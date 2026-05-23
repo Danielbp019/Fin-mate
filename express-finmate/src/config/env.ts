@@ -5,6 +5,8 @@ export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   rateLimitWindowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
   rateLimitMax: Number(process.env.RATE_LIMIT_MAX) || 100,
+  jwtSecret: process.env.JWT_SECRET || 'dev-jwt-secret',
+  jwtExpiresInSeconds: Number(process.env.JWT_EXPIRES_IN_SECONDS) || 7200,
   db: {
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT) || 3306,

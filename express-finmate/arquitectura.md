@@ -155,7 +155,6 @@ Todas las entradas deben validarse usando Zod.
 
 ### Reglas
 
-- La base de datos ya existe previamente.
 - Usar MariaDB.
 - Usar Drizzle ORM.
 - Entender el SQL generado.
@@ -181,7 +180,7 @@ Todas las entradas deben validarse usando Zod.
 
 ### Logout
 
-Debe existir tabla de token_blacklist para:
+La tabla de token_blacklist para:
 
 - invalidar tokens
 - permitir cierre de sesión

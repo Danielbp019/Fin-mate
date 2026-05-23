@@ -5,6 +5,7 @@ import { rateLimit } from 'express-rate-limit';
 import { errorHandler } from './shared/middlewares/errorHandler.js';
 import { notFoundHandler } from './shared/middlewares/notFoundHandler.js';
 import pingRouter from './modules/ping/ping.routes.js';
+import authRouter from './modules/auth/auth.routes.js';
 import { env } from './config/env.js';
 
 const app = express();
@@ -26,6 +27,7 @@ app.get('/', (_req, res) => {
 });
 
 app.use(pingRouter);
+app.use(authRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
