@@ -66,3 +66,12 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 ## Arquitectura
 
 Modular Monolith con flujo `route → controller → service → repository → database`. Cada módulo es independiente dentro de `src/modules/<modulo>/` con sus propios archivos de rutas, controlador, servicio, repositorio, schema de validación y tipos.
+
+## Pendientes
+
+Funcionalidades planificadas para futuras iteraciones:
+
+- Cambio de contraseña
+- Recuperación de contraseña
+- Verificación de email
+- Limpieza automática de token_blacklist (tokens expirados)

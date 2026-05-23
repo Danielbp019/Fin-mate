@@ -29,4 +29,5 @@ export interface LogoutResponse {
 
 export interface AuthenticatedRequest extends Request {
   userId: string;
+  token: string;
 }
