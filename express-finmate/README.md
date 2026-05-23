@@ -56,6 +56,18 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 | POST   | `/auth/login`    | `{ email, password }`           | 200 `{ message, token, user }` |
 | POST   | `/auth/logout`   | `Authorization: Bearer <token>` | 200 `{ message }`              |
 
+### Categories
+
+Todas las rutas requieren `Authorization: Bearer <token>`.
+
+| Método | Ruta              | Body / Query                                                 | Respuesta                |
+| ------ | ----------------- | ------------------------------------------------------------ | ------------------------ |
+| GET    | `/categories`     | `?type=income\|expense`                                      | 200 `CategoryResponse[]` |
+| GET    | `/categories/:id` | —                                                            | 200 `CategoryResponse`   |
+| POST   | `/categories`     | `{ name, type, icon?, color?, parentId?, sortOrder? }`       | 201 `CategoryResponse`   |
+| PATCH  | `/categories/:id` | `{ name?, icon?, color?, parentId?, sortOrder?, isActive? }` | 200 `CategoryResponse`   |
+| DELETE | `/categories/:id` | —                                                            | 204 Sin contenido        |
+
 ### Health
 
 | Método | Ruta    | Respuesta                             |
