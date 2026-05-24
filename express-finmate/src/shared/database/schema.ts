@@ -39,7 +39,6 @@ export const categories = mysqlTable(
     name: varchar('name', { length: 100 }).notNull(),
     icon: varchar('icon', { length: 50 }),
     color: varchar('color', { length: 20 }),
-    parentId: char('parent_id', { length: 36 }),
     sortOrder: decimal('sort_order', { precision: 10, scale: 0 }).notNull().default('0'),
     isActive: boolean('is_active').notNull().default(true),
     isSystem: boolean('is_system').notNull().default(false),
@@ -50,7 +49,6 @@ export const categories = mysqlTable(
   (table) => ({
     userIdIdx: index('idx_categories_user_id').on(table.userId),
     typeIdx: index('idx_categories_type').on(table.type),
-    parentIdIdx: index('idx_categories_parent_id').on(table.parentId),
   }),
 );
 
@@ -185,11 +183,6 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
     fields: [categories.userId],
     references: [users.id],
   }),
-  parent: one(categories, {
-    fields: [categories.parentId],
-    references: [categories.id],
-  }),
-  subcategories: many(categories),
   movements: many(movements),
 }));
 

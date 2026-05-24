@@ -5,7 +5,6 @@ CREATE TABLE `categories` (
 	`name` varchar(100) NOT NULL COMMENT 'Nombre de la categoría',
 	`icon` varchar(50) COMMENT 'Nombre/icono visual opcional',
 	`color` varchar(20) COMMENT 'Color opcional para UI',
-	`parent_id` char(36) COMMENT 'Permite subcategorías. Ejemplo: Food → Fast Food',
 	`sort_order` decimal NOT NULL DEFAULT '0' COMMENT 'Orden visual en listados',
 	`is_active` boolean NOT NULL DEFAULT true COMMENT 'Permite desactivar categorías sin borrarlas',
 	`is_system` boolean NOT NULL DEFAULT false COMMENT 'Indica si pertenece al sistema',
@@ -107,7 +106,6 @@ CREATE TABLE `users` (
 --> statement-breakpoint
 CREATE INDEX `idx_categories_user_id` ON `categories` (`user_id`);--> statement-breakpoint
 CREATE INDEX `idx_categories_type` ON `categories` (`type`);--> statement-breakpoint
-CREATE INDEX `idx_categories_parent_id` ON `categories` (`parent_id`);--> statement-breakpoint
 CREATE INDEX `idx_couple_members_user_id` ON `couple_members` (`user_id`);--> statement-breakpoint
 CREATE INDEX `idx_couples_created_by` ON `couples` (`created_by`);--> statement-breakpoint
 CREATE INDEX `idx_debt_payments_debt_id` ON `debt_payments` (`debt_id`);--> statement-breakpoint

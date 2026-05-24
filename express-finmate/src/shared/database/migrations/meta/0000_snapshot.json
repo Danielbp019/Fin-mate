@@ -49,13 +49,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "parent_id": {
-          "name": "parent_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "sort_order": {
           "name": "sort_order",
           "type": "decimal",
@@ -115,13 +108,6 @@
           "name": "idx_categories_type",
           "columns": [
             "type"
-          ],
-          "isUnique": false
-        },
-        "idx_categories_parent_id": {
-          "name": "idx_categories_parent_id",
-          "columns": [
-            "parent_id"
           ],
           "isUnique": false
         }

@@ -64,7 +64,6 @@ export async function create(data: {
   name: string;
   icon?: string | null;
   color?: string | null;
-  parentId?: string | null;
   sortOrder?: string;
   isActive: boolean;
   isSystem: boolean;
@@ -80,7 +79,6 @@ export async function update(
     name: string;
     icon: string | null;
     color: string | null;
-    parentId: string | null;
     sortOrder: string;
     isActive: boolean;
     updatedAt: Date;

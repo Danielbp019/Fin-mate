@@ -16,7 +16,6 @@ export const createCategorySchema = z.object({
     .string()
     .max(20, 'El color no puede exceder 20 caracteres')
     .optional(),
-  parentId: z.string().uuid('ID de categoría padre inválido').optional(),
   sortOrder: z
     .string()
     .optional(),
@@ -35,11 +34,6 @@ export const updateCategorySchema = z.object({
   color: z
     .string()
     .max(20, 'El color no puede exceder 20 caracteres')
-    .optional(),
-  parentId: z
-    .string()
-    .uuid('ID de categoría padre inválido')
-    .nullable()
     .optional(),
   sortOrder: z
     .string()
