@@ -34,6 +34,7 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 - **Base de Datos**: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DATABASE_URL`
 - **Rate Limiting**: `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX`
 - **JWT**: `JWT_SECRET`, `JWT_EXPIRES_IN_SECONDS`
+- **Token Cleanup**: `TOKEN_CLEANUP_INTERVAL_MS`
 
 ## Comandos Útiles
 
@@ -88,4 +89,3 @@ Funcionalidades planificadas para futuras iteraciones:
 - Cambio de contraseña
 - Recuperación de contraseña
 - Verificación de email
-- Limpieza automática de token_blacklist (tokens expirados)

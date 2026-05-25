@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { eq } from 'drizzle-orm';
+import { eq, lt } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
 import { users, tokenBlacklist } from '../../shared/database/schema.js';
 
@@ -35,4 +35,10 @@ export async function findBlacklistedToken(token: string) {
     .limit(1);
 
   return result[0] ?? null;
+}
+
+export async function deleteExpiredTokens() {
+  await db
+    .delete(tokenBlacklist)
+    .where(lt(tokenBlacklist.expiresAt, new Date()));
 }

@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { env } from '../../config/env.js';
 import { AppError } from '../../shared/errors/AppError.js';
 import * as authRepository from './auth.repository.js';
-import type { AuthResponse, AuthUser } from './auth.types.js';
+import type { AuthResponse } from './auth.types.js';
 
 function buildAuthResponse(user: { id: string; name: string; email: string }): AuthResponse {
   const token = jwt.sign({ userId: user.id }, env.jwtSecret, {
