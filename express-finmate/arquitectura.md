@@ -8,7 +8,8 @@
 - No separar globalmente controllers/services/models.
 - Si necesitas documentacion usa el MCP context7.
 - Los textos que se muestren al usuario, deben estar en idioma español.
-- En .agents hay reglas y skills para trabajar con la dependencia dinero.js
+- En .agents hay reglas y skills para trabajar con la dependencia dinero.js.
+- Cuando se creen end points nuevos actualizar el archivo readme.md.
 
 ---
 
@@ -18,7 +19,6 @@ src/
 modules/
 auth/
 users/
-transactions/
 categories/
 
 shared/

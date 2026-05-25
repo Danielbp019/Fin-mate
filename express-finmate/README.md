@@ -45,6 +45,8 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 | `npm run db:generate` | Genera migraciones desde el schema                 |
 | `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB            |
 | `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 4 categorías) |
+| `npm test`            | Ejecuta todos los tests (vitest run)               |
+| `npm run test:watch`  | Ejecuta tests en modo watch (vitest)               |
 
 ## Endpoints Activos
 
