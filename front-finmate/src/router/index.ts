@@ -6,7 +6,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/dashboard',
+      name: 'Landing',
+      component: () => import('@/pages/LandingPage.vue'),
     },
     {
       path: '/login',
@@ -32,9 +33,14 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(to => {
+router.beforeEach(async to => {
   const auth = useAuthStore()
-  const guestRoutes = new Set(['Login', 'Register'])
+
+  if (!auth.appReady) {
+    await auth.initialize()
+  }
+
+  const guestRoutes = new Set(['Landing', 'Login', 'Register'])
   if (!auth.isAuthenticated && !guestRoutes.has(to.name as string)) {
     return { name: 'Login' }
   }

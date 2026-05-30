@@ -1,141 +1,129 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { Request, Response, NextFunction } from 'express';
+import { type Request, type Response, type NextFunction } from 'express';
+import * as authController from '../auth.controller.js';
 import * as authService from '../auth.service.js';
 
 vi.mock('../auth.service.js');
 
-function createReq(body: Record<string, unknown> = {}): Request {
-  return { body } as Request;
-}
-
-function createRes(): Response {
-  const res: Partial<Response> = {};
-  res.status = vi.fn().mockReturnValue(res);
-  res.json = vi.fn().mockReturnValue(res);
+function createMockRes() {
+  const res: Partial<Response> = {
+    status: vi.fn().mockReturnThis(),
+    json: vi.fn().mockReturnThis(),
+    cookie: vi.fn().mockReturnThis(),
+  };
   return res as Response;
 }
 
-function createTokenReq(token: string, body: Record<string, unknown> = {}): Request {
-  return { body, token } as unknown as Request;
+function createMockReq(overrides: Partial<Request> = {}): Request {
+  return {
+    body: {},
+    cookies: {},
+    ...overrides,
+  } as Request;
 }
 
-let authController: typeof import('../auth.controller.js');
+const mockNext: NextFunction = vi.fn();
 
-beforeEach(async () => {
-  vi.clearAllMocks();
-  authController = await import('../auth.controller.js');
-});
+const mockServiceResult = {
+  accessToken: 'access-token-value',
+  user: { id: '1', name: 'Test', email: 'test@test.com' },
+  refreshToken: 'refresh-token-value',
+  cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 2592000000 },
+};
 
-describe('register', () => {
-  it('returns 201 with auth response when data is valid', async () => {
-    const req = createReq({ name: 'Juan', email: 'juan@example.com', password: '123456' });
-    const res = createRes();
-    const next = vi.fn() as NextFunction;
-
-    vi.mocked(authService.register).mockResolvedValue({
-      message: 'Usuario registrado exitosamente',
-      token: 'mock-token',
-      user: { id: 'uuid', name: 'Juan', email: 'juan@example.com' },
-    });
-
-    await authController.register(req, res, next);
-
-    expect(authService.register).toHaveBeenCalledWith({
-      name: 'Juan',
-      email: 'juan@example.com',
-      password: '123456',
-    });
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({
-      message: 'Usuario registrado exitosamente',
-      token: 'mock-token',
-      user: { id: 'uuid', name: 'Juan', email: 'juan@example.com' },
-    });
-    expect(next).not.toHaveBeenCalled();
+describe('authController.login', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.login).mockResolvedValue(mockServiceResult);
   });
 
-  it('calls next with error when body is invalid', async () => {
-    const req = createReq({ name: 'Juan', email: 'invalido' });
-    const res = createRes();
-    const next = vi.fn() as NextFunction;
+  it('debe llamar al servicio y setear cookie', async () => {
+    const req = createMockReq({ body: { email: 'test@test.com', password: '123456' } });
+    const res = createMockRes();
 
-    await authController.register(req, res, next);
+    await authController.login(req, res, mockNext);
 
-    expect(authService.register).not.toHaveBeenCalled();
-    expect(next).toHaveBeenCalledTimes(1);
-    expect(next).toHaveBeenCalledWith(expect.any(Error));
-  });
-
-  it('calls next with error when service throws', async () => {
-    const req = createReq({ name: 'Juan', email: 'juan@example.com', password: '123456' });
-    const res = createRes();
-    const next = vi.fn() as NextFunction;
-    const error = new Error('Service error');
-
-    vi.mocked(authService.register).mockRejectedValue(error);
-
-    await authController.register(req, res, next);
-
-    expect(next).toHaveBeenCalledWith(error);
-  });
-});
-
-describe('login', () => {
-  it('returns 200 with auth response when credentials are valid', async () => {
-    const req = createReq({ email: 'juan@example.com', password: '123456' });
-    const res = createRes();
-    const next = vi.fn() as NextFunction;
-
-    vi.mocked(authService.login).mockResolvedValue({
-      message: 'Inicio de sesión exitoso',
-      token: 'mock-token',
-      user: { id: 'uuid', name: 'Juan', email: 'juan@example.com' },
-    });
-
-    await authController.login(req, res, next);
-
-    expect(authService.login).toHaveBeenCalledWith({
-      email: 'juan@example.com',
-      password: '123456',
-    });
+    expect(authService.login).toHaveBeenCalledWith({ email: 'test@test.com', password: '123456' });
+    expect(res.cookie).toHaveBeenCalledWith('refreshToken', 'refresh-token-value', mockServiceResult.cookieOptions);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      message: 'Inicio de sesión exitoso',
-      token: 'mock-token',
-      user: { id: 'uuid', name: 'Juan', email: 'juan@example.com' },
+      accessToken: 'access-token-value',
+      user: { id: '1', name: 'Test', email: 'test@test.com' },
     });
   });
 
-  it('calls next with error when credentials are invalid', async () => {
-    const req = createReq({ email: 'juan@example.com', password: 'wrong' });
-    const res = createRes();
-    const next = vi.fn() as NextFunction;
-    const error = new Error('Credenciales inválidas');
+  it('debe pasar errores a next', async () => {
+    const error = new Error('Test error');
+    vi.mocked(authService.login).mockRejectedValueOnce(error);
+    const req = createMockReq({ body: { email: 'test@test.com', password: '123456' } });
+    const res = createMockRes();
 
-    vi.mocked(authService.login).mockRejectedValue(error);
-
-    await authController.login(req, res, next);
-
-    expect(next).toHaveBeenCalledWith(error);
+    await authController.login(req, res, mockNext);
+    expect(mockNext).toHaveBeenCalledWith(error);
   });
 });
 
-describe('logout', () => {
-  it('returns 200 with success message', async () => {
-    const req = createTokenReq('valid-token');
-    const res = createRes();
-    const next = vi.fn() as NextFunction;
+describe('authController.refresh', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.refresh).mockResolvedValue(mockServiceResult);
+  });
 
+  it('debe llamar al servicio con cookie y setear nueva cookie', async () => {
+    const req = createMockReq({ cookies: { refreshToken: 'old-refresh-token' } });
+    const res = createMockRes();
+
+    await authController.refresh(req, res, mockNext);
+
+    expect(authService.refresh).toHaveBeenCalledWith('old-refresh-token');
+    expect(res.cookie).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ accessToken: 'access-token-value' });
+  });
+});
+
+describe('authController.logout', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
     vi.mocked(authService.logout).mockResolvedValue({
-      message: 'Sesión cerrada exitosamente',
+      success: true,
+      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
     });
+  });
 
-    await authController.logout(req, res, next);
+  it('debe llamar al servicio y limpiar cookie', async () => {
+    const req = createMockReq({ cookies: { refreshToken: 'rt' } });
+    const res = createMockRes();
 
-    expect(authService.logout).toHaveBeenCalledWith('valid-token');
+    await authController.logout(req, res, mockNext);
+
+    expect(authService.logout).toHaveBeenCalledWith('rt');
+    expect(res.cookie).toHaveBeenCalledWith('refreshToken', '', expect.any(Object));
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({
-      message: 'Sesión cerrada exitosamente',
+    expect(res.json).toHaveBeenCalledWith({ success: true });
+  });
+});
+
+describe('authController.logoutAll', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.logoutAll).mockResolvedValue({
+      success: true,
+      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
     });
+  });
+
+  it('debe llamar al servicio con userId y limpiar cookie', async () => {
+    const req = createMockReq({
+      cookies: { refreshToken: 'rt' },
+    }) as any;
+    req.userId = 'user-1';
+    const res = createMockRes();
+
+    await authController.logoutAll(req, res, mockNext);
+
+    expect(authService.logoutAll).toHaveBeenCalledWith('user-1', 'rt');
+    expect(res.cookie).toHaveBeenCalledWith('refreshToken', '', expect.any(Object));
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });

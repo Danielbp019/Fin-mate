@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import api from '@/services/api'
 
 export interface User {
-  id: number
+  id: string
   name: string
   email: string
 }
@@ -12,38 +12,23 @@ export interface User {
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
 
-  const token = ref<string | null>(localStorage.getItem('token'))
-  const user = ref<User | null>(
-    JSON.parse(localStorage.getItem('user') ?? 'null'),
-  )
+  const accessToken = ref<string | null>(null)
+  const user = ref<User | null>(null)
+  const appReady = ref(false)
 
-  const isAuthenticated = computed(() => !!token.value)
-
-  function persist (tokenValue: string, userValue: User) {
-    token.value = tokenValue
-    user.value = userValue
-    localStorage.setItem('token', tokenValue)
-    localStorage.setItem('user', JSON.stringify(userValue))
-  }
-
-  function clear () {
-    token.value = null
-    user.value = null
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-  }
+  const isAuthenticated = computed(() => !!accessToken.value)
 
   async function login (email: string, password: string) {
     const res = await api.post('/auth/login', { email, password })
-    const { token: t, user: u } = res.data
-    persist(t, u)
+    accessToken.value = res.data.accessToken
+    user.value = res.data.user
     router.push('/dashboard')
   }
 
   async function register (name: string, email: string, password: string) {
     const res = await api.post('/auth/register', { name, email, password })
-    const { token: t, user: u } = res.data
-    persist(t, u)
+    accessToken.value = res.data.accessToken
+    user.value = res.data.user
     router.push('/dashboard')
   }
 
@@ -56,5 +41,36 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { token, user, isAuthenticated, login, register, logout }
+  async function refresh () {
+    const res = await api.post('/auth/refresh')
+    accessToken.value = res.data.accessToken
+  }
+
+  async function initialize () {
+    try {
+      await refresh()
+    } catch {
+      clear()
+    } finally {
+      appReady.value = true
+    }
+  }
+
+  function clear () {
+    accessToken.value = null
+    user.value = null
+  }
+
+  return {
+    accessToken,
+    user,
+    isAuthenticated,
+    appReady,
+    login,
+    register,
+    logout,
+    refresh,
+    initialize,
+    clear,
+  }
 })

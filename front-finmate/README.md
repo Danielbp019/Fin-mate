@@ -4,7 +4,7 @@ Aplicación web para administración de finanzas personales, ingresos y gastos, 
 
 ## Stack Tecnológico
 
-Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, ESLint, Zod
+Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, ESLint, Zod
 
 ## Requisitos
 
@@ -19,7 +19,9 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, ESLint, Zod
 
 ## Variables de Entorno
 
-No requiere variables de entorno para desarrollo. El frontend se conecta al backend en `http://localhost:5173` por defecto.
+| Variable              | Descripción                     | Default                    |
+| --------------------- | ------------------------------- | -------------------------- |
+| `VITE_API_BASE_URL`   | URL base del backend            | `http://localhost:3000`    |
 
 ## Comandos Útiles
 
@@ -36,19 +38,27 @@ No requiere variables de entorno para desarrollo. El frontend se conecta al back
 
 ```
 src/
-  main.ts             Punto de entrada
-  App.vue             Componente raíz
-  components/         Componentes reutilizables
-  plugins/            Configuración de plugins (Vuetify, Router, Pinia)
-  styles/             Estilos globales y tema
-public/               Archivos públicos estáticos
+  main.ts               Punto de entrada
+  App.vue               Componente raíz (inicializa auth store)
+  pages/                Vistas de la aplicación (Login, Register, Dashboard)
+  layouts/              Layouts compartidos (AuthLayout)
+  stores/               Stores de Pinia (auth)
+  services/             Servicios (api.ts - Axios)
+  plugins/              Configuración de plugins (Vuetify, Router, Pinia)
+  router/               Configuración de rutas (Vue Router)
+  styles/               Estilos globales y tema
+  components/           Componentes reutilizables
+public/                 Archivos públicos estáticos
 ```
 
-## Funcionalidades
+## Autenticación
 
-- ESLint para calidad de código
-- Pinia para manejo de estado
-- Vue Router para navegación
+- **Access Token**: JWT de 15 minutos, almacenado solo en memoria (Pinia). Se envía en header `Authorization: Bearer`.
+- **Refresh Token**: JWT de 30 días, almacenado en cookie HttpOnly. Se renueva automáticamente.
+- **Login/Register**: El backend envía el refresh token como cookie HttpOnly y retorna el access token.
+- **Refresh automático**: El interceptor de Axios detecta errores 401 e intenta refrescar el token automáticamente.
+- **Logout**: Revoca el refresh token en el backend y limpia el estado en memoria.
+- **Persistencia**: No se utiliza localStorage para almacenar tokens.
 
 ## Reglas del Proyecto
 
@@ -58,11 +68,6 @@ public/               Archivos públicos estáticos
 ## Validaciones
 
 Todas las entradas deben validarse usando Zod.
-
-## Autenticación
-
-- Bearer Token Authentication.
-- JWT con expiración mínima de 2 horas.
 
 ## Seguridad
 

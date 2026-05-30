@@ -82,14 +82,6 @@ CREATE TABLE `movements` (
 	CONSTRAINT `movements_id` PRIMARY KEY(`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT = 'Movimientos financieros (ingresos/gastos)';
 --> statement-breakpoint
-CREATE TABLE `token_blacklist` (
-	`id` char(36) NOT NULL COMMENT 'UUID único del token en blacklist',
-	`token` text NOT NULL COMMENT 'Token JWT invalidado al hacer logout',
-	`expires_at` datetime(3) NOT NULL COMMENT 'Fecha de expiración del token (para limpieza programada)',
-	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de registro en blacklist',
-	CONSTRAINT `token_blacklist_id` PRIMARY KEY(`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT = 'Tokens JWT invalidados en logout';
---> statement-breakpoint
 CREATE TABLE `users` (
 	`id` char(36) NOT NULL COMMENT 'UUID único del usuario',
 	`name` varchar(120) NOT NULL COMMENT 'Nombre visible del usuario',
@@ -104,6 +96,16 @@ CREATE TABLE `users` (
 	CONSTRAINT `users_email_key` UNIQUE(`email`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT = 'Tabla de usuarios del sistema';
 --> statement-breakpoint
+CREATE TABLE `refresh_tokens` (
+	`id` char(36) NOT NULL COMMENT 'UUID único del refresh token',
+	`user_id` char(36) NOT NULL COMMENT 'Usuario propietario del refresh token',
+	`expires_at` datetime(3) NOT NULL COMMENT 'Fecha de expiración del refresh token',
+	`revoked` boolean NOT NULL DEFAULT false COMMENT 'Indica si el refresh token fue invalidado',
+	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de creación',
+	`updated_at` datetime(3) NOT NULL COMMENT 'Última actualización',
+	CONSTRAINT `refresh_tokens_id` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT = 'Refresh tokens JWT para rotación de sesiones';
+--> statement-breakpoint
 CREATE INDEX `idx_categories_user_id` ON `categories` (`user_id`);--> statement-breakpoint
 CREATE INDEX `idx_categories_type` ON `categories` (`type`);--> statement-breakpoint
 CREATE INDEX `idx_couple_members_user_id` ON `couple_members` (`user_id`);--> statement-breakpoint
@@ -117,4 +119,4 @@ CREATE INDEX `idx_movements_user_id` ON `movements` (`user_id`);--> statement-br
 CREATE INDEX `idx_movements_couple_id` ON `movements` (`couple_id`);--> statement-breakpoint
 CREATE INDEX `idx_movements_category_id` ON `movements` (`category_id`);--> statement-breakpoint
 CREATE INDEX `idx_movements_type_date` ON `movements` (`type`,`movement_date`);--> statement-breakpoint
-CREATE INDEX `idx_token_blacklist_token` ON `token_blacklist` (`token`);
+CREATE INDEX `idx_refresh_tokens_user_id` ON `refresh_tokens` (`user_id`);

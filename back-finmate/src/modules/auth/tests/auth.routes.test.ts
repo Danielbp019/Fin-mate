@@ -1,167 +1,205 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import express from 'express';
+import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { env } from '../../../config/env.js';
+import { errorHandler } from '../../../shared/middlewares/errorHandler.js';
+import authRouter from '../auth.routes.js';
+import * as authService from '../auth.service.js';
 
-vi.mock('../auth.repository.js');
-vi.mock('bcryptjs');
+vi.mock('../auth.service.js');
+vi.mock('../../../config/env.js', () => ({
+  env: {
+    jwtSecret: 'test-secret',
+    jwtExpiresInSeconds: 900,
+    jwtRefreshExpiresInSeconds: 2592000,
+    nodeEnv: 'test',
+    frontendUrl: 'http://localhost:5173',
+    rateLimitWindowMs: 900000,
+    rateLimitMax: 100,
+    db: {
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      password: '',
+      name: 'finmate_test',
+    },
+  },
+}));
 
-const appPromise = import('../../../app.js').then((m) => m.default);
+const app = express();
+app.use(express.json());
+app.use(cookieParser());
+app.use(authRouter);
+app.use(errorHandler);
 
-function createToken(): string {
-  return jwt.sign({ userId: '550e8400-e29b-41d4-a716-446655440000' }, env.jwtSecret, {
-    expiresIn: '1h',
-  });
+function createMockServiceResponse() {
+  return {
+    accessToken: 'mock-access-token',
+    user: { id: '1', name: 'Test', email: 'test@test.com' },
+    refreshToken: 'mock-refresh-token',
+    cookieOptions: {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict' as const,
+      path: '/auth',
+      maxAge: 2592000000,
+    },
+  };
 }
 
-let app: Awaited<typeof appPromise>;
-let authRepository: typeof import('../auth.repository.js');
+describe('POST /auth/login', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.login).mockResolvedValue(createMockServiceResponse());
+  });
 
-beforeEach(async () => {
-  vi.clearAllMocks();
-  app = await appPromise;
-  authRepository = await import('../auth.repository.js');
+  it('debe retornar 200 con accessToken y user', async () => {
+    const res = await request(app)
+      .post('/auth/login')
+      .send({ email: 'test@test.com', password: '123456' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('accessToken');
+    expect(res.body).toHaveProperty('user');
+    expect(res.body.user.email).toBe('test@test.com');
+  });
+
+  it('debe setear cookie refreshToken', async () => {
+    const res = await request(app)
+      .post('/auth/login')
+      .send({ email: 'test@test.com', password: '123456' });
+
+    expect(res.headers['set-cookie']).toBeDefined();
+    const cookies = res.headers['set-cookie'] as unknown as string[];
+    const hasRefreshCookie = cookies.some((c: string) => c.startsWith('refreshToken='));
+    expect(hasRefreshCookie).toBe(true);
+  });
+
+  it('debe retornar 400 con datos inválidos', async () => {
+    const res = await request(app)
+      .post('/auth/login')
+      .send({ email: 'invalido', password: '' });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('debe retornar 401 con credenciales inválidas', async () => {
+    vi.mocked(authService.login).mockRejectedValueOnce(
+      Object.assign(new Error(), { statusCode: 401, message: 'Credenciales inválidas' }),
+    );
+
+    const res = await request(app)
+      .post('/auth/login')
+      .send({ email: 'test@test.com', password: 'wrong' });
+
+    expect(res.status).toBe(401);
+  });
 });
 
 describe('POST /auth/register', () => {
-  it('returns 201 with token for valid data', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
-
-    const res = await request(app)
-      .post('/auth/register')
-      .send({ name: 'Juan Pérez', email: 'juan@example.com', password: '123456' })
-      .expect(201);
-
-    expect(res.body).toHaveProperty('token');
-    expect(res.body.message).toBe('Usuario registrado exitosamente');
-    expect(res.body.user.name).toBe('Juan Pérez');
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.register).mockResolvedValue(createMockServiceResponse());
   });
 
-  it('returns 409 when email already exists', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue({
-      id: 'existing-id',
-      name: 'Existente',
-      email: 'juan@example.com',
-      passwordHash: 'hash',
-      status: 'active',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    });
-
+  it('debe retornar 201 con accessToken y user', async () => {
     const res = await request(app)
       .post('/auth/register')
-      .send({ name: 'Juan', email: 'juan@example.com', password: '123456' })
-      .expect(409);
+      .send({ name: 'Nuevo', email: 'nuevo@test.com', password: '123456' });
 
-    expect(res.body.error).toBe('El correo electrónico ya está registrado');
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('accessToken');
+    expect(res.body).toHaveProperty('user');
   });
 
-  it('returns 400 for invalid body', async () => {
+  it('debe retornar 400 con datos inválidos', async () => {
     const res = await request(app)
       .post('/auth/register')
-      .send({ name: 'J', email: 'invalido', password: '12345' })
-      .expect(400);
+      .send({ name: '', email: 'invalido', password: '12' });
 
-    expect(res.body.error).toBe('Datos inválidos');
-    expect(res.body.details).toBeInstanceOf(Array);
+    expect(res.status).toBe(400);
   });
 });
 
-describe('POST /auth/login', () => {
-  it('returns 200 with token for valid credentials', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue({
-      id: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'Juan Pérez',
-      email: 'juan@example.com',
-      passwordHash: '$2a$10$hashedpassword',
-      status: 'active',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    });
-    vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
-
-    const res = await request(app)
-      .post('/auth/login')
-      .send({ email: 'juan@example.com', password: '123456' })
-      .expect(200);
-
-    expect(res.body).toHaveProperty('token');
-    expect(res.body.message).toBe('Inicio de sesión exitoso');
+describe('POST /auth/refresh', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.refresh).mockResolvedValue(createMockServiceResponse());
   });
 
-  it('returns 401 when user not found', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
-
+  it('debe retornar 200 con nuevo accessToken', async () => {
     const res = await request(app)
-      .post('/auth/login')
-      .send({ email: 'unknown@example.com', password: '123456' })
-      .expect(401);
+      .post('/auth/refresh')
+      .set('Cookie', ['refreshToken=mock-refresh-token']);
 
-    expect(res.body.error).toBe('Credenciales inválidas');
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('accessToken');
   });
 
-  it('returns 401 for wrong password', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue({
-      id: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'Juan Pérez',
-      email: 'juan@example.com',
-      passwordHash: '$2a$10$hashedpassword',
-      status: 'active',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    });
-    vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
+  it('debe retornar 401 sin cookie', async () => {
+    vi.mocked(authService.refresh).mockRejectedValueOnce(
+      Object.assign(new Error(), { statusCode: 401, message: 'Refresh token no proporcionado' }),
+    );
 
     const res = await request(app)
-      .post('/auth/login')
-      .send({ email: 'juan@example.com', password: 'wrong-password' })
-      .expect(401);
+      .post('/auth/refresh');
 
-    expect(res.body.error).toBe('Credenciales inválidas');
+    expect(res.status).toBe(401);
   });
 });
 
 describe('POST /auth/logout', () => {
-  it('returns 200 when token is valid', async () => {
-    vi.mocked(authRepository.findBlacklistedToken).mockResolvedValue(null);
-
-    const token = createToken();
-
-    const res = await request(app)
-      .post('/auth/logout')
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
-
-    expect(res.body.message).toBe('Sesión cerrada exitosamente');
-  });
-
-  it('returns 401 when no token is provided', async () => {
-    const res = await request(app)
-      .post('/auth/logout')
-      .expect(401);
-
-    expect(res.body.error).toBe('Token no proporcionado');
-  });
-
-  it('returns 401 when token is blacklisted', async () => {
-    vi.mocked(authRepository.findBlacklistedToken).mockResolvedValue({
-      id: 'blacklisted-id',
-      token: 'some-token',
-      expiresAt: new Date(Date.now() + 3600000),
-      createdAt: new Date(),
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.logout).mockResolvedValue({
+      success: true,
+      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
     });
+  });
 
-    const token = createToken();
+  it('debe retornar 401 sin token de acceso', async () => {
+    const res = await request(app)
+      .post('/auth/logout');
+
+    expect(res.status).toBe(401);
+  });
+
+  it('debe retornar 200 con token válido', async () => {
+    const token = jwt.sign({ sub: 'user-1' }, 'test-secret');
 
     const res = await request(app)
       .post('/auth/logout')
       .set('Authorization', `Bearer ${token}`)
-      .expect(401);
+      .set('Cookie', ['refreshToken=rt']);
 
-    expect(res.body.error).toBe('Token inválido o expirado');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ success: true });
+  });
+});
+
+describe('POST /auth/logout-all', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authService.logoutAll).mockResolvedValue({
+      success: true,
+      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
+    });
+  });
+
+  it('debe retornar 401 sin token de acceso', async () => {
+    const res = await request(app).post('/auth/logout-all');
+    expect(res.status).toBe(401);
+  });
+
+  it('debe retornar 200 con token válido', async () => {
+    const token = jwt.sign({ sub: 'user-1' }, 'test-secret');
+
+    const res = await request(app)
+      .post('/auth/logout-all')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ success: true });
   });
 });

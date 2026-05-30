@@ -1,7 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { registerSchema, loginSchema } from './auth.schema.js';
 import * as authService from './auth.service.js';
-import type { AuthenticatedRequest } from './auth.types.js';
 
 export async function register(
   req: Request,
@@ -11,7 +10,12 @@ export async function register(
   try {
     const data = registerSchema.parse(req.body);
     const result = await authService.register(data);
-    res.status(201).json(result);
+
+    res.cookie('refreshToken', result.refreshToken, result.cookieOptions);
+    res.status(201).json({
+      accessToken: result.accessToken,
+      user: result.user,
+    });
   } catch (error) {
     next(error);
   }
@@ -25,7 +29,30 @@ export async function login(
   try {
     const data = loginSchema.parse(req.body);
     const result = await authService.login(data);
-    res.status(200).json(result);
+
+    res.cookie('refreshToken', result.refreshToken, result.cookieOptions);
+    res.status(200).json({
+      accessToken: result.accessToken,
+      user: result.user,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function refresh(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const refreshTokenValue = req.cookies?.refreshToken;
+    const result = await authService.refresh(refreshTokenValue);
+
+    res.cookie('refreshToken', result.refreshToken, result.cookieOptions);
+    res.status(200).json({
+      accessToken: result.accessToken,
+    });
   } catch (error) {
     next(error);
   }
@@ -37,9 +64,28 @@ export async function logout(
   next: NextFunction,
 ) {
   try {
-    const { token } = req as AuthenticatedRequest;
-    const result = await authService.logout(token);
-    res.status(200).json(result);
+    const refreshTokenValue = req.cookies?.refreshToken;
+    const result = await authService.logout(refreshTokenValue);
+
+    res.cookie('refreshToken', '', result.cookieOptions);
+    res.status(200).json({ success: result.success });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function logoutAll(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = (req as any).userId;
+    const refreshTokenValue = req.cookies?.refreshToken;
+    const result = await authService.logoutAll(userId, refreshTokenValue);
+
+    res.cookie('refreshToken', '', result.cookieOptions);
+    res.status(200).json({ success: result.success });
   } catch (error) {
     next(error);
   }

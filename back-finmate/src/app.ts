@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
 import { errorHandler } from './shared/middlewares/errorHandler.js';
 import { notFoundHandler } from './shared/middlewares/notFoundHandler.js';
@@ -20,8 +21,12 @@ const limiter = rateLimit({
 
 app.use(helmet());
 app.use(limiter);
-app.use(cors());
+app.use(cors({
+  origin: env.frontendUrl,
+  credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (_req, res) => {
   res.send('¡Hola Mundo!');

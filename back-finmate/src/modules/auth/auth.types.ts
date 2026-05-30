@@ -1,5 +1,3 @@
-import { type Request } from 'express';
-
 export interface RegisterBody {
   name: string;
   email: string;
@@ -17,17 +15,20 @@ export interface AuthUser {
   email: string;
 }
 
-export interface AuthResponse {
-  message: string;
-  token: string;
+export interface LoginResponse {
+  accessToken: string;
   user: AuthUser;
 }
 
-export interface LogoutResponse {
-  message: string;
+export interface RegisterResponse {
+  accessToken: string;
+  user: AuthUser;
 }
 
-export interface AuthenticatedRequest extends Request {
-  userId: string;
-  token: string;
+export interface RefreshResponse {
+  accessToken: string;
+}
+
+export interface LogoutResponse {
+  success: boolean;
 }

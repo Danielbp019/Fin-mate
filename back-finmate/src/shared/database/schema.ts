@@ -7,7 +7,6 @@ import {
   decimal,
   tinyint,
   boolean,
-  text,
   index,
   uniqueIndex,
 } from 'drizzle-orm/mysql-core';
@@ -156,26 +155,36 @@ export const debtPayments = mysqlTable(
   }),
 );
 
-export const tokenBlacklist = mysqlTable(
-  'token_blacklist',
+export const refreshTokens = mysqlTable(
+  'refresh_tokens',
   {
     id: char('id', { length: 36 }).primaryKey(),
-    token: text('token').notNull(),
+    userId: char('user_id', { length: 36 }).notNull(),
     expiresAt: datetime('expires_at', { fsp: 3 }).notNull(),
+    revoked: boolean('revoked').notNull().default(false),
     createdAt: datetime('created_at', { fsp: 3 }).notNull().default(sql`CURRENT_TIMESTAMP(3)`),
+    updatedAt: datetime('updated_at', { fsp: 3 }).notNull(),
   },
   (table) => ({
-    tokenIdx: index('idx_token_blacklist_token').on(table.token),
+    userIdIdx: index('idx_refresh_tokens_user_id').on(table.userId),
   }),
 );
 
-export const usersRelations = relations(users, ({ many, one }) => ({
+export const usersRelations = relations(users, ({ many }) => ({
   categories: many(categories),
   createdCouples: many(couples),
   coupleMembers: many(coupleMembers),
   movements: many(movements),
   debts: many(debts),
   debtPayments: many(debtPayments),
+  refreshTokens: many(refreshTokens),
+}));
+
+export const refreshTokensRelations = relations(refreshTokens, ({ one }) => ({
+  user: one(users, {
+    fields: [refreshTokens.userId],
+    references: [users.id],
+  }),
 }));
 
 export const categoriesRelations = relations(categories, ({ one, many }) => ({

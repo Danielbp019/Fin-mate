@@ -16,6 +16,14 @@ export function errorHandler(
     return;
   }
 
+  const statusCode = (err as any).statusCode;
+  if (statusCode && typeof statusCode === 'number') {
+    res.status(statusCode).json({
+      error: err.message,
+    });
+    return;
+  }
+
   if (err instanceof ZodError) {
     res.status(400).json({
       error: 'Datos inválidos',

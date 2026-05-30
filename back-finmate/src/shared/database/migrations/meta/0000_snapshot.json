@@ -1,799 +1,872 @@
 {
-  "version": "5",
-  "dialect": "mysql",
-  "id": "48e1529f-2fb5-4ebc-8101-c1882b5f6ba0",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "tables": {
-    "categories": {
-      "name": "categories",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "enum('income','expense')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "icon": {
-          "name": "icon",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "color": {
-          "name": "color",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "decimal",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": true
-        },
-        "is_system": {
-          "name": "is_system",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "idx_categories_user_id": {
-          "name": "idx_categories_user_id",
-          "columns": [
-            "user_id"
-          ],
-          "isUnique": false
-        },
-        "idx_categories_type": {
-          "name": "idx_categories_type",
-          "columns": [
-            "type"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "categories_id": {
-          "name": "categories_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "couple_members": {
-      "name": "couple_members",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "couple_id": {
-          "name": "couple_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "role": {
-          "name": "role",
-          "type": "enum('owner','member')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'member'"
-        },
-        "joined_at": {
-          "name": "joined_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        }
-      },
-      "indexes": {
-        "idx_couple_members_user_id": {
-          "name": "idx_couple_members_user_id",
-          "columns": [
-            "user_id"
-          ],
-          "isUnique": false
-        },
-        "couple_members_couple_id_user_id_key": {
-          "name": "couple_members_couple_id_user_id_key",
-          "columns": [
-            "couple_id",
-            "user_id"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "couple_members_id": {
-          "name": "couple_members_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "couples": {
-      "name": "couples",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_by": {
-          "name": "created_by",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "status": {
-          "name": "status",
-          "type": "enum('active','inactive')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'active'"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "idx_couples_created_by": {
-          "name": "idx_couples_created_by",
-          "columns": [
-            "created_by"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "couples_id": {
-          "name": "couples_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "debt_payments": {
-      "name": "debt_payments",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "debt_id": {
-          "name": "debt_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "amount": {
-          "name": "amount",
-          "type": "decimal(19,4)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "payment_date": {
-          "name": "payment_date",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "notes": {
-          "name": "notes",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        }
-      },
-      "indexes": {
-        "idx_debt_payments_debt_id": {
-          "name": "idx_debt_payments_debt_id",
-          "columns": [
-            "debt_id"
-          ],
-          "isUnique": false
-        },
-        "idx_debt_payments_user_id": {
-          "name": "idx_debt_payments_user_id",
-          "columns": [
-            "user_id"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "debt_payments_id": {
-          "name": "debt_payments_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "debts": {
-      "name": "debts",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "couple_id": {
-          "name": "couple_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(150)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "initial_amount": {
-          "name": "initial_amount",
-          "type": "decimal(19,4)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "current_amount": {
-          "name": "current_amount",
-          "type": "decimal(19,4)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "interest_rate": {
-          "name": "interest_rate",
-          "type": "decimal(10,4)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "minimum_payment": {
-          "name": "minimum_payment",
-          "type": "decimal(19,4)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'0'"
-        },
-        "due_day": {
-          "name": "due_day",
-          "type": "tinyint",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "priority": {
-          "name": "priority",
-          "type": "enum('low','medium','high')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'medium'"
-        },
-        "status": {
-          "name": "status",
-          "type": "enum('pending','paid','overdue')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'pending'"
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "idx_debts_user_id": {
-          "name": "idx_debts_user_id",
-          "columns": [
-            "user_id"
-          ],
-          "isUnique": false
-        },
-        "idx_debts_couple_id": {
-          "name": "idx_debts_couple_id",
-          "columns": [
-            "couple_id"
-          ],
-          "isUnique": false
-        },
-        "idx_debts_status": {
-          "name": "idx_debts_status",
-          "columns": [
-            "status"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "debts_id": {
-          "name": "debts_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "movements": {
-      "name": "movements",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "couple_id": {
-          "name": "couple_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "category_id": {
-          "name": "category_id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "enum('income','expense')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "amount": {
-          "name": "amount",
-          "type": "decimal(19,4)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "movement_date": {
-          "name": "movement_date",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "is_shared": {
-          "name": "is_shared",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "idx_movements_user_id": {
-          "name": "idx_movements_user_id",
-          "columns": [
-            "user_id"
-          ],
-          "isUnique": false
-        },
-        "idx_movements_couple_id": {
-          "name": "idx_movements_couple_id",
-          "columns": [
-            "couple_id"
-          ],
-          "isUnique": false
-        },
-        "idx_movements_category_id": {
-          "name": "idx_movements_category_id",
-          "columns": [
-            "category_id"
-          ],
-          "isUnique": false
-        },
-        "idx_movements_type_date": {
-          "name": "idx_movements_type_date",
-          "columns": [
-            "type",
-            "movement_date"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "movements_id": {
-          "name": "movements_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "token_blacklist": {
-      "name": "token_blacklist",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "token": {
-          "name": "token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        }
-      },
-      "indexes": {
-        "idx_token_blacklist_token": {
-          "name": "idx_token_blacklist_token",
-          "columns": [
-            "token"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "token_blacklist_id": {
-          "name": "token_blacklist_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "users": {
-      "name": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "char(36)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(120)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(190)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "password_hash": {
-          "name": "password_hash",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "status": {
-          "name": "status",
-          "type": "enum('active','inactive')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'active'"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP(3)"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "datetime(3)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "users_email_key": {
-          "name": "users_email_key",
-          "columns": [
-            "email"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "users_id": {
-          "name": "users_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "columns": [
-            "email"
-          ]
-        }
-      },
-      "checkConstraint": {}
-    }
-  },
-  "views": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
-    "tables": {},
-    "indexes": {}
-  }
+    "version":  "5",
+    "dialect":  "mysql",
+    "id":  "48e1529f-2fb5-4ebc-8101-c1882b5f6ba0",
+    "prevId":  "00000000-0000-0000-0000-000000000000",
+    "tables":  {
+                   "categories":  {
+                                      "name":  "categories",
+                                      "columns":  {
+                                                      "id":  {
+                                                                 "name":  "id",
+                                                                 "type":  "char(36)",
+                                                                 "primaryKey":  false,
+                                                                 "notNull":  true,
+                                                                 "autoincrement":  false
+                                                             },
+                                                      "user_id":  {
+                                                                      "name":  "user_id",
+                                                                      "type":  "char(36)",
+                                                                      "primaryKey":  false,
+                                                                      "notNull":  false,
+                                                                      "autoincrement":  false
+                                                                  },
+                                                      "type":  {
+                                                                   "name":  "type",
+                                                                   "type":  "enum(\u0027income\u0027,\u0027expense\u0027)",
+                                                                   "primaryKey":  false,
+                                                                   "notNull":  true,
+                                                                   "autoincrement":  false
+                                                               },
+                                                      "name":  {
+                                                                   "name":  "name",
+                                                                   "type":  "varchar(100)",
+                                                                   "primaryKey":  false,
+                                                                   "notNull":  true,
+                                                                   "autoincrement":  false
+                                                               },
+                                                      "icon":  {
+                                                                   "name":  "icon",
+                                                                   "type":  "varchar(50)",
+                                                                   "primaryKey":  false,
+                                                                   "notNull":  false,
+                                                                   "autoincrement":  false
+                                                               },
+                                                      "color":  {
+                                                                    "name":  "color",
+                                                                    "type":  "varchar(20)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  false,
+                                                                    "autoincrement":  false
+                                                                },
+                                                      "sort_order":  {
+                                                                         "name":  "sort_order",
+                                                                         "type":  "decimal",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false,
+                                                                         "default":  "\u00270\u0027"
+                                                                     },
+                                                      "is_active":  {
+                                                                        "name":  "is_active",
+                                                                        "type":  "boolean",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false,
+                                                                        "default":  true
+                                                                    },
+                                                      "is_system":  {
+                                                                        "name":  "is_system",
+                                                                        "type":  "boolean",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false,
+                                                                        "default":  false
+                                                                    },
+                                                      "created_at":  {
+                                                                         "name":  "created_at",
+                                                                         "type":  "datetime(3)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false,
+                                                                         "default":  "CURRENT_TIMESTAMP(3)"
+                                                                     },
+                                                      "updated_at":  {
+                                                                         "name":  "updated_at",
+                                                                         "type":  "datetime(3)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false
+                                                                     },
+                                                      "deleted_at":  {
+                                                                         "name":  "deleted_at",
+                                                                         "type":  "datetime(3)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  false,
+                                                                         "autoincrement":  false
+                                                                     }
+                                                  },
+                                      "indexes":  {
+                                                      "idx_categories_user_id":  {
+                                                                                     "name":  "idx_categories_user_id",
+                                                                                     "columns":  [
+                                                                                                     "user_id"
+                                                                                                 ],
+                                                                                     "isUnique":  false
+                                                                                 },
+                                                      "idx_categories_type":  {
+                                                                                  "name":  "idx_categories_type",
+                                                                                  "columns":  [
+                                                                                                  "type"
+                                                                                              ],
+                                                                                  "isUnique":  false
+                                                                              }
+                                                  },
+                                      "foreignKeys":  {
+
+                                                      },
+                                      "compositePrimaryKeys":  {
+                                                                   "categories_id":  {
+                                                                                         "name":  "categories_id",
+                                                                                         "columns":  [
+                                                                                                         "id"
+                                                                                                     ]
+                                                                                     }
+                                                               },
+                                      "uniqueConstraints":  {
+
+                                                            },
+                                      "checkConstraint":  {
+
+                                                          }
+                                  },
+                   "couple_members":  {
+                                          "name":  "couple_members",
+                                          "columns":  {
+                                                          "id":  {
+                                                                     "name":  "id",
+                                                                     "type":  "char(36)",
+                                                                     "primaryKey":  false,
+                                                                     "notNull":  true,
+                                                                     "autoincrement":  false
+                                                                 },
+                                                          "couple_id":  {
+                                                                            "name":  "couple_id",
+                                                                            "type":  "char(36)",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true,
+                                                                            "autoincrement":  false
+                                                                        },
+                                                          "user_id":  {
+                                                                          "name":  "user_id",
+                                                                          "type":  "char(36)",
+                                                                          "primaryKey":  false,
+                                                                          "notNull":  true,
+                                                                          "autoincrement":  false
+                                                                      },
+                                                          "role":  {
+                                                                       "name":  "role",
+                                                                       "type":  "enum(\u0027owner\u0027,\u0027member\u0027)",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  true,
+                                                                       "autoincrement":  false,
+                                                                       "default":  "\u0027member\u0027"
+                                                                   },
+                                                          "joined_at":  {
+                                                                            "name":  "joined_at",
+                                                                            "type":  "datetime(3)",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true,
+                                                                            "autoincrement":  false,
+                                                                            "default":  "CURRENT_TIMESTAMP(3)"
+                                                                        }
+                                                      },
+                                          "indexes":  {
+                                                          "idx_couple_members_user_id":  {
+                                                                                             "name":  "idx_couple_members_user_id",
+                                                                                             "columns":  [
+                                                                                                             "user_id"
+                                                                                                         ],
+                                                                                             "isUnique":  false
+                                                                                         },
+                                                          "couple_members_couple_id_user_id_key":  {
+                                                                                                       "name":  "couple_members_couple_id_user_id_key",
+                                                                                                       "columns":  [
+                                                                                                                       "couple_id",
+                                                                                                                       "user_id"
+                                                                                                                   ],
+                                                                                                       "isUnique":  true
+                                                                                                   }
+                                                      },
+                                          "foreignKeys":  {
+
+                                                          },
+                                          "compositePrimaryKeys":  {
+                                                                       "couple_members_id":  {
+                                                                                                 "name":  "couple_members_id",
+                                                                                                 "columns":  [
+                                                                                                                 "id"
+                                                                                                             ]
+                                                                                             }
+                                                                   },
+                                          "uniqueConstraints":  {
+
+                                                                },
+                                          "checkConstraint":  {
+
+                                                              }
+                                      },
+                   "couples":  {
+                                   "name":  "couples",
+                                   "columns":  {
+                                                   "id":  {
+                                                              "name":  "id",
+                                                              "type":  "char(36)",
+                                                              "primaryKey":  false,
+                                                              "notNull":  true,
+                                                              "autoincrement":  false
+                                                          },
+                                                   "created_by":  {
+                                                                      "name":  "created_by",
+                                                                      "type":  "char(36)",
+                                                                      "primaryKey":  false,
+                                                                      "notNull":  true,
+                                                                      "autoincrement":  false
+                                                                  },
+                                                   "name":  {
+                                                                "name":  "name",
+                                                                "type":  "varchar(120)",
+                                                                "primaryKey":  false,
+                                                                "notNull":  false,
+                                                                "autoincrement":  false
+                                                            },
+                                                   "status":  {
+                                                                  "name":  "status",
+                                                                  "type":  "enum(\u0027active\u0027,\u0027inactive\u0027)",
+                                                                  "primaryKey":  false,
+                                                                  "notNull":  true,
+                                                                  "autoincrement":  false,
+                                                                  "default":  "\u0027active\u0027"
+                                                              },
+                                                   "created_at":  {
+                                                                      "name":  "created_at",
+                                                                      "type":  "datetime(3)",
+                                                                      "primaryKey":  false,
+                                                                      "notNull":  true,
+                                                                      "autoincrement":  false,
+                                                                      "default":  "CURRENT_TIMESTAMP(3)"
+                                                                  },
+                                                   "updated_at":  {
+                                                                      "name":  "updated_at",
+                                                                      "type":  "datetime(3)",
+                                                                      "primaryKey":  false,
+                                                                      "notNull":  true,
+                                                                      "autoincrement":  false
+                                                                  }
+                                               },
+                                   "indexes":  {
+                                                   "idx_couples_created_by":  {
+                                                                                  "name":  "idx_couples_created_by",
+                                                                                  "columns":  [
+                                                                                                  "created_by"
+                                                                                              ],
+                                                                                  "isUnique":  false
+                                                                              }
+                                               },
+                                   "foreignKeys":  {
+
+                                                   },
+                                   "compositePrimaryKeys":  {
+                                                                "couples_id":  {
+                                                                                   "name":  "couples_id",
+                                                                                   "columns":  [
+                                                                                                   "id"
+                                                                                               ]
+                                                                               }
+                                                            },
+                                   "uniqueConstraints":  {
+
+                                                         },
+                                   "checkConstraint":  {
+
+                                                       }
+                               },
+                   "debt_payments":  {
+                                         "name":  "debt_payments",
+                                         "columns":  {
+                                                         "id":  {
+                                                                    "name":  "id",
+                                                                    "type":  "char(36)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "autoincrement":  false
+                                                                },
+                                                         "debt_id":  {
+                                                                         "name":  "debt_id",
+                                                                         "type":  "char(36)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false
+                                                                     },
+                                                         "user_id":  {
+                                                                         "name":  "user_id",
+                                                                         "type":  "char(36)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false
+                                                                     },
+                                                         "amount":  {
+                                                                        "name":  "amount",
+                                                                        "type":  "decimal(19,4)",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false
+                                                                    },
+                                                         "payment_date":  {
+                                                                              "name":  "payment_date",
+                                                                              "type":  "datetime(3)",
+                                                                              "primaryKey":  false,
+                                                                              "notNull":  true,
+                                                                              "autoincrement":  false
+                                                                          },
+                                                         "notes":  {
+                                                                       "name":  "notes",
+                                                                       "type":  "varchar(255)",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  false,
+                                                                       "autoincrement":  false
+                                                                   },
+                                                         "created_at":  {
+                                                                            "name":  "created_at",
+                                                                            "type":  "datetime(3)",
+                                                                            "primaryKey":  false,
+                                                                            "notNull":  true,
+                                                                            "autoincrement":  false,
+                                                                            "default":  "CURRENT_TIMESTAMP(3)"
+                                                                        }
+                                                     },
+                                         "indexes":  {
+                                                         "idx_debt_payments_debt_id":  {
+                                                                                           "name":  "idx_debt_payments_debt_id",
+                                                                                           "columns":  [
+                                                                                                           "debt_id"
+                                                                                                       ],
+                                                                                           "isUnique":  false
+                                                                                       },
+                                                         "idx_debt_payments_user_id":  {
+                                                                                           "name":  "idx_debt_payments_user_id",
+                                                                                           "columns":  [
+                                                                                                           "user_id"
+                                                                                                       ],
+                                                                                           "isUnique":  false
+                                                                                       }
+                                                     },
+                                         "foreignKeys":  {
+
+                                                         },
+                                         "compositePrimaryKeys":  {
+                                                                      "debt_payments_id":  {
+                                                                                               "name":  "debt_payments_id",
+                                                                                               "columns":  [
+                                                                                                               "id"
+                                                                                                           ]
+                                                                                           }
+                                                                  },
+                                         "uniqueConstraints":  {
+
+                                                               },
+                                         "checkConstraint":  {
+
+                                                             }
+                                     },
+                   "debts":  {
+                                 "name":  "debts",
+                                 "columns":  {
+                                                 "id":  {
+                                                            "name":  "id",
+                                                            "type":  "char(36)",
+                                                            "primaryKey":  false,
+                                                            "notNull":  true,
+                                                            "autoincrement":  false
+                                                        },
+                                                 "user_id":  {
+                                                                 "name":  "user_id",
+                                                                 "type":  "char(36)",
+                                                                 "primaryKey":  false,
+                                                                 "notNull":  true,
+                                                                 "autoincrement":  false
+                                                             },
+                                                 "couple_id":  {
+                                                                   "name":  "couple_id",
+                                                                   "type":  "char(36)",
+                                                                   "primaryKey":  false,
+                                                                   "notNull":  false,
+                                                                   "autoincrement":  false
+                                                               },
+                                                 "title":  {
+                                                               "name":  "title",
+                                                               "type":  "varchar(150)",
+                                                               "primaryKey":  false,
+                                                               "notNull":  true,
+                                                               "autoincrement":  false
+                                                           },
+                                                 "description":  {
+                                                                     "name":  "description",
+                                                                     "type":  "varchar(255)",
+                                                                     "primaryKey":  false,
+                                                                     "notNull":  false,
+                                                                     "autoincrement":  false
+                                                                 },
+                                                 "initial_amount":  {
+                                                                        "name":  "initial_amount",
+                                                                        "type":  "decimal(19,4)",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false
+                                                                    },
+                                                 "current_amount":  {
+                                                                        "name":  "current_amount",
+                                                                        "type":  "decimal(19,4)",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false
+                                                                    },
+                                                 "interest_rate":  {
+                                                                       "name":  "interest_rate",
+                                                                       "type":  "decimal(10,4)",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  true,
+                                                                       "autoincrement":  false,
+                                                                       "default":  "\u00270\u0027"
+                                                                   },
+                                                 "minimum_payment":  {
+                                                                         "name":  "minimum_payment",
+                                                                         "type":  "decimal(19,4)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false,
+                                                                         "default":  "\u00270\u0027"
+                                                                     },
+                                                 "due_day":  {
+                                                                 "name":  "due_day",
+                                                                 "type":  "tinyint",
+                                                                 "primaryKey":  false,
+                                                                 "notNull":  false,
+                                                                 "autoincrement":  false
+                                                             },
+                                                 "priority":  {
+                                                                  "name":  "priority",
+                                                                  "type":  "enum(\u0027low\u0027,\u0027medium\u0027,\u0027high\u0027)",
+                                                                  "primaryKey":  false,
+                                                                  "notNull":  true,
+                                                                  "autoincrement":  false,
+                                                                  "default":  "\u0027medium\u0027"
+                                                              },
+                                                 "status":  {
+                                                                "name":  "status",
+                                                                "type":  "enum(\u0027pending\u0027,\u0027paid\u0027,\u0027overdue\u0027)",
+                                                                "primaryKey":  false,
+                                                                "notNull":  true,
+                                                                "autoincrement":  false,
+                                                                "default":  "\u0027pending\u0027"
+                                                            },
+                                                 "start_date":  {
+                                                                    "name":  "start_date",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  false,
+                                                                    "autoincrement":  false
+                                                                },
+                                                 "end_date":  {
+                                                                  "name":  "end_date",
+                                                                  "type":  "datetime(3)",
+                                                                  "primaryKey":  false,
+                                                                  "notNull":  false,
+                                                                  "autoincrement":  false
+                                                              },
+                                                 "created_at":  {
+                                                                    "name":  "created_at",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "autoincrement":  false,
+                                                                    "default":  "CURRENT_TIMESTAMP(3)"
+                                                                },
+                                                 "updated_at":  {
+                                                                    "name":  "updated_at",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "autoincrement":  false
+                                                                },
+                                                 "deleted_at":  {
+                                                                    "name":  "deleted_at",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  false,
+                                                                    "autoincrement":  false
+                                                                }
+                                             },
+                                 "indexes":  {
+                                                 "idx_debts_user_id":  {
+                                                                           "name":  "idx_debts_user_id",
+                                                                           "columns":  [
+                                                                                           "user_id"
+                                                                                       ],
+                                                                           "isUnique":  false
+                                                                       },
+                                                 "idx_debts_couple_id":  {
+                                                                             "name":  "idx_debts_couple_id",
+                                                                             "columns":  [
+                                                                                             "couple_id"
+                                                                                         ],
+                                                                             "isUnique":  false
+                                                                         },
+                                                 "idx_debts_status":  {
+                                                                          "name":  "idx_debts_status",
+                                                                          "columns":  [
+                                                                                          "status"
+                                                                                      ],
+                                                                          "isUnique":  false
+                                                                      }
+                                             },
+                                 "foreignKeys":  {
+
+                                                 },
+                                 "compositePrimaryKeys":  {
+                                                              "debts_id":  {
+                                                                               "name":  "debts_id",
+                                                                               "columns":  [
+                                                                                               "id"
+                                                                                           ]
+                                                                           }
+                                                          },
+                                 "uniqueConstraints":  {
+
+                                                       },
+                                 "checkConstraint":  {
+
+                                                     }
+                             },
+                   "movements":  {
+                                     "name":  "movements",
+                                     "columns":  {
+                                                     "id":  {
+                                                                "name":  "id",
+                                                                "type":  "char(36)",
+                                                                "primaryKey":  false,
+                                                                "notNull":  true,
+                                                                "autoincrement":  false
+                                                            },
+                                                     "user_id":  {
+                                                                     "name":  "user_id",
+                                                                     "type":  "char(36)",
+                                                                     "primaryKey":  false,
+                                                                     "notNull":  true,
+                                                                     "autoincrement":  false
+                                                                 },
+                                                     "couple_id":  {
+                                                                       "name":  "couple_id",
+                                                                       "type":  "char(36)",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  false,
+                                                                       "autoincrement":  false
+                                                                   },
+                                                     "category_id":  {
+                                                                         "name":  "category_id",
+                                                                         "type":  "char(36)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  true,
+                                                                         "autoincrement":  false
+                                                                     },
+                                                     "type":  {
+                                                                  "name":  "type",
+                                                                  "type":  "enum(\u0027income\u0027,\u0027expense\u0027)",
+                                                                  "primaryKey":  false,
+                                                                  "notNull":  true,
+                                                                  "autoincrement":  false
+                                                              },
+                                                     "amount":  {
+                                                                    "name":  "amount",
+                                                                    "type":  "decimal(19,4)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "autoincrement":  false
+                                                                },
+                                                     "description":  {
+                                                                         "name":  "description",
+                                                                         "type":  "varchar(255)",
+                                                                         "primaryKey":  false,
+                                                                         "notNull":  false,
+                                                                         "autoincrement":  false
+                                                                     },
+                                                     "movement_date":  {
+                                                                           "name":  "movement_date",
+                                                                           "type":  "datetime(3)",
+                                                                           "primaryKey":  false,
+                                                                           "notNull":  true,
+                                                                           "autoincrement":  false
+                                                                       },
+                                                     "is_shared":  {
+                                                                       "name":  "is_shared",
+                                                                       "type":  "boolean",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  true,
+                                                                       "autoincrement":  false,
+                                                                       "default":  false
+                                                                   },
+                                                     "created_at":  {
+                                                                        "name":  "created_at",
+                                                                        "type":  "datetime(3)",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false,
+                                                                        "default":  "CURRENT_TIMESTAMP(3)"
+                                                                    },
+                                                     "updated_at":  {
+                                                                        "name":  "updated_at",
+                                                                        "type":  "datetime(3)",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  true,
+                                                                        "autoincrement":  false
+                                                                    },
+                                                     "deleted_at":  {
+                                                                        "name":  "deleted_at",
+                                                                        "type":  "datetime(3)",
+                                                                        "primaryKey":  false,
+                                                                        "notNull":  false,
+                                                                        "autoincrement":  false
+                                                                    }
+                                                 },
+                                     "indexes":  {
+                                                     "idx_movements_user_id":  {
+                                                                                   "name":  "idx_movements_user_id",
+                                                                                   "columns":  [
+                                                                                                   "user_id"
+                                                                                               ],
+                                                                                   "isUnique":  false
+                                                                               },
+                                                     "idx_movements_couple_id":  {
+                                                                                     "name":  "idx_movements_couple_id",
+                                                                                     "columns":  [
+                                                                                                     "couple_id"
+                                                                                                 ],
+                                                                                     "isUnique":  false
+                                                                                 },
+                                                     "idx_movements_category_id":  {
+                                                                                       "name":  "idx_movements_category_id",
+                                                                                       "columns":  [
+                                                                                                       "category_id"
+                                                                                                   ],
+                                                                                       "isUnique":  false
+                                                                                   },
+                                                     "idx_movements_type_date":  {
+                                                                                     "name":  "idx_movements_type_date",
+                                                                                     "columns":  [
+                                                                                                     "type",
+                                                                                                     "movement_date"
+                                                                                                 ],
+                                                                                     "isUnique":  false
+                                                                                 }
+                                                 },
+                                     "foreignKeys":  {
+
+                                                     },
+                                     "compositePrimaryKeys":  {
+                                                                  "movements_id":  {
+                                                                                       "name":  "movements_id",
+                                                                                       "columns":  [
+                                                                                                       "id"
+                                                                                                   ]
+                                                                                   }
+                                                              },
+                                     "uniqueConstraints":  {
+
+                                                           },
+                                     "checkConstraint":  {
+
+                                                         }
+                                 },
+                   "users":  {
+                                 "name":  "users",
+                                 "columns":  {
+                                                 "id":  {
+                                                            "name":  "id",
+                                                            "type":  "char(36)",
+                                                            "primaryKey":  false,
+                                                            "notNull":  true,
+                                                            "autoincrement":  false
+                                                        },
+                                                 "name":  {
+                                                              "name":  "name",
+                                                              "type":  "varchar(120)",
+                                                              "primaryKey":  false,
+                                                              "notNull":  true,
+                                                              "autoincrement":  false
+                                                          },
+                                                 "email":  {
+                                                               "name":  "email",
+                                                               "type":  "varchar(190)",
+                                                               "primaryKey":  false,
+                                                               "notNull":  true,
+                                                               "autoincrement":  false
+                                                           },
+                                                 "password_hash":  {
+                                                                       "name":  "password_hash",
+                                                                       "type":  "varchar(255)",
+                                                                       "primaryKey":  false,
+                                                                       "notNull":  true,
+                                                                       "autoincrement":  false
+                                                                   },
+                                                 "status":  {
+                                                                "name":  "status",
+                                                                "type":  "enum(\u0027active\u0027,\u0027inactive\u0027)",
+                                                                "primaryKey":  false,
+                                                                "notNull":  true,
+                                                                "autoincrement":  false,
+                                                                "default":  "\u0027active\u0027"
+                                                            },
+                                                 "created_at":  {
+                                                                    "name":  "created_at",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "autoincrement":  false,
+                                                                    "default":  "CURRENT_TIMESTAMP(3)"
+                                                                },
+                                                 "updated_at":  {
+                                                                    "name":  "updated_at",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  true,
+                                                                    "autoincrement":  false
+                                                                },
+                                                 "deleted_at":  {
+                                                                    "name":  "deleted_at",
+                                                                    "type":  "datetime(3)",
+                                                                    "primaryKey":  false,
+                                                                    "notNull":  false,
+                                                                    "autoincrement":  false
+                                                                }
+                                             },
+                                 "indexes":  {
+                                                 "users_email_key":  {
+                                                                         "name":  "users_email_key",
+                                                                         "columns":  [
+                                                                                         "email"
+                                                                                     ],
+                                                                         "isUnique":  true
+                                                                     }
+                                             },
+                                 "foreignKeys":  {
+
+                                                 },
+                                 "compositePrimaryKeys":  {
+                                                              "users_id":  {
+                                                                               "name":  "users_id",
+                                                                               "columns":  [
+                                                                                               "id"
+                                                                                           ]
+                                                                           }
+                                                          },
+                                 "uniqueConstraints":  {
+                                                           "users_email_unique":  {
+                                                                                      "name":  "users_email_unique",
+                                                                                      "columns":  [
+                                                                                                      "email"
+                                                                                                  ]
+                                                                                  }
+                                                       },
+                                 "checkConstraint":  {
+
+                                                     }
+                             },
+                   "refresh_tokens":  {
+                                          "checkConstraint":  {
+
+                                                              },
+                                          "name":  "refresh_tokens",
+                                          "columns":  {
+                                                          "id":  {
+                                                                     "autoincrement":  false,
+                                                                     "primaryKey":  false,
+                                                                     "name":  "id",
+                                                                     "notNull":  true,
+                                                                     "type":  "char(36)"
+                                                                 },
+                                                          "updated_at":  {
+                                                                             "autoincrement":  false,
+                                                                             "primaryKey":  false,
+                                                                             "name":  "updated_at",
+                                                                             "notNull":  true,
+                                                                             "type":  "datetime(3)"
+                                                                         },
+                                                          "revoked":  {
+                                                                          "primaryKey":  false,
+                                                                          "name":  "revoked",
+                                                                          "type":  "boolean",
+                                                                          "default":  false,
+                                                                          "autoincrement":  false,
+                                                                          "notNull":  true
+                                                                      },
+                                                          "expires_at":  {
+                                                                             "autoincrement":  false,
+                                                                             "primaryKey":  false,
+                                                                             "name":  "expires_at",
+                                                                             "notNull":  true,
+                                                                             "type":  "datetime(3)"
+                                                                         },
+                                                          "created_at":  {
+                                                                             "primaryKey":  false,
+                                                                             "name":  "created_at",
+                                                                             "type":  "datetime(3)",
+                                                                             "default":  "CURRENT_TIMESTAMP(3)",
+                                                                             "autoincrement":  false,
+                                                                             "notNull":  true
+                                                                         },
+                                                          "user_id":  {
+                                                                          "autoincrement":  false,
+                                                                          "primaryKey":  false,
+                                                                          "name":  "user_id",
+                                                                          "notNull":  true,
+                                                                          "type":  "char(36)"
+                                                                      }
+                                                      },
+                                          "uniqueConstraints":  {
+
+                                                                },
+                                          "indexes":  {
+                                                          "idx_refresh_tokens_user_id":  {
+                                                                                             "name":  "idx_refresh_tokens_user_id",
+                                                                                             "columns":  [
+                                                                                                             "user_id"
+                                                                                                         ],
+                                                                                             "isUnique":  false
+                                                                                         }
+                                                      },
+                                          "foreignKeys":  {
+
+                                                          },
+                                          "compositePrimaryKeys":  {
+                                                                       "refresh_tokens_id":  {
+                                                                                                 "name":  "refresh_tokens_id",
+                                                                                                 "columns":  [
+                                                                                                                 "id"
+                                                                                                             ]
+                                                                                             }
+                                                                   }
+                                      }
+               },
+    "views":  {
+
+              },
+    "_meta":  {
+                  "schemas":  {
+
+                              },
+                  "tables":  {
+
+                             },
+                  "columns":  {
+
+                              }
+              },
+    "internal":  {
+                     "tables":  {
+
+                                },
+                     "indexes":  {
+
+                                 }
+                 }
 }

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import { eq, lt } from 'drizzle-orm';
+import { eq, and, gt } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
-import { users, tokenBlacklist } from '../../shared/database/schema.js';
+import { users, refreshTokens } from '../../shared/database/schema.js';
 
 export async function findUserByEmail(email: string) {
   const result = await db
@@ -19,26 +19,50 @@ export async function createUser(
   await db.insert(users).values(data);
 }
 
-export async function blacklistToken(token: string, expiresAt: Date) {
-  await db.insert(tokenBlacklist).values({
-    id: crypto.randomUUID(),
-    token,
-    expiresAt,
+export async function createRefreshToken(data: {
+  userId: string;
+  expiresAt: Date;
+}) {
+  const id = crypto.randomUUID();
+  const now = new Date();
+
+  await db.insert(refreshTokens).values({
+    id,
+    userId: data.userId,
+    expiresAt: data.expiresAt,
+    revoked: false,
+    createdAt: now,
+    updatedAt: now,
   });
+
+  return id;
 }
 
-export async function findBlacklistedToken(token: string) {
+export async function findRefreshTokenById(id: string) {
   const result = await db
     .select()
-    .from(tokenBlacklist)
-    .where(eq(tokenBlacklist.token, token))
+    .from(refreshTokens)
+    .where(eq(refreshTokens.id, id))
     .limit(1);
 
   return result[0] ?? null;
 }
 
-export async function deleteExpiredTokens() {
+export async function revokeRefreshToken(id: string) {
   await db
-    .delete(tokenBlacklist)
-    .where(lt(tokenBlacklist.expiresAt, new Date()));
+    .update(refreshTokens)
+    .set({ revoked: true, updatedAt: new Date() })
+    .where(eq(refreshTokens.id, id));
+}
+
+export async function revokeAllUserRefreshTokens(userId: string) {
+  await db
+    .update(refreshTokens)
+    .set({ revoked: true, updatedAt: new Date() })
+    .where(
+      and(
+        eq(refreshTokens.userId, userId),
+        eq(refreshTokens.revoked, false),
+      ),
+    );
 }

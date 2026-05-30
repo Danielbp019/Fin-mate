@@ -1,17 +1,32 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { env } from '../../../config/env.js';
 
 vi.mock('../../auth/auth.repository.js');
 vi.mock('../categories.repository.js');
-vi.mock('bcryptjs');
+vi.mock('../../../config/env.js', () => ({
+  env: {
+    jwtSecret: 'test-secret',
+    jwtExpiresInSeconds: 900,
+    jwtRefreshExpiresInSeconds: 2592000,
+    nodeEnv: 'test',
+    frontendUrl: 'http://localhost:5173',
+    rateLimitWindowMs: 900000,
+    rateLimitMax: 100,
+    db: {
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      password: '',
+      name: 'finmate_test',
+    },
+  },
+}));
 
 const appPromise = import('../../../app.js').then((m) => m.default);
 
 function createToken(): string {
-  return jwt.sign({ userId: 'user-123' }, env.jwtSecret, { expiresIn: '1h' });
+  return jwt.sign({ sub: 'user-123' }, 'test-secret', { expiresIn: '1h' });
 }
 
 const mockCategory = {
@@ -29,37 +44,17 @@ const mockCategory = {
 };
 
 let app: Awaited<typeof appPromise>;
-let authRepository: typeof import('../../auth/auth.repository.js');
 let categoriesRepository: typeof import('../categories.repository.js');
 
 beforeEach(async () => {
   vi.clearAllMocks();
   app = await appPromise;
-  authRepository = await import('../../auth/auth.repository.js');
   categoriesRepository = await import('../categories.repository.js');
-
-  vi.mocked(authRepository.findBlacklistedToken).mockResolvedValue(null);
 });
 
 describe('authentication', () => {
   it('returns 401 when no token is provided', async () => {
     await request(app).get('/categories').expect(401);
-  });
-
-  it('returns 401 when token is blacklisted', async () => {
-    vi.mocked(authRepository.findBlacklistedToken).mockResolvedValue({
-      id: 'blacklisted-id',
-      token: 'some-token',
-      expiresAt: new Date(Date.now() + 3600000),
-      createdAt: new Date(),
-    });
-
-    const token = createToken();
-
-    await request(app)
-      .get('/categories')
-      .set('Authorization', `Bearer ${token}`)
-      .expect(401);
   });
 });
 
@@ -124,7 +119,6 @@ describe('GET /categories/:id', () => {
 describe('POST /categories', () => {
   it('returns 201 with created category', async () => {
     vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
-    vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
 
     const token = createToken();
 

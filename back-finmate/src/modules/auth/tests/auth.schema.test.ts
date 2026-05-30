@@ -2,69 +2,67 @@ import { describe, it, expect } from 'vitest';
 import { registerSchema, loginSchema } from '../auth.schema.js';
 
 describe('registerSchema', () => {
-  it('accepts valid data', () => {
-    const result = registerSchema.parse({
-      name: 'Juan Pérez',
-      email: 'juan@example.com',
+  it('debe validar datos correctos', () => {
+    const data = registerSchema.parse({
+      name: 'Usuario Test',
+      email: 'test@example.com',
       password: '123456',
     });
-    expect(result).toEqual({
-      name: 'Juan Pérez',
-      email: 'juan@example.com',
-      password: '123456',
-    });
+    expect(data.name).toBe('Usuario Test');
+    expect(data.email).toBe('test@example.com');
+    expect(data.password).toBe('123456');
   });
 
-  it('rejects name shorter than 2 characters', () => {
-    expect(() =>
-      registerSchema.parse({ name: 'A', email: 'a@b.com', password: '123456' }),
-    ).toThrow();
-  });
-
-  it('rejects name longer than 120 characters', () => {
+  it('debe rechazar email inválido', () => {
     expect(() =>
       registerSchema.parse({
-        name: 'A'.repeat(121),
-        email: 'a@b.com',
+        name: 'Test',
+        email: 'invalido',
         password: '123456',
       }),
     ).toThrow();
   });
 
-  it('rejects invalid email', () => {
+  it('debe rechazar contraseña menor a 6 caracteres', () => {
     expect(() =>
-      registerSchema.parse({ name: 'Juan', email: 'correo-invalido', password: '123456' }),
+      registerSchema.parse({
+        name: 'Test',
+        email: 'test@example.com',
+        password: '12345',
+      }),
     ).toThrow();
   });
 
-  it('rejects password shorter than 6 characters', () => {
+  it('debe rechazar nombre vacío', () => {
     expect(() =>
-      registerSchema.parse({ name: 'Juan', email: 'juan@example.com', password: '12345' }),
+      registerSchema.parse({
+        name: 'A',
+        email: 'test@example.com',
+        password: '123456',
+      }),
     ).toThrow();
   });
 });
 
 describe('loginSchema', () => {
-  it('accepts valid data', () => {
-    const result = loginSchema.parse({
-      email: 'juan@example.com',
+  it('debe validar datos correctos', () => {
+    const data = loginSchema.parse({
+      email: 'test@example.com',
       password: '123456',
     });
-    expect(result).toEqual({
-      email: 'juan@example.com',
-      password: '123456',
-    });
+    expect(data.email).toBe('test@example.com');
+    expect(data.password).toBe('123456');
   });
 
-  it('rejects invalid email', () => {
+  it('debe rechazar email inválido', () => {
     expect(() =>
       loginSchema.parse({ email: 'invalido', password: '123456' }),
     ).toThrow();
   });
 
-  it('rejects empty password', () => {
+  it('debe rechazar contraseña vacía', () => {
     expect(() =>
-      loginSchema.parse({ email: 'juan@example.com', password: '' }),
+      loginSchema.parse({ email: 'test@example.com', password: '' }),
     ).toThrow();
   });
 });

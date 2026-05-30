@@ -1,144 +1,235 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import * as authService from '../auth.service.js';
 import * as authRepository from '../auth.repository.js';
 
 vi.mock('../auth.repository.js');
-vi.mock('bcryptjs');
-vi.mock('jsonwebtoken');
+vi.mock('../../../config/env.js', () => ({
+  env: {
+    jwtSecret: 'test-secret',
+    jwtExpiresInSeconds: 900,
+    jwtRefreshExpiresInSeconds: 2592000,
+    nodeEnv: 'test',
+    frontendUrl: 'http://localhost:5173',
+    rateLimitWindowMs: 900000,
+    rateLimitMax: 100,
+    db: {
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      password: '',
+      name: 'finmate_test',
+    },
+  },
+}));
 
 const mockUser = {
   id: '550e8400-e29b-41d4-a716-446655440000',
-  name: 'Juan Pérez',
-  email: 'juan@example.com',
-  passwordHash: '$2a$10$hashedpassword',
+  name: 'Usuario Test',
+  email: 'test@example.com',
+  passwordHash: bcrypt.hashSync('123456', 10),
   status: 'active' as const,
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,
 };
 
-let authService: typeof import('../auth.service.js');
+const mockRefreshTokenRecord = {
+  id: '660e8400-e29b-41d4-a716-446655440001',
+  userId: mockUser.id,
+  expiresAt: new Date(Date.now() + 2592000 * 1000),
+  revoked: false,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
 
-beforeEach(async () => {
-  vi.clearAllMocks();
-  authService = await import('../auth.service.js');
-});
+describe('authService.login', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(mockUser);
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
+  });
 
-describe('register', () => {
-  it('creates user and returns token when email is available', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
-    vi.mocked(bcrypt.hash).mockResolvedValue('$2a$10$hashedpassword');
-    vi.mocked(jwt.sign).mockReturnValue('mock-token' as never);
-
-    const result = await authService.register({
-      name: 'Juan Pérez',
-      email: 'juan@example.com',
+  it('debe retornar accessToken y refreshToken con credenciales válidas', async () => {
+    const result = await authService.login({
+      email: 'test@example.com',
       password: '123456',
     });
 
-    expect(authRepository.findUserByEmail).toHaveBeenCalledWith('juan@example.com');
-    expect(bcrypt.hash).toHaveBeenCalledWith('123456', 10);
-    expect(authRepository.createUser).toHaveBeenCalledTimes(1);
-    expect(jwt.sign).toHaveBeenCalled();
-    expect(result.token).toBe('mock-token');
-    expect(result.message).toBe('Usuario registrado exitosamente');
-    expect(result.user).toEqual({
-      id: expect.any(String),
-      name: 'Juan Pérez',
-      email: 'juan@example.com',
-    });
+    expect(result.accessToken).toBeTruthy();
+    expect(result.refreshToken).toBeTruthy();
+    expect(result.cookieOptions).toBeTruthy();
+    expect(result.user.id).toBe(mockUser.id);
+    expect(result.user.name).toBe('Usuario Test');
+
+    const decoded = jwt.verify(result.accessToken, 'test-secret') as { sub: string };
+    expect(decoded.sub).toBe(mockUser.id);
   });
 
-  it('throws 409 when email already exists', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(mockUser);
+  it('debe lanzar 401 si el email no existe', async () => {
+    vi.mocked(authRepository.findUserByEmail).mockResolvedValueOnce(null);
+    await expect(
+      authService.login({ email: 'noexiste@test.com', password: '123456' }),
+    ).rejects.toMatchObject({ statusCode: 401 });
+  });
 
+  it('debe lanzar 401 si la contraseña es incorrecta', async () => {
+    await expect(
+      authService.login({
+        email: 'test@example.com',
+        password: 'wrong-password',
+      }),
+    ).rejects.toMatchObject({ statusCode: 401 });
+  });
+
+  it('debe lanzar 403 si el usuario está inactivo', async () => {
+    vi.mocked(authRepository.findUserByEmail).mockResolvedValueOnce({
+      ...mockUser,
+      status: 'inactive' as const,
+    });
+    await expect(
+      authService.login({ email: 'test@example.com', password: '123456' }),
+    ).rejects.toMatchObject({ statusCode: 403 });
+  });
+
+  it('debe crear un refresh token en la base de datos', async () => {
+    await authService.login({
+      email: 'test@example.com',
+      password: '123456',
+    });
+
+    expect(authRepository.createRefreshToken).toHaveBeenCalledTimes(1);
+    expect(authRepository.createRefreshToken).toHaveBeenCalledWith({
+      userId: mockUser.id,
+      expiresAt: expect.any(Date),
+    });
+  });
+});
+
+describe('authService.register', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
+    vi.mocked(authRepository.createUser).mockResolvedValue(undefined);
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
+  });
+
+  it('debe registrar y retornar tokens', async () => {
+    const result = await authService.register({
+      name: 'Nuevo Usuario',
+      email: 'nuevo@test.com',
+      password: '123456',
+    });
+
+    expect(result.accessToken).toBeTruthy();
+    expect(result.refreshToken).toBeTruthy();
+    expect(result.user.name).toBe('Nuevo Usuario');
+    expect(authRepository.createUser).toHaveBeenCalledTimes(1);
+  });
+
+  it('debe lanzar 409 si el email ya existe', async () => {
+    vi.mocked(authRepository.findUserByEmail).mockResolvedValueOnce(mockUser);
     await expect(
       authService.register({
-        name: 'Juan',
-        email: 'juan@example.com',
+        name: 'Otro',
+        email: 'test@example.com',
         password: '123456',
       }),
-    ).rejects.toMatchObject({
-      statusCode: 409,
-      message: 'El correo electrónico ya está registrado',
-    });
-
-    expect(authRepository.createUser).not.toHaveBeenCalled();
+    ).rejects.toMatchObject({ statusCode: 409 });
   });
 });
 
-describe('login', () => {
-  it('returns token with valid credentials', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
-    vi.mocked(jwt.sign).mockReturnValue('mock-token' as never);
-
-    const result = await authService.login({
-      email: 'juan@example.com',
-      password: '123456',
-    });
-
-    expect(authRepository.findUserByEmail).toHaveBeenCalledWith('juan@example.com');
-    expect(bcrypt.compare).toHaveBeenCalledWith('123456', mockUser.passwordHash);
-    expect(result.token).toBe('mock-token');
-    expect(result.message).toBe('Inicio de sesión exitoso');
+describe('authService.refresh', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(mockRefreshTokenRecord);
+    vi.mocked(authRepository.revokeRefreshToken).mockResolvedValue(undefined);
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue('new-jti');
   });
 
-  it('throws 401 when user not found', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
-
-    await expect(
-      authService.login({ email: 'unknown@example.com', password: '123456' }),
-    ).rejects.toMatchObject({
-      statusCode: 401,
-      message: 'Credenciales inválidas',
-    });
-  });
-
-  it('throws 401 when password is incorrect', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
-
-    await expect(
-      authService.login({ email: 'juan@example.com', password: 'wrong' }),
-    ).rejects.toMatchObject({
-      statusCode: 401,
-      message: 'Credenciales inválidas',
-    });
-  });
-
-  it('throws 403 when user is inactive', async () => {
-    vi.mocked(authRepository.findUserByEmail).mockResolvedValue({
-      ...mockUser,
-      status: 'inactive',
-    });
-    vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
-
-    await expect(
-      authService.login({ email: 'juan@example.com', password: '123456' }),
-    ).rejects.toMatchObject({
-      statusCode: 403,
-      message: 'Cuenta desactivada',
-    });
-  });
-});
-
-describe('logout', () => {
-  it('blacklists token and returns success message', async () => {
-    const expiresAt = new Date(Date.now() + 3600000);
-    vi.mocked(jwt.verify).mockReturnValue({
-      userId: mockUser.id,
-      exp: Math.floor(expiresAt.getTime() / 1000),
-    } as never);
-
-    const result = await authService.logout('valid-token');
-
-    expect(jwt.verify).toHaveBeenCalledWith('valid-token', expect.any(String));
-    expect(authRepository.blacklistToken).toHaveBeenCalledWith(
-      'valid-token',
-      expect.any(Date),
+  it('debe rotar el refresh token y generar nuevo access token', async () => {
+    const oldRefreshToken = jwt.sign(
+      { sub: mockUser.id, jti: mockRefreshTokenRecord.id },
+      'test-secret',
+      { expiresIn: 2592000 },
     );
-    expect(result.message).toBe('Sesión cerrada exitosamente');
+
+    const result = await authService.refresh(oldRefreshToken);
+
+    expect(result.accessToken).toBeTruthy();
+    expect(result.refreshToken).toBeTruthy();
+    expect(result.cookieOptions).toBeTruthy();
+    expect(authRepository.revokeRefreshToken).toHaveBeenCalledWith(mockRefreshTokenRecord.id);
+    expect(authRepository.createRefreshToken).toHaveBeenCalledTimes(1);
+  });
+
+  it('debe lanzar 401 si no se proporciona refresh token', async () => {
+    await expect(authService.refresh(undefined)).rejects.toMatchObject({
+      statusCode: 401,
+    });
+  });
+
+  it('debe lanzar 401 si el refresh token es inválido', async () => {
+    await expect(authService.refresh('token-invalido')).rejects.toMatchObject({
+      statusCode: 401,
+    });
+  });
+
+  it('debe lanzar 401 si la sesión fue revocada', async () => {
+    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValueOnce({
+      ...mockRefreshTokenRecord,
+      revoked: true,
+    });
+
+    const revokedRefreshToken = jwt.sign(
+      { sub: mockUser.id, jti: mockRefreshTokenRecord.id },
+      'test-secret',
+      { expiresIn: 2592000 },
+    );
+
+    await expect(authService.refresh(revokedRefreshToken)).rejects.toMatchObject({
+      statusCode: 401,
+    });
+  });
+});
+
+describe('authService.logout', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(mockRefreshTokenRecord);
+    vi.mocked(authRepository.revokeRefreshToken).mockResolvedValue(undefined);
+  });
+
+  it('debe revocar el refresh token', async () => {
+    const refreshToken = jwt.sign(
+      { sub: mockUser.id, jti: mockRefreshTokenRecord.id },
+      'test-secret',
+      { expiresIn: 2592000 },
+    );
+
+    const result = await authService.logout(refreshToken);
+
+    expect(result.success).toBe(true);
+    expect(authRepository.revokeRefreshToken).toHaveBeenCalledWith(mockRefreshTokenRecord.id);
+  });
+
+  it('debe retornar éxito incluso sin refresh token', async () => {
+    const result = await authService.logout(undefined);
+    expect(result.success).toBe(true);
+    expect(authRepository.revokeRefreshToken).not.toHaveBeenCalled();
+  });
+});
+
+describe('authService.logoutAll', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(authRepository.revokeAllUserRefreshTokens).mockResolvedValue(undefined);
+  });
+
+  it('debe revocar todos los refresh tokens del usuario', async () => {
+    const result = await authService.logoutAll(mockUser.id, undefined);
+    expect(result.success).toBe(true);
+    expect(authRepository.revokeAllUserRefreshTokens).toHaveBeenCalledWith(mockUser.id);
   });
 });
