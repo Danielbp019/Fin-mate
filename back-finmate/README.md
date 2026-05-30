@@ -37,30 +37,43 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 
 ## Comandos Útiles
 
-| Comando               | Descripción                                        |
-| --------------------- | -------------------------------------------------- |
-| `npm run dev`         | Inicia servidor con hot-reload (tsx watch)         |
-| `npm run build`       | Compila TypeScript a JS                            |
-| `npm run start`       | Ejecuta compilado en producción                    |
-| `npm run db:generate` | Genera migraciones desde el schema                 |
-| `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB            |
-| `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 4 categorías) |
-| `npm test`            | Ejecuta todos los tests (vitest run)               |
-| `npm run test:watch`  | Ejecuta tests en modo watch (vitest)               |
+| Comando               | Descripción                                                              |
+| --------------------- | ------------------------------------------------------------------------ |
+| `npm run dev`         | Inicia servidor con hot-reload + limpieza automática de tokens expirados |
+| `npm run build`       | Compila TypeScript a JS                                                  |
+| `npm run start`       | Ejecuta compilado en producción                                          |
+| `npm run db:generate` | Genera migraciones desde el schema                                       |
+| `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB                                  |
+| `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 4 categorías)                       |
+| `npm test`            | Ejecuta todos los tests (vitest run)                                     |
+| `npm run test:watch`  | Ejecuta tests en modo watch (vitest)                                     |
+
+## Limpieza de Tokens
+
+Los refresh tokens se acumulan en la tabla `refresh_tokens` con cada login y rotación.
+Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automática al iniciar:
+
+- **Archivo**: `src/shared/database/cleanup.ts`
+- **Cuándo**: Cada vez que arranca el servidor (`npm run dev` o `npm start`)
+- **Qué elimina**:
+  - Tokens cuya fecha de expiración ya pasó (`expires_at < NOW()`)
+  - Tokens revocados con más de 7 días de antigüedad
+- **Comportamiento**: Envuelto en try/catch — si falla, no bloquea el inicio del servidor y solo muestra una advertencia en consola
 
 ## Endpoints Activos
 
 ### Auth
 
-| Método | Ruta              | Body / Headers / Cookies                                    | Respuesta                             |
-| ------ | ----------------- | ----------------------------------------------------------- | ------------------------------------- |
-| POST   | `/auth/register`  | `{ name, email, password }`                                 | 201 `{ accessToken, user }` + cookie  |
-| POST   | `/auth/login`     | `{ email, password }`                                       | 200 `{ accessToken, user }` + cookie  |
-| POST   | `/auth/refresh`   | Cookie `refreshToken` (HttpOnly)                            | 200 `{ accessToken }` + nueva cookie  |
-| POST   | `/auth/logout`    | `Authorization: Bearer <token>` + Cookie `refreshToken`     | 200 `{ success }` + cookie limpiada   |
-| POST   | `/auth/logout-all`| `Authorization: Bearer <token>` + Cookie `refreshToken`     | 200 `{ success }` + cookie limpiada   |
+| Método | Ruta               | Body / Headers / Cookies                                | Respuesta                            |
+| ------ | ------------------ | ------------------------------------------------------- | ------------------------------------ |
+| POST   | `/auth/register`   | `{ name, email, password }`                             | 201 `{ accessToken, user }` + cookie |
+| POST   | `/auth/login`      | `{ email, password }`                                   | 200 `{ accessToken, user }` + cookie |
+| POST   | `/auth/refresh`    | Cookie `refreshToken` (HttpOnly)                        | 200 `{ accessToken }` + nueva cookie |
+| POST   | `/auth/logout`     | `Authorization: Bearer <token>` + Cookie `refreshToken` | 200 `{ success }` + cookie limpiada  |
+| POST   | `/auth/logout-all` | `Authorization: Bearer <token>` + Cookie `refreshToken` | 200 `{ success }` + cookie limpiada  |
 
 **Flujo de autenticación:**
+
 - **Access Token**: JWT de 15 minutos, enviado en header `Authorization: Bearer`. Nunca se almacena en base de datos.
 - **Refresh Token**: JWT de 30 días, almacenado en cookie HttpOnly (`Path=/auth`). Se rota en cada uso.
 - **Logout**: Revoca el refresh token actual en base de datos.

@@ -21,10 +21,12 @@ const limiter = rateLimit({
 
 app.use(helmet());
 app.use(limiter);
-app.use(cors({
-  origin: env.frontendUrl,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: env.frontendUrl,
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 

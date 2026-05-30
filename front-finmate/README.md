@@ -19,20 +19,20 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, ESLint, Zod
 
 ## Variables de Entorno
 
-| Variable              | Descripción                     | Default                    |
-| --------------------- | ------------------------------- | -------------------------- |
-| `VITE_API_BASE_URL`   | URL base del backend            | `http://localhost:3000`    |
+| Variable            | Descripción          | Default                 |
+| ------------------- | -------------------- | ----------------------- |
+| `VITE_API_BASE_URL` | URL base del backend | `http://localhost:3000` |
 
 ## Comandos Útiles
 
-| Comando               | Descripción                                    |
-| --------------------- | ---------------------------------------------- |
-| `npm run dev`         | Inicia servidor de desarrollo con hot-reload   |
-| `npm run build`       | Compila para producción                        |
-| `npm run preview`     | Previsualiza build de producción               |
-| `npm run lint`        | Ejecuta ESLint                                 |
-| `npm run lint:fix`    | Corrige errores de ESLint automáticamente      |
-| `npm run type-check`  | Verifica tipos de TypeScript                   |
+| Comando              | Descripción                                  |
+| -------------------- | -------------------------------------------- |
+| `npm run dev`        | Inicia servidor de desarrollo con hot-reload |
+| `npm run build`      | Compila para producción                      |
+| `npm run preview`    | Previsualiza build de producción             |
+| `npm run lint`       | Ejecuta ESLint                               |
+| `npm run lint:fix`   | Corrige errores de ESLint automáticamente    |
+| `npm run type-check` | Verifica tipos de TypeScript                 |
 
 ## Estructura del Proyecto
 
@@ -62,8 +62,13 @@ public/                 Archivos públicos estáticos
 
 ## Reglas del Proyecto
 
-- Los textos que se muestren al usuario deben estar en idioma español.
-- Usar el MCP context7 para consultar documentación de librerías.
+- Los textos que se muestren al usuario deben estar en idioma español
+- Usar el MCP context7 para consultar documentación de librerías
+- Cuando se creen end points nuevos actualizar el archivo readme.md
+- Evitar complejidad enterprise innecesaria
+- Aplicar principios SOLID siempre que sea razonable
+- Validar toda entrada externa
+- No uses nunca iconos en textos informativos de consola
 
 ## Validaciones
 

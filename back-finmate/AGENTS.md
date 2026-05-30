@@ -16,6 +16,7 @@ Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod, JWT (Access + Refresh
 - Evitar complejidad enterprise innecesaria
 - Aplicar principios SOLID siempre que sea razonable
 - Validar toda entrada externa
+- No uses nunca iconos en textos informativos de consola
 
 ### Variables de Entorno
 
