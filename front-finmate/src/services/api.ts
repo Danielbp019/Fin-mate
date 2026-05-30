@@ -39,6 +39,12 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
+    const isRefreshRequest = originalRequest.url?.includes('/auth/refresh')
+
+    if (isRefreshRequest) {
+      throw error
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {

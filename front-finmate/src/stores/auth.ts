@@ -22,6 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
     const res = await api.post('/auth/login', { email, password })
     accessToken.value = res.data.accessToken
     user.value = res.data.user
+    appReady.value = true
     router.push('/dashboard')
   }
 
@@ -29,6 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
     const res = await api.post('/auth/register', { name, email, password })
     accessToken.value = res.data.accessToken
     user.value = res.data.user
+    appReady.value = true
     router.push('/dashboard')
   }
 

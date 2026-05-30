@@ -36,11 +36,12 @@ const router = createRouter({
 router.beforeEach(async to => {
   const auth = useAuthStore()
 
-  if (!auth.appReady) {
+  const guestRoutes = new Set(['Landing', 'Login', 'Register'])
+
+  if (!auth.appReady && !guestRoutes.has(to.name as string)) {
     await auth.initialize()
   }
 
-  const guestRoutes = new Set(['Landing', 'Login', 'Register'])
   if (!auth.isAuthenticated && !guestRoutes.has(to.name as string)) {
     return { name: 'Login' }
   }
