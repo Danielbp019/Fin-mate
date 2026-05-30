@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Back-end de finmate",
   "license": "ISC",
-  "author": "Daniel Bautista P.",
+  "author": "Daniel M. Bautista Pradilla",
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
@@ -17,28 +17,28 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
+    "bcryptjs": "2.4.3",
+    "cors": "2.8.5",
     "dinero.js": "2.0.2",
-    "dotenv": "^16.5.0",
+    "dotenv": "16.5.0",
     "drizzle-orm": "0.45.2",
     "express": "5.2.1",
     "express-rate-limit": "8.5.2",
     "helmet": "8.2.0",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "9.0.2",
     "mysql2": "3.22.3",
-    "zod": "^3.24.4"
+    "zod": "3.24.4"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
-    "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.15.3",
+    "@types/bcryptjs": "2.4.6",
+    "@types/cors": "2.8.17",
+    "@types/express": "5.0.1",
+    "@types/jsonwebtoken": "9.0.9",
+    "@types/node": "22.15.3",
     "@types/supertest": "7.2.0",
     "supertest": "7.2.2",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3",
+    "tsx": "4.19.4",
+    "typescript": "5.8.3",
     "vitest": "4.1.7"
   }
 }
