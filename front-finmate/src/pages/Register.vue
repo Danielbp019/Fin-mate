@@ -206,7 +206,7 @@
   import type { AxiosError } from 'axios'
   import { ref } from 'vue'
   import { useAuthStore } from '@/stores/auth'
-  import '@/styles/auth.css'
+  import '@/styles/theme.css'
 
   const auth = useAuthStore()
   const name = ref('')

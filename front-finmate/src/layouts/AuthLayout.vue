@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { shallowRef } from 'vue'
+  import { onMounted, shallowRef } from 'vue'
   import { useTheme } from 'vuetify'
   import { useAuthStore } from '@/stores/auth'
 
@@ -49,7 +49,16 @@
   const theme = useTheme()
   const drawer = shallowRef(false)
 
+  onMounted(() => {
+    const saved = localStorage.getItem('theme')
+    if (saved === 'dark' || saved === 'light') {
+      theme.global.name.value = saved
+    }
+  })
+
   function toggleTheme () {
-    theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+    const next = theme.global.name.value === 'light' ? 'dark' : 'light'
+    theme.global.name.value = next
+    localStorage.setItem('theme', next)
   }
 </script>

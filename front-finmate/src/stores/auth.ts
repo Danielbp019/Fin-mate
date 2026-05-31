@@ -39,7 +39,8 @@ export const useAuthStore = defineStore('auth', () => {
       await api.post('/auth/logout')
     } finally {
       clear()
-      router.push('/login')
+      localStorage.removeItem('theme')
+      router.push('/')
     }
   }
 

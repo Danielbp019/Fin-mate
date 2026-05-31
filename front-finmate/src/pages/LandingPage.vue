@@ -7,13 +7,9 @@
     <nav class="lp-nav">
       <div class="lp-logo">
         <div class="lp-logo-icon">
-          <svg fill="none" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M10 2.5C10 2.5 5 5 5 10.5C5 13.5 7.2 16 10 16C12.8 16 15 13.5 15 10.5C15 5 10 2.5 10 2.5Z"
-              fill="rgba(255,255,255,0.3)"
-            />
-            <path d="M10 5C10 5 7 7 7 10.5C7 12.4 8.3 14 10 14C11.7 14 13 12.4 13 10.5C13 7 10 5 10 5Z" fill="white" />
-          </svg>
+          <div class="fm-logo-icon">
+            <v-icon color="white" size="20">mdi-finance</v-icon>
+          </div>
         </div>
         FinMate
       </div>
@@ -57,15 +53,6 @@
             Comenzar gratis
           </button>
           <button class="btn-outline" @click="router.push({ name: 'Login' })">Iniciar sesión</button>
-        </div>
-
-        <div class="lp-trust">
-          <div class="lp-trust-dots">
-            <div class="lp-trust-dot" style="background:#1D9E75">A</div>
-            <div class="lp-trust-dot" style="background:#185FA5;margin-left:-6px">M</div>
-            <div class="lp-trust-dot" style="background:#BA7517;margin-left:-6px">R</div>
-          </div>
-          +2,400 usuarios administrando sus finanzas hoy
         </div>
       </div>
 
@@ -232,21 +219,48 @@
 
     <!-- FOOTER -->
     <footer class="lp-footer">
-      <div class="footer-logo">FinMate</div>
-      <div class="footer-links">
-        <a href="#">Privacidad</a>
-        <a href="#">Términos</a>
-        <a href="#">Soporte</a>
+      <div class="footer-logo">
+        FinMate — una aplicación de
+        <img alt="firma" class="footer-signature" :src="firmaNegra">
       </div>
-      <div style="font-size:11px;color:var(--ink-soft);opacity:0.6">© 2026 FinMate</div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="#" @click.prevent="showPrivacy = true">Privacidad</a>
+          <a href="#" @click.prevent="showTerms = true">Términos</a>
+        </div>
+        <div style="font-size:11px;color:var(--ink-soft);opacity:0.6">© 2026 FinMate</div>
+      </div>
     </footer>
+
+    <LegalModal v-model="showPrivacy" title="Privacidad">
+      <p class="mb-3">En FinMate nos tomamos tu privacidad en serio. Esta política describe cómo recopilamos, usamos y protegemos tu información personal.</p>
+      <p class="mb-3"><strong>Datos que recopilamos:</strong> nombre, correo electrónico, información financiera que registres voluntariamente (ingresos, gastos, deudas).</p>
+      <p class="mb-3"><strong>Uso de la información:</strong> tus datos se usan exclusivamente para proveer el servicio de administración financiera, generar reportes y sugerencias personalizadas.</p>
+      <p class="mb-3"><strong>Cookies:</strong> utilizamos cookies esenciales para mantener tu sesión activa. No usamos cookies de rastreo ni publicitarias.</p>
+      <p class="mb-3"><strong>Protección:</strong> tus datos se almacenan de forma segura con encriptación en reposo y en tránsito. Nunca compartimos tu información con terceros.</p>
+      <p><strong>Tus derechos:</strong> puedes solicitar la eliminación de tus datos en cualquier momento escribiéndonos a soporte@finmate.app.</p>
+    </LegalModal>
+
+    <LegalModal v-model="showTerms" title="Términos de uso">
+      <p class="mb-3">Al crear una cuenta en FinMate aceptas los siguientes términos y condiciones de uso.</p>
+      <p class="mb-3"><strong>Uso del servicio:</strong> FinMate es una herramienta de administración financiera personal. No brindamos asesoría financiera profesional ni garantizamos resultados específicos.</p>
+      <p class="mb-3"><strong>Cuenta:</strong> eres responsable de mantener la confidencialidad de tu contraseña y de toda actividad en tu cuenta.</p>
+      <p class="mb-3"><strong>Limitación de responsabilidad:</strong> FinMate no se hace responsable por decisiones financieras tomadas basadas en la información proporcionada por la aplicación.</p>
+      <p class="mb-3"><strong>Modificaciones:</strong> nos reservamos el derecho de actualizar estos términos. Notificaremos cambios significativos por correo electrónico.</p>
+      <p><strong>Vigencia:</strong> estos términos están vigentes a partir del 1 de enero de 2026.</p>
+    </LegalModal>
 
   </div>
 </template>
 
 <script setup lang="ts">
+  import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import '@/styles/landing-page.css'
+  import firmaNegra from '@/assets/daniel_firma_black.svg'
+  import LegalModal from '@/components/LegalModal.vue'
+  import '@/styles/theme.css'
 
   const router = useRouter()
+  const showPrivacy = ref(false)
+  const showTerms = ref(false)
 </script>
