@@ -92,94 +92,43 @@
           <h1 class="fm-form-title">Crea tu cuenta</h1>
         </div>
 
-        <v-alert
-          v-if="error"
-          class="fm-alert mb-5"
-          closable
-          density="compact"
-          rounded="lg"
-          type="error"
-          variant="tonal"
-          @click:close="error = ''"
-        >
+        <v-alert v-if="error" class="fm-alert mb-5" closable density="compact" rounded="lg" type="error" variant="tonal"
+          @click:close="error = ''">
           {{ error }}
         </v-alert>
 
         <v-form class="fm-form" @submit.prevent="handleRegister">
           <div class="fm-field-group">
             <label class="fm-label">Nombre completo</label>
-            <v-text-field
-              v-model="name"
-              class="fm-input"
-              density="comfortable"
-              hide-details="auto"
-              placeholder="Tu nombre"
-              prepend-inner-icon="mdi-account-outline"
-              required
-              rounded="lg"
-              variant="outlined"
-            />
+            <v-text-field v-model="name" class="fm-input" density="comfortable" hide-details="auto"
+              placeholder="Tu nombre" prepend-inner-icon="mdi-account-outline" required rounded="lg"
+              variant="outlined" />
           </div>
 
           <div class="fm-field-group">
             <label class="fm-label">Correo electrónico</label>
-            <v-text-field
-              v-model="email"
-              class="fm-input"
-              density="comfortable"
-              hide-details="auto"
-              placeholder="tu@correo.com"
-              prepend-inner-icon="mdi-email-outline"
-              required
-              rounded="lg"
-              type="email"
-              variant="outlined"
-            />
+            <v-text-field v-model="email" class="fm-input" density="comfortable" hide-details="auto"
+              placeholder="tu@correo.com" prepend-inner-icon="mdi-email-outline" required rounded="lg" type="email"
+              variant="outlined" />
           </div>
 
           <div class="fm-field-row">
             <div class="fm-field-group">
               <label class="fm-label">Contraseña</label>
-              <v-text-field
-                v-model="password"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                placeholder="••••••••"
-                prepend-inner-icon="mdi-lock-outline"
-                required
-                rounded="lg"
-                type="password"
-                variant="outlined"
-              />
+              <v-text-field v-model="password" class="fm-input" density="comfortable" hide-details="auto"
+                placeholder="••••••••" prepend-inner-icon="mdi-lock-outline" required rounded="lg" type="password"
+                variant="outlined" />
             </div>
 
             <div class="fm-field-group">
               <label class="fm-label">Confirmar contraseña</label>
-              <v-text-field
-                v-model="confirmPassword"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                placeholder="••••••••"
-                prepend-inner-icon="mdi-lock-check-outline"
-                required
-                rounded="lg"
-                :rules="[confirmMatch]"
-                type="password"
-                variant="outlined"
-              />
+              <v-text-field v-model="confirmPassword" class="fm-input" density="comfortable" hide-details="auto"
+                placeholder="••••••••" prepend-inner-icon="mdi-lock-check-outline" required rounded="lg"
+                :rules="[confirmMatch]" type="password" variant="outlined" />
             </div>
           </div>
 
-          <v-btn
-            block
-            class="fm-btn-submit mt-5"
-            :loading="loading"
-            rounded="lg"
-            size="large"
-            type="submit"
-          >
+          <v-btn block class="fm-btn-submit mt-5" :loading="loading" rounded="lg" size="large" type="submit">
             <template #loader>
               <v-progress-circular color="white" indeterminate size="20" width="2" />
             </template>
@@ -189,9 +138,12 @@
 
         <p class="fm-terms">
           Al registrarte aceptas nuestros
-          <a href="#">Términos de uso</a> y
-          <a href="#">Política de privacidad</a>.
+          <a href="#" @click.prevent="showTerms = true">Términos de uso</a> y
+          <a href="#" @click.prevent="showPrivacy = true">Política de privacidad</a>.
         </p>
+
+        <LegalModal v-model="showPrivacy" type="privacy" />
+        <LegalModal v-model="showTerms" type="terms" />
 
         <p class="fm-switch-link">
           ¿Ya tienes cuenta?
@@ -203,39 +155,42 @@
 </template>
 
 <script lang="ts" setup>
-  import type { AxiosError } from 'axios'
-  import { ref } from 'vue'
-  import { useAuthStore } from '@/stores/auth'
-  import '@/styles/theme.css'
+import type { AxiosError } from 'axios'
+import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import LegalModal from '@/components/LegalModal.vue'
+import '@/styles/theme.css'
 
-  const auth = useAuthStore()
-  const name = ref('')
-  const email = ref('')
-  const password = ref('')
-  const confirmPassword = ref('')
-  const loading = ref(false)
-  const error = ref('')
+const auth = useAuthStore()
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const loading = ref(false)
+const error = ref('')
+const showPrivacy = ref(false)
+const showTerms = ref(false)
 
-  function confirmMatch (v: string) {
-    return v === password.value || 'Las contraseñas no coinciden'
+function confirmMatch(v: string) {
+  return v === password.value || 'Las contraseñas no coinciden'
+}
+
+async function handleRegister() {
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Las contraseñas no coinciden'
+    return
   }
-
-  async function handleRegister () {
-    if (password.value !== confirmPassword.value) {
-      error.value = 'Las contraseñas no coinciden'
-      return
-    }
-    loading.value = true
-    error.value = ''
-    try {
-      await auth.register(name.value, email.value, password.value)
-    } catch (error_) {
-      const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message
-      error.value = msg || 'Error al registrarse'
-    } finally {
-      loading.value = false
-    }
+  loading.value = true
+  error.value = ''
+  try {
+    await auth.register(name.value, email.value, password.value)
+  } catch (error_) {
+    const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message
+    error.value = msg || 'Error al registrarse'
+  } finally {
+    loading.value = false
   }
+}
 </script>
 
 <style scoped>

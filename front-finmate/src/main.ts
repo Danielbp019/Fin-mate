@@ -14,7 +14,6 @@ import { registerPlugins } from '@/plugins'
 import App from './App.vue'
 
 // Styles
-import 'unfonts.css'
 import '@fontsource/playfair-display/700.css'
 import '@fontsource/playfair-display/900.css'
 import '@fontsource/dm-sans/300.css'

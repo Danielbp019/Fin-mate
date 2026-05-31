@@ -42,13 +42,8 @@
         <div class="lp-cta-row">
           <button class="btn-cta" @click="router.push({ name: 'Register' })">
             <svg fill="none" height="16" viewBox="0 0 24 24" width="16">
-              <path
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-                stroke="white"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="white" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" />
             </svg>
             Comenzar gratis
           </button>
@@ -156,13 +151,8 @@
         <div class="feat-card">
           <div class="feat-icon fi-green">
             <svg fill="none" height="22" viewBox="0 0 24 24" width="22">
-              <path
-                d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"
-                stroke="#0F6E56"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#0F6E56" stroke-linecap="round"
+                stroke-linejoin="round" stroke-width="2" />
             </svg>
           </div>
           <div class="feat-name">Control de ingresos y gastos</div>
@@ -174,11 +164,7 @@
             <svg fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path
                 d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
-                stroke="#185FA5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
+                stroke="#185FA5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
             </svg>
           </div>
           <div class="feat-name">Modo pareja</div>
@@ -189,13 +175,8 @@
         <div class="feat-card">
           <div class="feat-icon fi-gold">
             <svg fill="none" height="22" viewBox="0 0 24 24" width="22">
-              <path
-                d="M22 12h-4l-3 9L9 3l-3 9H2"
-                stroke="#BA7517"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#BA7517" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" />
             </svg>
           </div>
           <div class="feat-name">Gestión de deudas</div>
@@ -232,35 +213,20 @@
       </div>
     </footer>
 
-    <LegalModal v-model="showPrivacy" title="Privacidad">
-      <p class="mb-3">En FinMate nos tomamos tu privacidad en serio. Esta política describe cómo recopilamos, usamos y protegemos tu información personal.</p>
-      <p class="mb-3"><strong>Datos que recopilamos:</strong> nombre, correo electrónico, información financiera que registres voluntariamente (ingresos, gastos, deudas).</p>
-      <p class="mb-3"><strong>Uso de la información:</strong> tus datos se usan exclusivamente para proveer el servicio de administración financiera, generar reportes y sugerencias personalizadas.</p>
-      <p class="mb-3"><strong>Cookies:</strong> utilizamos cookies esenciales para mantener tu sesión activa. No usamos cookies de rastreo ni publicitarias.</p>
-      <p class="mb-3"><strong>Protección:</strong> tus datos se almacenan de forma segura con encriptación en reposo y en tránsito. Nunca compartimos tu información con terceros.</p>
-      <p><strong>Tus derechos:</strong> puedes solicitar la eliminación de tus datos en cualquier momento escribiéndonos a soporte@finmate.app.</p>
-    </LegalModal>
-
-    <LegalModal v-model="showTerms" title="Términos de uso">
-      <p class="mb-3">Al crear una cuenta en FinMate aceptas los siguientes términos y condiciones de uso.</p>
-      <p class="mb-3"><strong>Uso del servicio:</strong> FinMate es una herramienta de administración financiera personal. No brindamos asesoría financiera profesional ni garantizamos resultados específicos.</p>
-      <p class="mb-3"><strong>Cuenta:</strong> eres responsable de mantener la confidencialidad de tu contraseña y de toda actividad en tu cuenta.</p>
-      <p class="mb-3"><strong>Limitación de responsabilidad:</strong> FinMate no se hace responsable por decisiones financieras tomadas basadas en la información proporcionada por la aplicación.</p>
-      <p class="mb-3"><strong>Modificaciones:</strong> nos reservamos el derecho de actualizar estos términos. Notificaremos cambios significativos por correo electrónico.</p>
-      <p><strong>Vigencia:</strong> estos términos están vigentes a partir del 1 de enero de 2026.</p>
-    </LegalModal>
+    <LegalModal v-model="showPrivacy" type="privacy" />
+    <LegalModal v-model="showTerms" type="terms" />
 
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import firmaNegra from '@/assets/daniel_firma_black.svg'
-  import LegalModal from '@/components/LegalModal.vue'
-  import '@/styles/theme.css'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import firmaNegra from '@/assets/daniel_firma_black.svg'
+import LegalModal from '@/components/LegalModal.vue'
+import '@/styles/theme.css'
 
-  const router = useRouter()
-  const showPrivacy = ref(false)
-  const showTerms = ref(false)
+const router = useRouter()
+const showPrivacy = ref(false)
+const showTerms = ref(false)
 </script>

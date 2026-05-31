@@ -61,34 +61,17 @@
           <p class="fm-form-sub">Ingresa tus datos para continuar</p>
         </div>
 
-        <v-alert
-          v-if="error"
-          class="fm-alert mb-5"
-          closable
-          density="compact"
-          rounded="lg"
-          type="error"
-          variant="tonal"
-          @click:close="error = ''"
-        >
+        <v-alert v-if="error" class="fm-alert mb-5" closable density="compact" rounded="lg" type="error" variant="tonal"
+          @click:close="error = ''">
           {{ error }}
         </v-alert>
 
         <v-form class="fm-form" @submit.prevent="handleLogin">
           <div class="fm-field-group">
             <label class="fm-label">Correo electrónico</label>
-            <v-text-field
-              v-model="email"
-              class="fm-input"
-              density="comfortable"
-              hide-details="auto"
-              placeholder="tu@correo.com"
-              prepend-inner-icon="mdi-email-outline"
-              required
-              rounded="lg"
-              type="email"
-              variant="outlined"
-            />
+            <v-text-field v-model="email" class="fm-input" density="comfortable" hide-details="auto"
+              placeholder="tu@correo.com" prepend-inner-icon="mdi-email-outline" required rounded="lg" type="email"
+              variant="outlined" />
           </div>
 
           <div class="fm-field-group">
@@ -96,28 +79,12 @@
               <label class="fm-label">Contraseña</label>
               <a class="fm-forgot" href="#">¿La olvidaste?</a>
             </div>
-            <v-text-field
-              v-model="password"
-              class="fm-input"
-              density="comfortable"
-              hide-details="auto"
-              placeholder="••••••••"
-              prepend-inner-icon="mdi-lock-outline"
-              required
-              rounded="lg"
-              type="password"
-              variant="outlined"
-            />
+            <v-text-field v-model="password" class="fm-input" density="comfortable" hide-details="auto"
+              placeholder="••••••••" prepend-inner-icon="mdi-lock-outline" required rounded="lg" type="password"
+              variant="outlined" />
           </div>
 
-          <v-btn
-            block
-            class="fm-btn-submit mt-6"
-            :loading="loading"
-            rounded="lg"
-            size="large"
-            type="submit"
-          >
+          <v-btn block class="fm-btn-submit mt-6" :loading="loading" rounded="lg" size="large" type="submit">
             <template #loader>
               <v-progress-circular color="white" indeterminate size="20" width="2" />
             </template>
@@ -135,29 +102,29 @@
 </template>
 
 <script lang="ts" setup>
-  import type { AxiosError } from 'axios'
-  import { ref } from 'vue'
-  import { useAuthStore } from '@/stores/auth'
-  import '@/styles/theme.css'
+import type { AxiosError } from 'axios'
+import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import '@/styles/theme.css'
 
-  const auth = useAuthStore()
-  const email = ref('')
-  const password = ref('')
-  const loading = ref(false)
-  const error = ref('')
+const auth = useAuthStore()
+const email = ref('')
+const password = ref('')
+const loading = ref(false)
+const error = ref('')
 
-  async function handleLogin () {
-    loading.value = true
-    error.value = ''
-    try {
-      await auth.login(email.value, password.value)
-    } catch (error_) {
-      const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message
-      error.value = msg || 'Error al iniciar sesión'
-    } finally {
-      loading.value = false
-    }
+async function handleLogin() {
+  loading.value = true
+  error.value = ''
+  try {
+    await auth.login(email.value, password.value)
+  } catch (error_) {
+    const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message
+    error.value = msg || 'Error al iniciar sesión'
+  } finally {
+    loading.value = false
   }
+}
 </script>
 
 <style scoped>
