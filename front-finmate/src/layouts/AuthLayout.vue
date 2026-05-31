@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar flat elevation="0" class="auth-nav-bar">
       <template v-slot:prepend>
-        <v-btn variant="text" icon @click="drawer = !drawer" style="color:var(--green-deep)">
+        <v-btn variant="text" icon aria-label="Abrir menú" @click="drawer = !drawer" style="color:var(--green-deep)">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </template>
@@ -20,7 +20,9 @@
         <div class="d-flex align-center ga-3">
           <span style="color:var(--green-deep);font-size:14px;font-weight:500;">Bienvenido, {{ auth.user?.name }}</span>
 
-          <button class="btn-ghost" @click="toggleTheme">
+          <button class="btn-ghost"
+            :aria-label="`Cambiar tema a ${theme.global.name.value === 'light' ? 'oscuro' : 'claro'}`"
+            @click="toggleTheme">
             <v-icon>{{ theme.global.name.value === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny' }}</v-icon>
           </button>
 

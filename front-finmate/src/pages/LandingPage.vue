@@ -1,7 +1,6 @@
 <template>
-  <h2 class="sr-only">FinMate — Tu asistente financiero personal. Controla ingresos, gastos y deudas.</h2>
-
   <div class="lp-root">
+    <h1 class="sr-only">FinMate — Tu asistente financiero personal. Controla ingresos, gastos y deudas.</h1>
 
     <!-- NAV -->
     <nav class="lp-nav">
@@ -28,11 +27,11 @@
           Modo pareja disponible
         </div>
 
-        <h1 class="lp-headline">
+        <h2 class="lp-headline">
           Tu dinero,<br>
           bajo <em>control</em><br>
           por fin.
-        </h1>
+        </h2>
 
         <p class="lp-sub">
           Registra ingresos y gastos, gestiona deudas con estrategia y sincroniza finanzas con tu pareja. Todo en un
@@ -41,7 +40,7 @@
 
         <div class="lp-cta-row">
           <button class="btn-cta" @click="router.push({ name: 'Register' })">
-            <svg fill="none" height="16" viewBox="0 0 24 24" width="16">
+            <svg aria-hidden="true" fill="none" height="16" viewBox="0 0 24 24" width="16">
               <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="white" stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" />
             </svg>
@@ -62,7 +61,7 @@
 
           <div class="hero-card hc-main">
             <div class="hc-chip">
-              <svg height="8" viewBox="0 0 8 8" width="8">
+              <svg aria-hidden="true" height="8" viewBox="0 0 8 8" width="8">
                 <circle cx="4" cy="4" fill="#1D9E75" r="4" />
               </svg>
               Resumen de julio
@@ -150,7 +149,7 @@
       <div class="feat-grid">
         <div class="feat-card">
           <div class="feat-icon fi-green">
-            <svg fill="none" height="22" viewBox="0 0 24 24" width="22">
+            <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#0F6E56" stroke-linecap="round"
                 stroke-linejoin="round" stroke-width="2" />
             </svg>
@@ -161,7 +160,7 @@
 
         <div class="feat-card">
           <div class="feat-icon fi-blue">
-            <svg fill="none" height="22" viewBox="0 0 24 24" width="22">
+            <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path
                 d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
                 stroke="#185FA5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
@@ -174,7 +173,7 @@
 
         <div class="feat-card">
           <div class="feat-icon fi-gold">
-            <svg fill="none" height="22" viewBox="0 0 24 24" width="22">
+            <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#BA7517" stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" />
             </svg>
@@ -206,8 +205,8 @@
       </div>
       <div class="footer-right">
         <div class="footer-links">
-          <a href="#" @click.prevent="showPrivacy = true">Privacidad</a>
-          <a href="#" @click.prevent="showTerms = true">Términos</a>
+          <button type="button" @click="showPrivacy = true">Privacidad</button>
+          <button type="button" @click="showTerms = true">Términos</button>
         </div>
         <div style="font-size:11px;color:var(--ink-soft);opacity:0.6">© 2026 FinMate</div>
       </div>
@@ -215,7 +214,6 @@
 
     <LegalModal v-model="showPrivacy" type="privacy" />
     <LegalModal v-model="showTerms" type="terms" />
-
   </div>
 </template>
 

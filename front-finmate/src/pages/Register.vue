@@ -138,8 +138,8 @@
 
         <p class="fm-terms">
           Al registrarte aceptas nuestros
-          <a href="#" @click.prevent="showTerms = true">Términos de uso</a> y
-          <a href="#" @click.prevent="showPrivacy = true">Política de privacidad</a>.
+          <button type="button" @click="showTerms = true">Términos de uso</button> y
+          <button type="button" @click="showPrivacy = true">Política de privacidad</button>.
         </p>
 
         <LegalModal v-model="showPrivacy" type="privacy" />
