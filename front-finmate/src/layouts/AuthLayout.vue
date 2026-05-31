@@ -9,6 +9,10 @@
 
       <span class="mr-2 text-body-medium">{{ auth.user?.name }}</span>
 
+      <v-btn icon @click="toggleTheme">
+        <v-icon>{{ theme.global.name.value === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny' }}</v-icon>
+      </v-btn>
+
       <v-btn icon="mdi-logout" @click="auth.logout" />
     </v-app-bar>
 
@@ -38,8 +42,14 @@
 
 <script lang="ts" setup>
   import { shallowRef } from 'vue'
+  import { useTheme } from 'vuetify'
   import { useAuthStore } from '@/stores/auth'
 
   const auth = useAuthStore()
+  const theme = useTheme()
   const drawer = shallowRef(false)
+
+  function toggleTheme () {
+    theme.global.name.value = theme.global.name.value === 'light' ? 'dark' : 'light'
+  }
 </script>

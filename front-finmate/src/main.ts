@@ -15,6 +15,11 @@ import App from './App.vue'
 
 // Styles
 import 'unfonts.css'
+import '@fontsource/playfair-display/700.css'
+import '@fontsource/playfair-display/900.css'
+import '@fontsource/dm-sans/300.css'
+import '@fontsource/dm-sans/400.css'
+import '@fontsource/dm-sans/500.css'
 
 const app = createApp(App)
 

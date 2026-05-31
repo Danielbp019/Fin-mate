@@ -1,77 +1,214 @@
 <template>
-  <v-container class="fill-height d-flex justify-center align-center">
-    <v-card class="pa-6" width="400">
-      <v-card-title class="text-h5 text-center mb-4">Crear Cuenta</v-card-title>
+  <div class="fm-auth-root">
+    <!-- Panel izquierdo decorativo -->
+    <div class="fm-panel-left">
+      <div class="fm-panel-bg" />
 
-      <v-alert
-        v-if="error"
-        class="mb-4"
-        closable
-        type="error"
-        @click:close="error = ''"
-      >
-        {{ error }}
-      </v-alert>
+      <div class="fm-panel-content">
+        <router-link class="fm-logo" :to="{ name: 'Landing' }">
+          <div class="fm-logo-icon">
+            <v-icon color="white" size="20">mdi-finance</v-icon>
+          </div>
+          FinMate
+        </router-link>
 
-      <v-form @submit.prevent="handleRegister">
-        <v-text-field
-          v-model="name"
-          label="Nombre"
-          prepend-inner-icon="mdi-account"
-          required
-        />
+        <div class="fm-panel-body">
+          <h2 class="fm-panel-headline">
+            Empieza tu<br>
+            camino a la<br>
+            <em>libertad</em><br>
+            financiera.
+          </h2>
+          <p class="fm-panel-sub">
+            Crea tu cuenta gratis y toma el control de cada peso desde el primer
+            día.
+          </p>
+        </div>
 
-        <v-text-field
-          v-model="email"
-          label="Email"
-          prepend-inner-icon="mdi-email"
-          required
-          type="email"
-        />
+        <!-- Features list -->
+        <div class="fm-features">
+          <div class="fm-feature-item">
+            <div class="fm-feature-icon">
+              <v-icon color="white" size="16">mdi-check</v-icon>
+            </div>
+            <span>Control de ingresos y gastos</span>
+          </div>
+          <div class="fm-feature-item">
+            <div class="fm-feature-icon">
+              <v-icon color="white" size="16">mdi-check</v-icon>
+            </div>
+            <span>Estrategias para eliminar deudas</span>
+          </div>
+          <div class="fm-feature-item">
+            <div class="fm-feature-icon">
+              <v-icon color="white" size="16">mdi-check</v-icon>
+            </div>
+            <span>Modo pareja sincronizado</span>
+          </div>
+          <div class="fm-feature-item">
+            <div class="fm-feature-icon">
+              <v-icon color="white" size="16">mdi-check</v-icon>
+            </div>
+            <span>Completamente gratuito</span>
+          </div>
+        </div>
 
-        <v-text-field
-          v-model="password"
-          label="Contraseña"
-          prepend-inner-icon="mdi-lock"
-          required
-          type="password"
-        />
+        <!-- Tarjeta decorativa mini -->
+        <div class="fm-deco-card">
+          <div class="fm-deco-header">
+            <div class="fm-deco-chip">
+              <span class="fm-deco-dot" />
+              Modo pareja activo
+            </div>
+            <span class="fm-deco-badge">👫 Sincronizado</span>
+          </div>
+          <div class="fm-deco-pair">
+            <div class="fm-deco-avatar" style="background: rgba(186, 117, 23, 0.4)">
+              A
+            </div>
+            <div class="fm-deco-avatar" style="background: rgba(24, 95, 165, 0.4); margin-left: -8px">
+              M
+            </div>
+            <div class="fm-deco-pair-text">
+              <span class="fm-deco-pair-name">Ana & Miguel</span>
+              <span class="fm-deco-pair-sub">Meta compartida: $5,000</span>
+            </div>
+          </div>
+          <div class="fm-deco-bar-track">
+            <div class="fm-deco-bar-fill" style="width: 74%" />
+          </div>
+          <div class="fm-deco-bar-labels">
+            <span>74% completado</span>
+            <span class="gold">$3,700 ahorrados</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <v-text-field
-          v-model="confirmPassword"
-          label="Confirmar Contraseña"
-          prepend-inner-icon="mdi-lock-check"
-          required
-          :rules="[confirmMatch]"
-          type="password"
-        />
+    <!-- Panel derecho: formulario -->
+    <div class="fm-panel-right">
+      <div class="fm-form-wrapper">
+        <div class="fm-form-header">
+          <h1 class="fm-form-title">Crea tu cuenta</h1>
+        </div>
 
-        <v-btn
-          block
-          class="mt-2"
-          color="primary"
-          :loading="loading"
-          type="submit"
+        <v-alert
+          v-if="error"
+          class="fm-alert mb-5"
+          closable
+          density="compact"
+          rounded="lg"
+          type="error"
+          variant="tonal"
+          @click:close="error = ''"
         >
-          Registrarse
-        </v-btn>
-      </v-form>
+          {{ error }}
+        </v-alert>
 
-      <v-card-text class="text-center mt-4 pa-0">
-        ¿Ya tienes cuenta?
-        <router-link :to="{ name: 'Login' }">Inicia sesión</router-link>
-      </v-card-text>
-    </v-card>
-  </v-container>
+        <v-form class="fm-form" @submit.prevent="handleRegister">
+          <div class="fm-field-group">
+            <label class="fm-label">Nombre completo</label>
+            <v-text-field
+              v-model="name"
+              class="fm-input"
+              density="comfortable"
+              hide-details="auto"
+              placeholder="Tu nombre"
+              prepend-inner-icon="mdi-account-outline"
+              required
+              rounded="lg"
+              variant="outlined"
+            />
+          </div>
+
+          <div class="fm-field-group">
+            <label class="fm-label">Correo electrónico</label>
+            <v-text-field
+              v-model="email"
+              class="fm-input"
+              density="comfortable"
+              hide-details="auto"
+              placeholder="tu@correo.com"
+              prepend-inner-icon="mdi-email-outline"
+              required
+              rounded="lg"
+              type="email"
+              variant="outlined"
+            />
+          </div>
+
+          <div class="fm-field-row">
+            <div class="fm-field-group">
+              <label class="fm-label">Contraseña</label>
+              <v-text-field
+                v-model="password"
+                class="fm-input"
+                density="comfortable"
+                hide-details="auto"
+                placeholder="••••••••"
+                prepend-inner-icon="mdi-lock-outline"
+                required
+                rounded="lg"
+                type="password"
+                variant="outlined"
+              />
+            </div>
+
+            <div class="fm-field-group">
+              <label class="fm-label">Confirmar contraseña</label>
+              <v-text-field
+                v-model="confirmPassword"
+                class="fm-input"
+                density="comfortable"
+                hide-details="auto"
+                placeholder="••••••••"
+                prepend-inner-icon="mdi-lock-check-outline"
+                required
+                rounded="lg"
+                :rules="[confirmMatch]"
+                type="password"
+                variant="outlined"
+              />
+            </div>
+          </div>
+
+          <v-btn
+            block
+            class="fm-btn-submit mt-5"
+            :loading="loading"
+            rounded="lg"
+            size="large"
+            type="submit"
+          >
+            <template #loader>
+              <v-progress-circular color="white" indeterminate size="20" width="2" />
+            </template>
+            Crear cuenta gratis
+          </v-btn>
+        </v-form>
+
+        <p class="fm-terms">
+          Al registrarte aceptas nuestros
+          <a href="#">Términos de uso</a> y
+          <a href="#">Política de privacidad</a>.
+        </p>
+
+        <p class="fm-switch-link">
+          ¿Ya tienes cuenta?
+          <router-link :to="{ name: 'Login' }">Inicia sesión</router-link>
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
   import type { AxiosError } from 'axios'
   import { ref } from 'vue'
   import { useAuthStore } from '@/stores/auth'
+  import '@/styles/auth.css'
 
   const auth = useAuthStore()
-
   const name = ref('')
   const email = ref('')
   const password = ref('')
@@ -100,3 +237,79 @@
     }
   }
 </script>
+
+<style scoped>
+.fm-panel-bg::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(29, 158, 117, 0.22);
+  top: -120px;
+  right: -160px;
+}
+
+.fm-panel-bg::before {
+  content: '';
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  bottom: -80px;
+  left: -100px;
+}
+
+.fm-panel-body {
+  margin-top: 40px;
+  margin-bottom: 28px;
+}
+
+.fm-panel-headline {
+  font-size: 38px;
+}
+
+.fm-panel-sub {
+  font-size: 14px;
+  max-width: 260px;
+  margin-bottom: 0;
+}
+
+.fm-form-title {
+  font-size: 28px;
+}
+
+.fm-form-sub {
+  font-size: 13px;
+}
+
+.fm-form-header {
+  margin-bottom: 28px;
+}
+
+.fm-field-group {
+  margin-bottom: 16px;
+}
+
+.fm-switch-link {
+  margin-top: 16px;
+}
+
+/* Vuetify input overrides */
+.fm-input :deep(.v-field__outline__start),
+.fm-input :deep(.v-field__outline__end),
+.fm-input :deep(.v-field__outline__notch) {
+  border-color: rgba(15, 110, 86, 0.25) !important;
+}
+
+.fm-input :deep(.v-field--focused .v-field__outline__start),
+.fm-input :deep(.v-field--focused .v-field__outline__end),
+.fm-input :deep(.v-field--focused .v-field__outline__notch) {
+  border-color: var(--green-mid) !important;
+}
+
+.fm-input :deep(.v-icon) {
+  color: var(--green-mid) !important;
+}
+</style>
