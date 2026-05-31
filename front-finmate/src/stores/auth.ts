@@ -46,6 +46,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function refresh () {
     const res = await api.post('/auth/refresh')
     accessToken.value = res.data.accessToken
+    user.value = res.data.user
   }
 
   async function initialize () {

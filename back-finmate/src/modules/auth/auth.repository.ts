@@ -13,6 +13,16 @@ export async function findUserByEmail(email: string) {
   return result[0] ?? null;
 }
 
+export async function findUserById(id: string) {
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, id))
+    .limit(1);
+
+  return result[0] ?? null;
+}
+
 export async function createUser(
   data: typeof users.$inferInsert,
 ) {

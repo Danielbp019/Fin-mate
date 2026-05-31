@@ -162,6 +162,12 @@ export async function refresh(refreshTokenValue: string | undefined) {
 
   await authRepository.revokeRefreshToken(decoded.jti);
 
+  const user = await authRepository.findUserById(decoded.sub);
+
+  if (!user) {
+    throw new AppError(401, 'Usuario no encontrado');
+  }
+
   const accessToken = generateAccessToken(decoded.sub);
   const { refreshToken } = await createSession(decoded.sub);
 
@@ -169,6 +175,7 @@ export async function refresh(refreshTokenValue: string | undefined) {
     accessToken,
     refreshToken,
     cookieOptions: getRefreshCookieOptions(),
+    user: { id: user.id, name: user.name, email: user.email },
   };
 }
 

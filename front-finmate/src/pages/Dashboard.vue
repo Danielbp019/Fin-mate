@@ -1,19 +1,62 @@
 <template>
-  <v-row>
-    <v-col cols="12">
-      <v-card>
-        <v-card-title class="text-h4">Bienvenido, {{ auth.user?.name }}</v-card-title>
+  <div class="dashboard-container">
+    <div class="dashboard-greeting">
+      <h1>Bienvenido, {{ auth.user?.name }}</h1>
+      <p>Este es tu panel de control financiero</p>
+    </div>
 
-        <v-card-text class="text-body-medium">
-          Este es tu panel de control de FinMate. Aquí podrás gestionar tus finanzas personales.
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <span class="summary-card-label">Ingresos</span>
+          <div class="summary-card-icon sc-icon-green">
+            <v-icon color="#0F6E56" size="18">mdi-trending-up</v-icon>
+          </div>
+        </div>
+        <div class="summary-card-value">$7,200</div>
+        <div class="summary-card-change change-positive">↑ 12% vs mes anterior</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <span class="summary-card-label">Gastos</span>
+          <div class="summary-card-icon sc-icon-gold">
+            <v-icon color="#BA7517" size="18">mdi-trending-down</v-icon>
+          </div>
+        </div>
+        <div class="summary-card-value">$2,380</div>
+        <div class="summary-card-change change-neutral">→ estable</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-card-header">
+          <span class="summary-card-label">Balance</span>
+          <div class="summary-card-icon sc-icon-blue">
+            <v-icon color="#185FA5" size="18">mdi-wallet</v-icon>
+          </div>
+        </div>
+        <div class="summary-card-value">$4,820</div>
+        <div class="summary-card-change change-positive">↑ disponible</div>
+      </div>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="content-card">
+        <h3 class="content-card-title">Últimos movimientos</h3>
+        <p style="font-size:13px;color:var(--ink-soft);font-weight:300">Aún no hay movimientos registrados. Comienza agregando tus ingresos y gastos.</p>
+      </div>
+
+      <div class="content-card">
+        <h3 class="content-card-title">Deudas activas</h3>
+        <p style="font-size:13px;color:var(--ink-soft);font-weight:300">No tienes deudas registradas.</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
   import { useAuthStore } from '@/stores/auth'
+  import '@/styles/app.css'
 
   const auth = useAuthStore()
 </script>

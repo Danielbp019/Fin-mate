@@ -52,6 +52,7 @@ export async function refresh(
     res.cookie('refreshToken', result.refreshToken, result.cookieOptions);
     res.status(200).json({
       accessToken: result.accessToken,
+      user: result.user,
     });
   } catch (error) {
     next(error);
