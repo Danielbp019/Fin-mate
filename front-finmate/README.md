@@ -67,7 +67,6 @@ public/                 Archivos públicos estáticos
 - Cuando se creen end points nuevos actualizar el archivo readme.md
 - Evitar complejidad enterprise innecesaria
 - Aplicar principios SOLID siempre que sea razonable
-- Validar toda entrada externa
 - No uses nunca iconos en textos informativos de consola
 
 ## Validaciones
