@@ -14,18 +14,12 @@ export async function findUserByEmail(email: string) {
 }
 
 export async function findUserById(id: string) {
-  const result = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, id))
-    .limit(1);
+  const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
 
   return result[0] ?? null;
 }
 
-export async function createUser(
-  data: typeof users.$inferInsert,
-) {
+export async function createUser(data: typeof users.$inferInsert) {
   await db.insert(users).values(data);
 }
 
@@ -70,9 +64,20 @@ export async function revokeAllUserRefreshTokens(userId: string) {
     .update(refreshTokens)
     .set({ revoked: true, updatedAt: new Date() })
     .where(
-      and(
-        eq(refreshTokens.userId, userId),
-        eq(refreshTokens.revoked, false),
-      ),
+      and(eq(refreshTokens.userId, userId), eq(refreshTokens.revoked, false)),
     );
+}
+
+export async function updateUserName(userId: string, name: string) {
+  await db
+    .update(users)
+    .set({ name, updatedAt: new Date() })
+    .where(eq(users.id, userId));
+}
+
+export async function updateUserPassword(userId: string, passwordHash: string) {
+  await db
+    .update(users)
+    .set({ passwordHash, updatedAt: new Date() })
+    .where(eq(users.id, userId));
 }

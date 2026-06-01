@@ -1,5 +1,10 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { registerSchema, loginSchema } from './auth.schema.js';
+import {
+  registerSchema,
+  loginSchema,
+  updateProfileSchema,
+  changePasswordSchema,
+} from './auth.schema.js';
 import * as authService from './auth.service.js';
 
 export async function register(
@@ -21,11 +26,7 @@ export async function register(
   }
 }
 
-export async function login(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const data = loginSchema.parse(req.body);
     const result = await authService.login(data);
@@ -40,11 +41,7 @@ export async function login(
   }
 }
 
-export async function refresh(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function refresh(req: Request, res: Response, next: NextFunction) {
   try {
     const refreshTokenValue = req.cookies?.refreshToken;
     const result = await authService.refresh(refreshTokenValue);
@@ -59,17 +56,45 @@ export async function refresh(
   }
 }
 
-export async function logout(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
     const refreshTokenValue = req.cookies?.refreshToken;
     const result = await authService.logout(refreshTokenValue);
 
     res.cookie('refreshToken', '', result.cookieOptions);
     res.status(200).json({ success: result.success });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateProfile(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = (req as any).userId;
+    const data = updateProfileSchema.parse(req.body);
+    const result = await authService.updateProfile(userId, data);
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function changePassword(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = (req as any).userId;
+    const data = changePasswordSchema.parse(req.body);
+    const result = await authService.changePassword(userId, data);
+
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

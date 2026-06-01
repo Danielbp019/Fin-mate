@@ -64,13 +64,15 @@ Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automátic
 
 ### Auth
 
-| Método | Ruta               | Body / Headers / Cookies                                | Respuesta                            |
-| ------ | ------------------ | ------------------------------------------------------- | ------------------------------------ |
-| POST   | `/auth/register`   | `{ name, email, password }`                             | 201 `{ accessToken, user }` + cookie |
-| POST   | `/auth/login`      | `{ email, password }`                                   | 200 `{ accessToken, user }` + cookie |
-| POST   | `/auth/refresh`    | Cookie `refreshToken` (HttpOnly)                        | 200 `{ accessToken }` + nueva cookie |
-| POST   | `/auth/logout`     | `Authorization: Bearer <token>` + Cookie `refreshToken` | 200 `{ success }` + cookie limpiada  |
-| POST   | `/auth/logout-all` | `Authorization: Bearer <token>` + Cookie `refreshToken` | 200 `{ success }` + cookie limpiada  |
+| Método | Ruta                    | Body / Headers / Cookies                                             | Respuesta                            |
+| ------ | ----------------------- | -------------------------------------------------------------------- | ------------------------------------ |
+| POST   | `/auth/register`        | `{ name, email, password }`                                          | 201 `{ accessToken, user }` + cookie |
+| POST   | `/auth/login`           | `{ email, password }`                                                | 200 `{ accessToken, user }` + cookie |
+| POST   | `/auth/refresh`         | Cookie `refreshToken` (HttpOnly)                                     | 200 `{ accessToken }` + nueva cookie |
+| POST   | `/auth/logout`          | `Authorization: Bearer <token>` + Cookie `refreshToken`              | 200 `{ success }` + cookie limpiada  |
+| POST   | `/auth/logout-all`      | `Authorization: Bearer <token>` + Cookie `refreshToken`              | 200 `{ success }` + cookie limpiada  |
+| PATCH  | `/auth/profile`         | `Authorization: Bearer <token>` + `{ name }`                         | 200 `{ id, name, email }`            |
+| POST   | `/auth/change-password` | `Authorization: Bearer <token>` + `{ currentPassword, newPassword }` | 200 `{ message }`                    |
 
 **Flujo de autenticación:**
 
@@ -178,17 +180,15 @@ Gestion de finanzas compartidas. Tablas `couples` y `couple_members` ya existen 
 - Un usuario solo puede pertenecer a un grupo activo a la vez
 - El `owner` no puede abandonar sin disolver (puede transferir ownership)
 
-### Cuenta (features de auth)
+### Cuenta (features de auth pendientes)
 
-Funcionalidades que extienden el modulo `auth` existente:
+Funcionalidades futuras que extienden el modulo `auth`:
 
-| Metodo | Ruta                    | Descripcion                                                 |
-| ------ | ----------------------- | ----------------------------------------------------------- |
-| PATCH  | `/auth/profile`         | Actualizar perfil (nombre, sin cambiar email)               |
-| POST   | `/auth/change-password` | Cambiar contrasena (requiere currentPassword + newPassword) |
-| POST   | `/auth/forgot-password` | Enviar email con token de recuperacion                      |
-| POST   | `/auth/reset-password`  | Resetear contrasena con token                               |
-| POST   | `/auth/verify-email`    | Verificar email con token enviado al registrar              |
+| Metodo | Ruta                    | Descripcion                                    |
+| ------ | ----------------------- | ---------------------------------------------- |
+| POST   | `/auth/forgot-password` | Enviar email con token de recuperacion         |
+| POST   | `/auth/reset-password`  | Resetear contrasena con token                  |
+| POST   | `/auth/verify-email`    | Verificar email con token enviado al registrar |
 
 - Tabla nueva `password_reset_tokens` (o similar) si se implementa forgot-password
 - Verificacion de email puede ser un campo `emailVerifiedAt` en `users`

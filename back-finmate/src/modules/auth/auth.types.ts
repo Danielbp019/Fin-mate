@@ -32,3 +32,22 @@ export interface RefreshResponse {
 export interface LogoutResponse {
   success: boolean;
 }
+
+export interface UpdateProfileBody {
+  name: string;
+}
+
+export interface ChangePasswordBody {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface UpdateProfileResponse {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface ChangePasswordResponse {
+  message: string;
+}

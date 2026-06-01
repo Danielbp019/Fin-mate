@@ -39,10 +39,7 @@ async function createSession(userId: string) {
   return { refreshToken, jti };
 }
 
-export async function login(data: {
-  email: string;
-  password: string;
-}) {
+export async function login(data: { email: string; password: string }) {
   const user = await authRepository.findUserByEmail(data.email);
   if (!user) {
     throw new AppError(401, 'Credenciales inválidas');
@@ -179,12 +176,17 @@ export async function refresh(refreshTokenValue: string | undefined) {
   };
 }
 
-export async function logoutAll(userId: string, refreshTokenValue: string | undefined) {
+export async function logoutAll(
+  userId: string,
+  refreshTokenValue: string | undefined,
+) {
   await authRepository.revokeAllUserRefreshTokens(userId);
 
   if (refreshTokenValue) {
     try {
-      const decoded = jwt.verify(refreshTokenValue, env.jwtSecret) as { jti: string };
+      const decoded = jwt.verify(refreshTokenValue, env.jwtSecret) as {
+        jti: string;
+      };
       const session = await authRepository.findRefreshTokenById(decoded.jti);
       if (session && !session.revoked) {
         await authRepository.revokeRefreshToken(decoded.jti);
@@ -195,6 +197,44 @@ export async function logoutAll(userId: string, refreshTokenValue: string | unde
   }
 
   return { success: true, cookieOptions: clearCookieOptions() };
+}
+
+export async function updateProfile(userId: string, data: { name: string }) {
+  const user = await authRepository.findUserById(userId);
+  if (!user) {
+    throw new AppError(404, 'Usuario no encontrado');
+  }
+
+  if (user.name === data.name) {
+    return { id: user.id, name: user.name, email: user.email };
+  }
+
+  await authRepository.updateUserName(userId, data.name);
+
+  return { id: user.id, name: data.name, email: user.email };
+}
+
+export async function changePassword(
+  userId: string,
+  data: { currentPassword: string; newPassword: string },
+) {
+  const user = await authRepository.findUserById(userId);
+  if (!user) {
+    throw new AppError(404, 'Usuario no encontrado');
+  }
+
+  const validPassword = await bcrypt.compare(
+    data.currentPassword,
+    user.passwordHash,
+  );
+  if (!validPassword) {
+    throw new AppError(401, 'La contraseña actual no es correcta');
+  }
+
+  const passwordHash = await bcrypt.hash(data.newPassword, 10);
+  await authRepository.updateUserPassword(userId, passwordHash);
+
+  return { message: 'Contraseña actualizada correctamente' };
 }
 
 function clearCookieOptions() {
