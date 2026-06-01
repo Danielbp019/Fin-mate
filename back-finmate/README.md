@@ -104,6 +104,18 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | PATCH  | `/movements/:id` | `{ categoryId?, type?, amount?, description?, movementDate?, isShared? }` | 200 `MovementResponse`     |
 | DELETE | `/movements/:id` | —                                                                         | 204 Sin contenido          |
 
+### Debts
+
+Todas las rutas requieren `Authorization: Bearer <token>`.
+
+| Método | Ruta         | Body / Query                                                                                                                                  | Respuesta            |
+| ------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| GET    | `/debts`     | `?status, ?priority`                                                                                                                          | 200 `DebtResponse[]` |
+| GET    | `/debts/:id` | —                                                                                                                                             | 200 `DebtResponse`   |
+| POST   | `/debts`     | `{ title, description?, initialAmount, interestRate?, minimumPayment?, dueDay?, priority?, startDate? }`                                      | 201 `DebtResponse`   |
+| PATCH  | `/debts/:id` | `{ title?, description?, initialAmount?, currentAmount?, interestRate?, minimumPayment?, dueDay?, priority?, status?, startDate?, endDate? }` | 200 `DebtResponse`   |
+| DELETE | `/debts/:id` | —                                                                                                                                             | 204 Sin contenido    |
+
 ### Health
 
 | Método | Ruta    | Respuesta                             |
