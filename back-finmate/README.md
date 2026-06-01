@@ -116,6 +116,15 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | PATCH  | `/debts/:id` | `{ title?, description?, initialAmount?, currentAmount?, interestRate?, minimumPayment?, dueDay?, priority?, status?, startDate?, endDate? }` | 200 `DebtResponse`   |
 | DELETE | `/debts/:id` | —                                                                                                                                             | 204 Sin contenido    |
 
+### Debt Payments (dentro de Debts)
+
+Todas las rutas requieren `Authorization: Bearer <token>`.
+
+| Método | Ruta                      | Body / Query                      | Respuesta               |
+| ------ | ------------------------- | --------------------------------- | ----------------------- |
+| GET    | `/debts/:debtId/payments` | —                                 | 200 `PaymentResponse[]` |
+| POST   | `/debts/:debtId/payments` | `{ amount, paymentDate, notes? }` | 201 `PaymentResponse`   |
+
 ### Health
 
 | Método | Ruta    | Respuesta                             |
@@ -152,84 +161,44 @@ src/modules/debts/
 
 ## Pendientes
 
-Funcionalidades planificadas en orden de implementación:
+Funcionalidades planificadas para futuras iteraciones:
 
-### 1. Movements (src/modules/movements/)
+### Couples (src/modules/couples/)
 
-CRUD de movimientos financieros. Tabla `movements` ya existe en schema de Drizzle.
+Gestion de finanzas compartidas. Tablas `couples` y `couple_members` ya existen en schema de Drizzle.
 
-| Método | Ruta             | Descripción                                                                 |
-| ------ | ---------------- | --------------------------------------------------------------------------- |
-| GET    | `/movements`     | Listar con filtros (?type, ?categoryId, ?from, ?to, ?page, ?limit)          |
-| GET    | `/movements/:id` | Obtener detalle                                                             |
-| POST   | `/movements`     | Crear `{ categoryId, type, amount, description?, movementDate, isShared? }` |
-| PATCH  | `/movements/:id` | Editar movimiento                                                           |
-| DELETE | `/movements/:id` | Soft delete                                                                 |
-
-- Usar dinero.js para `amount`
-- Filtrar por `userId` del token (solo ver propios)
-- Los movimientos con `isShared = true` se vinculan a un `coupleId`
-
-### 2. Debts (src/modules/debts/)
-
-CRUD de deudas. Tabla `debts` ya existe.
-
-| Método | Ruta         | Descripción                                                                                        |
-| ------ | ------------ | -------------------------------------------------------------------------------------------------- |
-| GET    | `/debts`     | Listar con filtros (?status, ?priority)                                                            |
-| GET    | `/debts/:id` | Obtener con pagos incluidos                                                                        |
-| POST   | `/debts`     | Crear `{ title, description?, initialAmount, interestRate?, minimumPayment?, dueDay?, priority? }` |
-| PATCH  | `/debts/:id` | Editar                                                                                             |
-| DELETE | `/debts/:id` | Soft delete                                                                                        |
-
-- Al crear, `currentAmount = initialAmount`
-
-### 3. Debt Payments (sub-módulo dentro de debts/)
-
-Registrar abonos a deudas. Tabla `debt_payments` ya existe.
-
-| Método | Ruta                      | Descripción                                  |
-| ------ | ------------------------- | -------------------------------------------- |
-| GET    | `/debts/:debtId/payments` | Listar pagos de una deuda                    |
-| POST   | `/debts/:debtId/payments` | Crear pago `{ amount, paymentDate, notes? }` |
-
-- **Regla de negocio**: al crear un pago, RESTAR `amount` del `current_amount` de la deuda
-- Si `currentAmount` llega a 0, cambiar `status` a `paid`
-- Montos con dinero.js
-
-### 4. Couples (src/modules/couples/)
-
-Gestión de finanzas compartidas. Tablas `couples` y `couple_members` ya existen.
-
-| Método | Ruta                  | Descripción                         |
+| Metodo | Ruta                  | Descripcion                         |
 | ------ | --------------------- | ----------------------------------- |
 | POST   | `/couples`            | Crear grupo (el creador es `owner`) |
 | POST   | `/couples/:id/invite` | Invitar usuario por email           |
-| POST   | `/couples/:id/join`   | Aceptar invitación                  |
+| POST   | `/couples/:id/join`   | Aceptar invitacion                  |
 | DELETE | `/couples/:id/leave`  | Abandonar grupo                     |
 | DELETE | `/couples/:id`        | Disolver grupo (solo owner)         |
 
 - Un usuario solo puede pertenecer a un grupo activo a la vez
 - El `owner` no puede abandonar sin disolver (puede transferir ownership)
 
-### 5. Cuenta (features de auth)
+### Cuenta (features de auth)
 
-Funcionalidades que extienden el módulo `auth` existente:
+Funcionalidades que extienden el modulo `auth` existente:
 
-| Método | Ruta                    | Descripción                                                 |
+| Metodo | Ruta                    | Descripcion                                                 |
 | ------ | ----------------------- | ----------------------------------------------------------- |
-| POST   | `/auth/change-password` | Cambiar contraseña (requiere currentPassword + newPassword) |
-| POST   | `/auth/forgot-password` | Enviar email con token de recuperación                      |
-| POST   | `/auth/reset-password`  | Resetear contraseña con token                               |
+| PATCH  | `/auth/profile`         | Actualizar perfil (nombre, sin cambiar email)               |
+| POST   | `/auth/change-password` | Cambiar contrasena (requiere currentPassword + newPassword) |
+| POST   | `/auth/forgot-password` | Enviar email con token de recuperacion                      |
+| POST   | `/auth/reset-password`  | Resetear contrasena con token                               |
 | POST   | `/auth/verify-email`    | Verificar email con token enviado al registrar              |
 
 - Tabla nueva `password_reset_tokens` (o similar) si se implementa forgot-password
-- Verificación de email puede ser un campo `emailVerifiedAt` en `users`
+- Verificacion de email puede ser un campo `emailVerifiedAt` en `users`
 
-## Módulos Existentes (no tocar)
+## Modulos Existentes
 
-| Módulo     | Archivos                  |
+| Modulo     | Archivos                  |
 | ---------- | ------------------------- |
 | Auth       | `src/modules/auth/`       |
 | Categories | `src/modules/categories/` |
+| Movements  | `src/modules/movements/`  |
+| Debts      | `src/modules/debts/`      |
 | Ping       | `src/modules/ping/`       |
