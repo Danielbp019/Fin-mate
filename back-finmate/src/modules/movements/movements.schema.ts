@@ -7,30 +7,41 @@ export const createMovementSchema = z.object({
   }),
   amount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+    .regex(
+      /^\d+(\.\d{1,4})?$/,
+      'El monto debe ser un numero valido con hasta 4 decimales',
+    ),
   description: z
     .string()
     .max(255, 'La descripcion no puede exceder 255 caracteres')
     .optional(),
-  movementDate: z.string().datetime({ message: 'Fecha de movimiento invalida' }),
-  isShared: z.boolean().optional(),
+  movementDate: z
+    .string()
+    .datetime({ message: 'Fecha de movimiento invalida' }),
 });
 
 export const updateMovementSchema = z.object({
   categoryId: z.string().uuid('ID de categoria invalido').optional(),
-  type: z.enum(['income', 'expense'], {
-    errorMap: () => ({ message: 'El tipo debe ser income o expense' }),
-  }).optional(),
+  type: z
+    .enum(['income', 'expense'], {
+      errorMap: () => ({ message: 'El tipo debe ser income o expense' }),
+    })
+    .optional(),
   amount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
+    .regex(
+      /^\d+(\.\d{1,4})?$/,
+      'El monto debe ser un numero valido con hasta 4 decimales',
+    )
     .optional(),
   description: z
     .string()
     .max(255, 'La descripcion no puede exceder 255 caracteres')
     .optional(),
-  movementDate: z.string().datetime({ message: 'Fecha de movimiento invalida' }).optional(),
-  isShared: z.boolean().optional(),
+  movementDate: z
+    .string()
+    .datetime({ message: 'Fecha de movimiento invalida' })
+    .optional(),
 });
 
 export const movementParamsSchema = z.object({

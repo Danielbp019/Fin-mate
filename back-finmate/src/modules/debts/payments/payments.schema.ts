@@ -3,7 +3,10 @@ import { z } from 'zod';
 export const createPaymentSchema = z.object({
   amount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+    .regex(
+      /^\d+(\.\d{1,4})?$/,
+      'El monto debe ser un numero valido con hasta 4 decimales',
+    ),
   paymentDate: z.string().datetime({ message: 'Fecha de pago invalida' }),
   notes: z
     .string()

@@ -4,7 +4,11 @@ import * as debtsRepository from '../debts.repository.js';
 import * as paymentsRepository from './payments.repository.js';
 import type { CreatePaymentBody, PaymentResponse } from './payments.types.js';
 
-function toResponse(row: NonNullable<Awaited<ReturnType<typeof paymentsRepository.findByDebt>>>[number]): PaymentResponse {
+function toResponse(
+  row: NonNullable<
+    Awaited<ReturnType<typeof paymentsRepository.findByDebt>>
+  >[number],
+): PaymentResponse {
   return {
     id: row.id,
     debtId: row.debtId,
@@ -16,7 +20,10 @@ function toResponse(row: NonNullable<Awaited<ReturnType<typeof paymentsRepositor
   };
 }
 
-export async function list(debtId: string, userId: string): Promise<PaymentResponse[]> {
+export async function list(
+  debtId: string,
+  userId: string,
+): Promise<PaymentResponse[]> {
   const debt = await debtsRepository.findById(debtId);
   if (!debt) {
     throw new AppError(404, 'Deuda no encontrada');
@@ -60,7 +67,7 @@ export async function create(
   const paymentAmount = Number(data.amount);
   const currentAmount = Number(debt.currentAmount);
   const newAmount = Math.max(0, currentAmount - paymentAmount);
-  const newStatus = newAmount <= 0 ? 'paid' as const : 'pending' as const;
+  const newStatus = newAmount <= 0 ? ('paid' as const) : ('pending' as const);
 
   await paymentsRepository.create(payment);
 

@@ -6,11 +6,7 @@ import {
 } from './movements.schema.js';
 import * as movementsService from './movements.service.js';
 
-export async function list(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function list(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const query = movementListQuerySchema.parse(req.query);
@@ -21,11 +17,7 @@ export async function list(
   }
 }
 
-export async function getById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const id = req.params.id as string;
@@ -36,11 +28,7 @@ export async function getById(
   }
 }
 
-export async function create(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const data = createMovementSchema.parse(req.body);
@@ -51,11 +39,7 @@ export async function create(
   }
 }
 
-export async function update(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const id = req.params.id as string;
@@ -67,11 +51,7 @@ export async function update(
   }
 }
 
-export async function remove(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const id = req.params.id as string;

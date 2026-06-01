@@ -21,7 +21,6 @@ function toResponse(row: typeof movements.$inferSelect): MovementResponse {
     amount: row.amount,
     description: row.description,
     movementDate: row.movementDate.toISOString(),
-    isShared: row.isShared,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };
@@ -85,7 +84,6 @@ export async function create(
     amount: data.amount,
     description: data.description ?? null,
     movementDate,
-    isShared: data.isShared ?? false,
     createdAt: now,
     updatedAt: now,
     deletedAt: null,
@@ -126,9 +124,10 @@ export async function update(
   if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
   if (data.type !== undefined) updateData.type = data.type;
   if (data.amount !== undefined) updateData.amount = data.amount;
-  if (data.description !== undefined) updateData.description = data.description ?? null;
-  if (data.movementDate !== undefined) updateData.movementDate = new Date(data.movementDate);
-  if (data.isShared !== undefined) updateData.isShared = data.isShared;
+  if (data.description !== undefined)
+    updateData.description = data.description ?? null;
+  if (data.movementDate !== undefined)
+    updateData.movementDate = new Date(data.movementDate);
 
   await movementsRepository.update(id, updateData);
 

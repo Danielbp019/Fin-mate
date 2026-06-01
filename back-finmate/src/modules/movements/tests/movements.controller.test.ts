@@ -12,7 +12,6 @@ const mockMovement = {
   amount: '150.50',
   description: 'Compra de comida',
   movementDate: '2026-06-01T12:00:00.000Z',
-  isShared: false,
   createdAt: '2026-06-01T12:00:00.000Z',
   updatedAt: '2026-06-01T12:00:00.000Z',
 };

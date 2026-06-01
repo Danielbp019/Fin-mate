@@ -29,7 +29,6 @@ describe('createMovementSchema', () => {
       amount: '2500.0000',
       description: 'Salario mensual',
       movementDate: '2026-06-01T12:00:00.000Z',
-      isShared: false,
     });
     expect(result).toEqual({
       categoryId: '550e8400-e29b-41d4-a716-446655440000',
@@ -37,7 +36,6 @@ describe('createMovementSchema', () => {
       amount: '2500.0000',
       description: 'Salario mensual',
       movementDate: '2026-06-01T12:00:00.000Z',
-      isShared: false,
     });
   });
 

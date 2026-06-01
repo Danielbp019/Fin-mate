@@ -98,13 +98,13 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 
 Todas las rutas requieren `Authorization: Bearer <token>`.
 
-| Método | Ruta             | Body / Query                                                              | Respuesta                  |
-| ------ | ---------------- | ------------------------------------------------------------------------- | -------------------------- |
-| GET    | `/movements`     | `?type, ?categoryId, ?from, ?to, ?page, ?limit`                           | 200 `{ data, pagination }` |
-| GET    | `/movements/:id` | —                                                                         | 200 `MovementResponse`     |
-| POST   | `/movements`     | `{ categoryId, type, amount, description?, movementDate, isShared? }`     | 201 `MovementResponse`     |
-| PATCH  | `/movements/:id` | `{ categoryId?, type?, amount?, description?, movementDate?, isShared? }` | 200 `MovementResponse`     |
-| DELETE | `/movements/:id` | —                                                                         | 204 Sin contenido          |
+| Método | Ruta             | Body / Query                                                   | Respuesta                  |
+| ------ | ---------------- | -------------------------------------------------------------- | -------------------------- |
+| GET    | `/movements`     | `?type, ?categoryId, ?from, ?to, ?page, ?limit`                | 200 `{ data, pagination }` |
+| GET    | `/movements/:id` | —                                                              | 200 `MovementResponse`     |
+| POST   | `/movements`     | `{ categoryId, type, amount, description?, movementDate }`     | 201 `MovementResponse`     |
+| PATCH  | `/movements/:id` | `{ categoryId?, type?, amount?, description?, movementDate? }` | 200 `MovementResponse`     |
+| DELETE | `/movements/:id` | —                                                              | 204 Sin contenido          |
 
 ### Debts
 
@@ -126,6 +126,23 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | ------ | ------------------------- | --------------------------------- | ----------------------- |
 | GET    | `/debts/:debtId/payments` | —                                 | 200 `PaymentResponse[]` |
 | POST   | `/debts/:debtId/payments` | `{ amount, paymentDate, notes? }` | 201 `PaymentResponse`   |
+
+### Couples
+
+Todas las rutas requieren `Authorization: Bearer <token>`.
+
+| Método | Ruta                  | Body / Headers | Respuesta                |
+| ------ | --------------------- | -------------- | ------------------------ |
+| GET    | `/couples`            | —              | 200 `CoupleResponse`     |
+| POST   | `/couples`            | `{ name? }`    | 201 `CoupleResponse`     |
+| POST   | `/couples/:id/invite` | `{ email }`    | 201 `InvitationResponse` |
+| POST   | `/couples/:id/join`   | —              | 200 `CoupleResponse`     |
+| DELETE | `/couples/:id/leave`  | —              | 200 `{ message }`        |
+| DELETE | `/couples/:id`        | —              | 200 `{ message }`        |
+
+- Un usuario solo puede pertenecer a un grupo activo a la vez
+- El `owner` no puede abandonar sin disolver
+- Al disolver, los registros compartidos se desvinculan (`couple_id = NULL`) sin borrar datos financieros
 
 ### Health
 
@@ -165,21 +182,6 @@ src/modules/debts/
 
 Funcionalidades planificadas para futuras iteraciones:
 
-### Couples (src/modules/couples/)
-
-Gestion de finanzas compartidas. Tablas `couples` y `couple_members` ya existen en schema de Drizzle.
-
-| Metodo | Ruta                  | Descripcion                         |
-| ------ | --------------------- | ----------------------------------- |
-| POST   | `/couples`            | Crear grupo (el creador es `owner`) |
-| POST   | `/couples/:id/invite` | Invitar usuario por email           |
-| POST   | `/couples/:id/join`   | Aceptar invitacion                  |
-| DELETE | `/couples/:id/leave`  | Abandonar grupo                     |
-| DELETE | `/couples/:id`        | Disolver grupo (solo owner)         |
-
-- Un usuario solo puede pertenecer a un grupo activo a la vez
-- El `owner` no puede abandonar sin disolver (puede transferir ownership)
-
 ### Cuenta (features de auth pendientes)
 
 Funcionalidades futuras que extienden el modulo `auth`:
@@ -193,6 +195,23 @@ Funcionalidades futuras que extienden el modulo `auth`:
 - Tabla nueva `password_reset_tokens` (o similar) si se implementa forgot-password
 - Verificacion de email puede ser un campo `emailVerifiedAt` en `users`
 
+### Couple Goals (futuro — `src/modules/couple-goals/`)
+
+Metas de ahorro compartidas entre miembros de un grupo activo. Cada miembro puede contribuir y se trackea el progreso colectivo.
+
+Tablas nuevas:
+
+- `couple_goals` — id, coupleId, title, targetAmount, currentAmount, deadline, status, createdBy, timestamps
+- `goal_contributions` — id, goalId, userId, amount, notes, date
+
+| Metodo | Ruta                                      | Descripcion                |
+| ------ | ----------------------------------------- | -------------------------- |
+| POST   | `/couples/:coupleId/goals`                | Crear meta de ahorro       |
+| GET    | `/couples/:coupleId/goals`                | Listar metas del grupo     |
+| PATCH  | `/couples/:coupleId/goals/:id`            | Editar meta (solo creador) |
+| DELETE | `/couples/:coupleId/goals/:id`            | Eliminar meta              |
+| POST   | `/couples/:coupleId/goals/:id/contribute` | Aportar a la meta          |
+
 ## Modulos Existentes
 
 | Modulo     | Archivos                  |
@@ -201,4 +220,5 @@ Funcionalidades futuras que extienden el modulo `auth`:
 | Categories | `src/modules/categories/` |
 | Movements  | `src/modules/movements/`  |
 | Debts      | `src/modules/debts/`      |
+| Couples    | `src/modules/couples/`    |
 | Ping       | `src/modules/ping/`       |

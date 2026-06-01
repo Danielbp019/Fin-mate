@@ -1,13 +1,12 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { createCategorySchema, updateCategorySchema } from './categories.schema.js';
+import {
+  createCategorySchema,
+  updateCategorySchema,
+} from './categories.schema.js';
 import * as categoriesService from './categories.service.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 
-export async function list(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function list(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as AuthenticatedRequest;
     const type = req.query.type as string | undefined;
@@ -24,11 +23,7 @@ export async function list(
   }
 }
 
-export async function getById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as AuthenticatedRequest;
     const id = req.params.id as string;
@@ -39,11 +34,7 @@ export async function getById(
   }
 }
 
-export async function create(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as AuthenticatedRequest;
     const data = createCategorySchema.parse(req.body);
@@ -54,11 +45,7 @@ export async function create(
   }
 }
 
-export async function update(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as AuthenticatedRequest;
     const id = req.params.id as string;
@@ -70,11 +57,7 @@ export async function update(
   }
 }
 
-export async function remove(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as AuthenticatedRequest;
     const id = req.params.id as string;

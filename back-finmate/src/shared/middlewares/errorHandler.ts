@@ -39,8 +39,6 @@ export function errorHandler(
 
   res.status(500).json({
     error:
-      env.nodeEnv === 'production'
-        ? 'Error interno del servidor'
-        : err.message,
+      env.nodeEnv === 'production' ? 'Error interno del servidor' : err.message,
   });
 }

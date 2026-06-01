@@ -1,7 +1,10 @@
 import crypto from 'crypto';
 import { AppError } from '../../shared/errors/AppError.js';
 import * as categoriesRepository from './categories.repository.js';
-import type { CreateCategoryBody, UpdateCategoryBody } from './categories.types.js';
+import type {
+  CreateCategoryBody,
+  UpdateCategoryBody,
+} from './categories.types.js';
 
 export async function list(userId: string, type?: string) {
   return await categoriesRepository.findByUser(userId, type);
@@ -86,7 +89,10 @@ export async function update(
   if (data.sortOrder !== undefined) updateData.sortOrder = data.sortOrder;
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
 
-  await categoriesRepository.update(id, updateData as Parameters<typeof categoriesRepository.update>[1]);
+  await categoriesRepository.update(
+    id,
+    updateData as Parameters<typeof categoriesRepository.update>[1],
+  );
 
   const updated = await categoriesRepository.findById(id);
   return updated!;

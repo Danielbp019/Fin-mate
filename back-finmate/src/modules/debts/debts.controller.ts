@@ -1,23 +1,27 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import {
-  createDebtSchema,
-  updateDebtSchema,
-} from './debts.schema.js';
+import { createDebtSchema, updateDebtSchema } from './debts.schema.js';
 import * as debtsService from './debts.service.js';
 
-export async function list(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function list(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const query = req.query as { status?: string; priority?: string };
-    const filters: { status?: 'pending' | 'paid' | 'overdue'; priority?: 'low' | 'medium' | 'high' } = {};
-    if (query.status === 'pending' || query.status === 'paid' || query.status === 'overdue') {
+    const filters: {
+      status?: 'pending' | 'paid' | 'overdue';
+      priority?: 'low' | 'medium' | 'high';
+    } = {};
+    if (
+      query.status === 'pending' ||
+      query.status === 'paid' ||
+      query.status === 'overdue'
+    ) {
       filters.status = query.status;
     }
-    if (query.priority === 'low' || query.priority === 'medium' || query.priority === 'high') {
+    if (
+      query.priority === 'low' ||
+      query.priority === 'medium' ||
+      query.priority === 'high'
+    ) {
       filters.priority = query.priority;
     }
     const result = await debtsService.list(userId, filters);
@@ -27,11 +31,7 @@ export async function list(
   }
 }
 
-export async function getById(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const id = req.params.id as string;
@@ -42,11 +42,7 @@ export async function getById(
   }
 }
 
-export async function create(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const data = createDebtSchema.parse(req.body);
@@ -57,11 +53,7 @@ export async function create(
   }
 }
 
-export async function update(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const id = req.params.id as string;
@@ -73,11 +65,7 @@ export async function update(
   }
 }
 
-export async function remove(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const id = req.params.id as string;

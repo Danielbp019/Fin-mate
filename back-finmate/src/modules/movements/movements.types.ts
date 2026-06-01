@@ -4,7 +4,6 @@ export interface CreateMovementBody {
   amount: string;
   description?: string;
   movementDate: string;
-  isShared?: boolean;
 }
 
 export interface UpdateMovementBody {
@@ -13,7 +12,6 @@ export interface UpdateMovementBody {
   amount?: string;
   description?: string;
   movementDate?: string;
-  isShared?: boolean;
 }
 
 export interface MovementResponse {
@@ -24,7 +22,6 @@ export interface MovementResponse {
   amount: string;
   description: string | null;
   movementDate: string;
-  isShared: boolean;
   createdAt: string;
   updatedAt: string;
 }

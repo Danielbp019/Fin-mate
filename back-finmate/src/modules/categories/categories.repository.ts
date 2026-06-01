@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { and, eq, isNull, ne, or, sql } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
 import { categories } from '../../shared/database/schema.js';
@@ -13,7 +12,11 @@ export async function findById(id: string) {
   return result[0] ?? null;
 }
 
-export async function findByNameAndUser(name: string, userId: string, excludeId?: string) {
+export async function findByNameAndUser(
+  name: string,
+  userId: string,
+  excludeId?: string,
+) {
   const conditions = [
     eq(categories.name, name),
     eq(categories.userId, userId),

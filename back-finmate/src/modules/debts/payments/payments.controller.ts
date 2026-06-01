@@ -2,11 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { createPaymentSchema } from './payments.schema.js';
 import * as paymentsService from './payments.service.js';
 
-export async function list(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function list(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const debtId = req.params.debtId as string;
@@ -17,11 +13,7 @@ export async function list(
   }
 }
 
-export async function create(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function create(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const debtId = req.params.debtId as string;

@@ -16,7 +16,9 @@ async function seed() {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`  ✖ Error de conexión: ${message}`);
-    console.error('    Verifica que las migraciones estén aplicadas con "npm run db:migrate"');
+    console.error(
+      '    Verifica que las migraciones estén aplicadas con "npm run db:migrate"',
+    );
     console.error('');
     process.exit(1);
   }
@@ -56,17 +58,55 @@ async function seed() {
   console.log('');
 
   const systemCategories = [
-    { id: crypto.randomUUID(), userId: null, type: 'income' as const,  name: 'Salario',    sortOrder: '0', isActive: true, isSystem: true, updatedAt: now },
-    { id: crypto.randomUUID(), userId: null, type: 'expense' as const, name: 'Comida',     sortOrder: '0', isActive: true, isSystem: true, updatedAt: now },
-    { id: crypto.randomUUID(), userId: null, type: 'expense' as const, name: 'Transporte', sortOrder: '0', isActive: true, isSystem: true, updatedAt: now },
-    { id: crypto.randomUUID(), userId: null, type: 'expense' as const, name: 'Salud',      sortOrder: '0', isActive: true, isSystem: true, updatedAt: now },
+    {
+      id: crypto.randomUUID(),
+      userId: null,
+      type: 'income' as const,
+      name: 'Salario',
+      sortOrder: '0',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
+    {
+      id: crypto.randomUUID(),
+      userId: null,
+      type: 'expense' as const,
+      name: 'Comida',
+      sortOrder: '0',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
+    {
+      id: crypto.randomUUID(),
+      userId: null,
+      type: 'expense' as const,
+      name: 'Transporte',
+      sortOrder: '0',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
+    {
+      id: crypto.randomUUID(),
+      userId: null,
+      type: 'expense' as const,
+      name: 'Salud',
+      sortOrder: '0',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
   ];
 
   await db.insert(categories).values(systemCategories);
   console.log('  ✔ 4 categorías del sistema insertadas');
   console.log('');
 
-  console.log('  ✅ Seed completado — 2 usuarios y 4 categorías del sistema creados');
+  console.log(
+    '  ✅ Seed completado — 2 usuarios y 4 categorías del sistema creados',
+  );
   console.log('');
 }
 

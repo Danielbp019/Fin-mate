@@ -43,7 +43,6 @@ const mockMovement = {
   amount: '150.50',
   description: 'Compra de comida',
   movementDate: new Date('2026-06-01T12:00:00.000Z'),
-  isShared: false,
   createdAt: new Date('2026-06-01T12:00:00.000Z'),
   updatedAt: new Date('2026-06-01T12:00:00.000Z'),
   deletedAt: null,

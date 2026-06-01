@@ -75,7 +75,6 @@ CREATE TABLE `movements` (
 	`amount` decimal(19,4) NOT NULL COMMENT 'Valor monetario preciso',
 	`description` varchar(255) COMMENT 'Descripción opcional',
 	`movement_date` datetime(3) NOT NULL COMMENT 'Fecha efectiva del movimiento',
-	`is_shared` boolean NOT NULL DEFAULT false COMMENT 'Indica si afecta finanzas compartidas',
 	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de creación',
 	`updated_at` datetime(3) NOT NULL COMMENT 'Última actualización',
 	`deleted_at` datetime(3) COMMENT 'Soft delete',
@@ -119,4 +118,15 @@ CREATE INDEX `idx_movements_user_id` ON `movements` (`user_id`);--> statement-br
 CREATE INDEX `idx_movements_couple_id` ON `movements` (`couple_id`);--> statement-breakpoint
 CREATE INDEX `idx_movements_category_id` ON `movements` (`category_id`);--> statement-breakpoint
 CREATE INDEX `idx_movements_type_date` ON `movements` (`type`,`movement_date`);--> statement-breakpoint
-CREATE INDEX `idx_refresh_tokens_user_id` ON `refresh_tokens` (`user_id`);
+CREATE INDEX `idx_refresh_tokens_user_id` ON `refresh_tokens` (`user_id`);--> statement-breakpoint
+CREATE TABLE `couple_invitations` (
+	`id` char(36) NOT NULL COMMENT 'UUID de la invitación',
+	`couple_id` char(36) NOT NULL COMMENT 'Grupo al que invita',
+	`invited_email` varchar(190) NOT NULL COMMENT 'Email del usuario invitado',
+	`status` enum('pending','accepted','declined','expired') NOT NULL DEFAULT 'pending' COMMENT 'Estado de la invitación',
+	`expires_at` datetime(3) NOT NULL COMMENT 'Fecha de expiración',
+	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de creación',
+	`updated_at` datetime(3) NOT NULL COMMENT 'Última actualización',
+	CONSTRAINT `couple_invitations_id` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT = 'Invitaciones a grupos financieros compartidos';--> statement-breakpoint
+CREATE INDEX `idx_invitations_couple_id` ON `couple_invitations` (`couple_id`);

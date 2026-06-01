@@ -11,7 +11,10 @@ export const createDebtSchema = z.object({
     .optional(),
   initialAmount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+    .regex(
+      /^\d+(\.\d{1,4})?$/,
+      'El monto debe ser un numero valido con hasta 4 decimales',
+    ),
   interestRate: z
     .string()
     .regex(/^\d+(\.\d{1,4})?$/, 'La tasa de interes debe ser un numero valido')
@@ -49,11 +52,17 @@ export const updateDebtSchema = z.object({
     .optional(),
   initialAmount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
+    .regex(
+      /^\d+(\.\d{1,4})?$/,
+      'El monto debe ser un numero valido con hasta 4 decimales',
+    )
     .optional(),
   currentAmount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
+    .regex(
+      /^\d+(\.\d{1,4})?$/,
+      'El monto debe ser un numero valido con hasta 4 decimales',
+    )
     .optional(),
   interestRate: z
     .string()
@@ -76,17 +85,16 @@ export const updateDebtSchema = z.object({
     .optional(),
   status: z
     .enum(['pending', 'paid', 'overdue'], {
-      errorMap: () => ({ message: 'El estado debe ser pending, paid o overdue' }),
+      errorMap: () => ({
+        message: 'El estado debe ser pending, paid o overdue',
+      }),
     })
     .optional(),
   startDate: z
     .string()
     .datetime({ message: 'Fecha de inicio invalida' })
     .optional(),
-  endDate: z
-    .string()
-    .datetime({ message: 'Fecha de fin invalida' })
-    .optional(),
+  endDate: z.string().datetime({ message: 'Fecha de fin invalida' }).optional(),
 });
 
 export const debtParamsSchema = z.object({

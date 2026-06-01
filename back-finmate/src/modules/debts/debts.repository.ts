@@ -14,10 +14,7 @@ export async function findById(id: string) {
 }
 
 export async function findByUser(userId: string, filters: DebtListFilters) {
-  const conditions = [
-    eq(debts.userId, userId),
-    isNull(debts.deletedAt),
-  ];
+  const conditions = [eq(debts.userId, userId), isNull(debts.deletedAt)];
 
   if (filters.status) {
     conditions.push(eq(debts.status, filters.status));

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { eq, and, gt } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
 import { users, refreshTokens } from '../../shared/database/schema.js';
 
