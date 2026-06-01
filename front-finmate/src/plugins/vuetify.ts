@@ -5,14 +5,25 @@
  */
 
 // Composables
-import { createVuetify } from 'vuetify'
+import { createVuetify } from 'vuetify';
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/styles';
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
     defaultTheme: 'light',
   },
-})
+  defaults: {
+    VLabel: { style: 'font-size: 14px; font-weight: 500;' },
+    VBtn: { style: 'font-size: 14px; font-weight: 500;' },
+    VTextField: { style: 'font-size: 14px;' },
+    VSelect: { style: 'font-size: 14px;' },
+    VCard: { style: 'font-size: 15px; line-height: 1.6;' },
+    VListItem: { style: 'font-size: 14px;' },
+    VListSubheader: { style: 'font-size: 14px;' },
+    VMenu: { style: 'font-size: 14px;' },
+    VDataTable: { style: 'font-size: 14px;' },
+  },
+});

@@ -2,7 +2,7 @@
   <v-dialog max-width="640" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)">
     <v-card theme="light">
       <v-card-title class="text-h5 pa-4">{{ title || (type === 'privacy' ? 'Privacidad' : 'Términos de uso')
-        }}</v-card-title>
+      }}</v-card-title>
       <v-divider />
       <v-card-text class="pa-6 text-body-medium" style="line-height: 1.7">
         <template v-if="type === 'privacy'">

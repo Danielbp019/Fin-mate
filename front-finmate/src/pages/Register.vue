@@ -226,7 +226,7 @@ async function handleRegister() {
 }
 
 .fm-panel-sub {
-  font-size: 14px;
+  font-size: 15px;
   max-width: 260px;
   margin-bottom: 0;
 }
@@ -236,7 +236,7 @@ async function handleRegister() {
 }
 
 .fm-form-sub {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .fm-form-header {

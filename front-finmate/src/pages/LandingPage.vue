@@ -82,7 +82,7 @@
 
             <div class="hc-mini-stat" style="margin-bottom:8px">
               <div>
-                <div style="font-size:10px;color:var(--ink-soft);margin-bottom:2px">Ingresos</div>
+                <div style="font-size:12px;color:var(--ink-soft);margin-bottom:2px">Ingresos</div>
                 <div class="hc-stat-num">$7,200</div>
               </div>
               <div class="hc-mini-pill pill-green">↑ 12%</div>
@@ -90,7 +90,7 @@
 
             <div class="hc-mini-stat" style="margin-bottom:8px">
               <div>
-                <div style="font-size:10px;color:var(--ink-soft);margin-bottom:2px">Gastos</div>
+                <div style="font-size:12px;color:var(--ink-soft);margin-bottom:2px">Gastos</div>
                 <div class="hc-stat-num">$2,380</div>
               </div>
               <div class="hc-mini-pill pill-gold">→ estable</div>
@@ -98,7 +98,7 @@
 
             <div class="hc-mini-stat">
               <div>
-                <div style="font-size:10px;color:var(--ink-soft);margin-bottom:2px">Deuda activa</div>
+                <div style="font-size:12px;color:var(--ink-soft);margin-bottom:2px">Deuda activa</div>
                 <div class="hc-stat-num">$1,450</div>
               </div>
               <div class="hc-mini-pill pill-blue">En plan</div>
@@ -108,7 +108,7 @@
           <div class="fb fb2">
             <div class="fb-icon fi-gold">💰</div>
             <div>
-              <div style="font-size:9px;color:var(--ink-soft)">Ahorro del mes</div>
+              <div style="font-size:11px;color:var(--ink-soft)">Ahorro del mes</div>
               <div style="font-size:13px;font-weight:600;color:var(--gold);font-family:'Playfair Display',serif">+$820
               </div>
             </div>
@@ -117,8 +117,8 @@
           <div class="fb fb1">
             <div class="fb-icon fi-blue">👫</div>
             <div>
-              <div style="font-size:9px;color:var(--ink-soft)">Modo pareja</div>
-              <div style="font-size:11px;font-weight:500;color:var(--blue-deep)">Sincronizado</div>
+              <div style="font-size:11px;color:var(--ink-soft)">Modo pareja</div>
+              <div style="font-size:12px;font-weight:500;color:var(--blue-deep)">Sincronizado</div>
             </div>
           </div>
         </div>
@@ -208,7 +208,7 @@
           <button type="button" @click="showPrivacy = true">Privacidad</button>
           <button type="button" @click="showTerms = true">Términos</button>
         </div>
-        <div style="font-size:11px;color:var(--ink-soft);opacity:0.6">© 2026 FinMate</div>
+        <div style="font-size:13px;color:var(--ink-soft);opacity:0.6">© 2026 FinMate</div>
       </div>
     </footer>
 

@@ -21,6 +21,15 @@ p {
   --ink-soft: #3d5c3d;
 }
 
+html {
+  font-size: 16px;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -158,7 +167,7 @@ p {
   gap: 6px;
   background: #e1f5ee;
   color: var(--green-deep);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   padding: 5px 12px;
   border-radius: 20px;
@@ -207,7 +216,7 @@ p {
   font-size: 16px;
   font-weight: 300;
   color: var(--ink-soft);
-  line-height: 1.65;
+  line-height: 1.7;
   margin-bottom: 32px;
   max-width: 380px;
 }
@@ -263,7 +272,7 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   opacity: 0.75;
 }
@@ -355,7 +364,7 @@ p {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--green-deep);
   background: var(--green-light);
@@ -375,7 +384,7 @@ p {
 }
 
 .hc-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-soft);
   margin-bottom: 16px;
   font-weight: 300;
@@ -384,7 +393,7 @@ p {
 .hc-bar-label {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--ink-soft);
   margin-bottom: 4px;
 }
@@ -417,7 +426,7 @@ p {
 }
 
 .hc-mini-pill {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   padding: 3px 8px;
   border-radius: 6px;
@@ -454,7 +463,7 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ink);
   white-space: nowrap;
@@ -501,7 +510,7 @@ p {
 
 .feat-label {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -572,7 +581,7 @@ p {
 }
 
 .feat-desc {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-soft);
   line-height: 1.6;
   font-weight: 300;
@@ -677,7 +686,7 @@ p {
 }
 
 .stat-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   font-weight: 300;
 }
@@ -719,7 +728,7 @@ p {
 
 .footer-links a,
 .footer-links button {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   text-decoration: none;
   font-weight: 300;
@@ -812,10 +821,10 @@ p {
 }
 
 .fm-panel-sub {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.72);
-  line-height: 1.65;
+  line-height: 1.7;
   max-width: 280px;
   margin-bottom: 32px;
 }
@@ -851,7 +860,7 @@ p {
 }
 
 .fm-stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.6);
   font-weight: 300;
 }
@@ -867,7 +876,7 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.82);
   font-weight: 300;
 }
@@ -903,7 +912,7 @@ p {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);
   margin-bottom: 10px;
@@ -922,7 +931,7 @@ p {
 }
 
 .fm-deco-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.65);
   background: rgba(255, 255, 255, 0.1);
@@ -968,13 +977,13 @@ p {
 }
 
 .fm-deco-pair-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #fff;
 }
 
 .fm-deco-pair-sub {
-  font-size: 10px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.55);
 }
 
@@ -995,7 +1004,7 @@ p {
 .fm-deco-bar-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.55);
 }
 
@@ -1037,7 +1046,7 @@ p {
 }
 
 .fm-form-sub {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ink-soft);
   font-weight: 300;
 }
@@ -1058,7 +1067,7 @@ p {
 
 .fm-label {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--ink);
   margin-bottom: 6px;
@@ -1073,7 +1082,7 @@ p {
 }
 
 .fm-forgot {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--green-mid);
   text-decoration: none;
   font-weight: 400;
@@ -1105,7 +1114,7 @@ p {
 .fm-switch-link {
   text-align: center;
   margin-top: 24px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-soft);
   font-weight: 300;
 }
@@ -1125,7 +1134,7 @@ p {
 .fm-terms {
   text-align: center;
   margin-top: 14px;
-  font-size: 11px;
+  font-size: 13px;
   color: rgba(61, 92, 61, 0.6);
   font-weight: 300;
   line-height: 1.6;
@@ -1196,7 +1205,7 @@ p {
 }
 
 .dashboard-greeting p {
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(var(--v-theme-on-surface), 0.6);
   font-weight: 300;
 }
@@ -1232,7 +1241,7 @@ p {
 }
 
 .summary-card-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: rgba(var(--v-theme-on-surface), 0.6);
   letter-spacing: 0.3px;
@@ -1268,7 +1277,7 @@ p {
 }
 
 .summary-card-change {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
 }
 
