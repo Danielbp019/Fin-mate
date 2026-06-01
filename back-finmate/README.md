@@ -96,7 +96,6 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 
 | Método | Ruta    | Respuesta                             |
 | ------ | ------- | ------------------------------------- |
-| GET    | `/`     | `¡Hola Mundo!`                        |
 | GET    | `/ping` | 200 `{ status, httpCode, timestamp }` |
 
 ## Arquitectura
@@ -107,6 +106,11 @@ Modular Monolith con flujo `route → controller → service → repository → 
 
 Funcionalidades planificadas para futuras iteraciones:
 
-- Cambio de contraseña
-- Recuperación de contraseña
-- Verificación de email
+- **Cambio de contraseña** — Endpoint para cambiar contraseña estando autenticado
+- **Recuperación de contraseña** — Flujo "olvidé mi contraseña" con envío de email
+- **Verificación de email** — Confirmación de email al registrarse
+- **Módulo Movements** — CRUD de movimientos financieros (ingresos/gastos) con filtros por fecha, tipo, categoría y paginación
+- **Módulo Couples** — Gestión de parejas/grupos: crear, invitar/aceptar, abandonar, roles (owner/member)
+- **Módulo Debts** — CRUD de deudas con prioridad, tasa de interés, estado (pending/paid/overdue)
+- **Sub-módulo Debt Payments** — Registrar pagos a deudas, actualizar `current_amount` automáticamente
+- **Eliminar endpoint GET / redundante** — La ruta raíz con `¡Hola Mundo!` es cubierta por `GET /ping`

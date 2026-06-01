@@ -78,7 +78,10 @@ describe('authController.refresh', () => {
     expect(authService.refresh).toHaveBeenCalledWith('old-refresh-token');
     expect(res.cookie).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ accessToken: 'access-token-value' });
+    expect(res.json).toHaveBeenCalledWith({
+      accessToken: 'access-token-value',
+      user: { id: '1', name: 'Test', email: 'test@test.com' },
+    });
   });
 });
 

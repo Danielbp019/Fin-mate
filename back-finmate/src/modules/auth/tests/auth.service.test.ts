@@ -146,6 +146,7 @@ describe('authService.refresh', () => {
     vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(mockRefreshTokenRecord);
     vi.mocked(authRepository.revokeRefreshToken).mockResolvedValue(undefined);
     vi.mocked(authRepository.createRefreshToken).mockResolvedValue('new-jti');
+    vi.mocked(authRepository.findUserById).mockResolvedValue(mockUser);
   });
 
   it('debe rotar el refresh token y generar nuevo access token', async () => {
