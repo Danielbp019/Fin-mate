@@ -64,7 +64,83 @@ Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod, JWT (Access + Refresh
 
 ## Estructura de Módulo
 
+### Módulo estándar (plano)
+
 ```
-auth.controller.ts  auth.service.ts  auth.repository.ts
-auth.routes.ts  auth.schema.ts  auth.types.ts
+src/modules/<modulo>/
+  <modulo>.controller.ts
+  <modulo>.service.ts
+  <modulo>.repository.ts
+  <modulo>.routes.ts
+  <modulo>.schema.ts      # Schemas de validación Zod
+  <modulo>.types.ts       # Tipos compartidos
+  tests/
+    <modulo>.service.test.ts
+    <modulo>.controller.test.ts
+    <modulo>.routes.test.ts
+    <modulo>.schema.test.ts
 ```
+
+### Módulo con sub-módulo
+
+Cuando una feature tiene lógica hija con su propia tabla y responsabilidades (ej. Debt Payments dentro de Debts), se estructura en subdirectorio:
+
+```
+src/modules/debts/
+  debts.controller.ts
+  debts.service.ts
+  debts.repository.ts
+  debts.schema.ts
+  debts.routes.ts
+  debts.types.ts
+  payments/                          # ← sub-módulo
+    payments.controller.ts
+    payments.service.ts
+    payments.repository.ts
+    payments.schema.ts
+    payments.types.ts
+    tests/
+      payments.service.test.ts
+      payments.controller.test.ts
+```
+
+**Reglas de sub-módulos:**
+
+- Tienen su propio controller/service/repository/schema como un módulo independiente
+- Las rutas del sub-módulo se montan desde el controlador del módulo padre, NO desde `app.ts`
+- El sub-módulo importa tipos y schemas del padre cuando necesita validar la relación (ej. `debtId`)
+
+### Registro en app.ts
+
+```
+// Módulos públicos (sin auth)
+app.use(pingRouter);
+app.use(authRouter);
+
+// Módulos protegidos (requieren auth middleware)
+app.use('/categories', categoriesRouter);
+app.use('/movements', movementsRouter);   // nuevo
+```
+
+Los módulos protegidos se registran bajo una ruta base. El middleware `authenticate` se aplica a nivel de router interno (en `<modulo>.routes.ts`) para mantener `app.ts` limpio.
+
+## Orden de Implementación Prioritario
+
+El proyecto tiene módulos pendientes. Construir en este orden:
+
+1. **Movements** — No depende de nada, desbloquea el core de la app
+2. **Debts** — Independiente, tabla propia
+3. **Debt Payments** — Depende de Debts (sub-módulo)
+4. **Couples** — Más complejo (invitaciones, roles), dejar para el final
+
+Ver `README.md` → **Pendientes** para detalles de cada uno.
+
+## Dinero.js
+
+Para montos monetarios usar dinero.js. Ver skills en `.agents/skills/`:
+
+- `dinero-best-practices` — Creación y aritmética
+- `dinero-currency-patterns` — Almacenamiento en DB (decimal con 4 decimales) y múltiples monedas
+- `dinero-formatting` — Formateo para respuestas JSON
+
+Los montos se almacenan como `DECIMAL(19,4)` en MariaDB y se transforman a Dinero en la capa de servicio. Las respuestas HTTP devuelven el valor como string o número según el caso de uso.

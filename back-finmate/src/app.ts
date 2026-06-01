@@ -8,6 +8,7 @@ import { notFoundHandler } from './shared/middlewares/notFoundHandler.js';
 import pingRouter from './modules/ping/ping.routes.js';
 import authRouter from './modules/auth/auth.routes.js';
 import categoriesRouter from './modules/categories/categories.routes.js';
+import movementsRouter from './modules/movements/movements.routes.js';
 import { env } from './config/env.js';
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(authRouter);
 
 // Rutas protegidas (requieren autenticación)
 app.use('/categories', categoriesRouter);
+app.use('/movements', movementsRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
