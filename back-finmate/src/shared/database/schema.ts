@@ -22,6 +22,7 @@ export const users = mysqlTable(
     status: mysqlEnum('status', ['active', 'inactive'])
       .notNull()
       .default('active'),
+    emailVerifiedAt: datetime('email_verified_at', { fsp: 3 }),
     createdAt: datetime('created_at', { fsp: 3 })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP(3)`),
@@ -223,6 +224,34 @@ export const refreshTokens = mysqlTable(
   },
   (table) => ({
     userIdIdx: index('idx_refresh_tokens_user_id').on(table.userId),
+  }),
+);
+
+export const passwordResetTokens = mysqlTable(
+  'password_reset_tokens',
+  {
+    id: char('id', { length: 36 }).primaryKey(),
+    userId: char('user_id', { length: 36 }).notNull(),
+    token: varchar('token', { length: 255 }).notNull(),
+    expiresAt: datetime('expires_at', { fsp: 3 }).notNull(),
+    used: boolean('used').notNull().default(false),
+    createdAt: datetime('created_at', { fsp: 3 })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP(3)`),
+  },
+  (table) => ({
+    userIdIdx: index('idx_password_reset_user_id').on(table.userId),
+    tokenUnique: uniqueIndex('password_reset_token_key').on(table.token),
+  }),
+);
+
+export const passwordResetTokensRelations = relations(
+  passwordResetTokens,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [passwordResetTokens.userId],
+      references: [users.id],
+    }),
   }),
 );
 

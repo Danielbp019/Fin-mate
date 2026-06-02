@@ -4,6 +4,9 @@ import {
   loginSchema,
   updateProfileSchema,
   changePasswordSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyEmailSchema,
 } from './auth.schema.js';
 import * as authService from './auth.service.js';
 
@@ -94,6 +97,48 @@ export async function changePassword(
     const data = changePasswordSchema.parse(req.body);
     const result = await authService.changePassword(userId, data);
 
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function forgotPassword(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const data = forgotPasswordSchema.parse(req.body);
+    const result = await authService.forgotPassword(data);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function resetPassword(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const data = resetPasswordSchema.parse(req.body);
+    const result = await authService.resetPassword(data);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function verifyEmail(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const data = verifyEmailSchema.parse(req.body);
+    const result = await authService.verifyEmail(data);
     res.status(200).json(result);
   } catch (error) {
     next(error);

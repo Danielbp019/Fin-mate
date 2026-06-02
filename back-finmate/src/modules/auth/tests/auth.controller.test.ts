@@ -28,7 +28,13 @@ const mockServiceResult = {
   accessToken: 'access-token-value',
   user: { id: '1', name: 'Test', email: 'test@test.com' },
   refreshToken: 'refresh-token-value',
-  cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 2592000000 },
+  cookieOptions: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'strict' as const,
+    path: '/auth',
+    maxAge: 2592000000,
+  },
 };
 
 describe('authController.login', () => {
@@ -38,13 +44,22 @@ describe('authController.login', () => {
   });
 
   it('debe llamar al servicio y setear cookie', async () => {
-    const req = createMockReq({ body: { email: 'test@test.com', password: '123456' } });
+    const req = createMockReq({
+      body: { email: 'test@test.com', password: '123456' },
+    });
     const res = createMockRes();
 
     await authController.login(req, res, mockNext);
 
-    expect(authService.login).toHaveBeenCalledWith({ email: 'test@test.com', password: '123456' });
-    expect(res.cookie).toHaveBeenCalledWith('refreshToken', 'refresh-token-value', mockServiceResult.cookieOptions);
+    expect(authService.login).toHaveBeenCalledWith({
+      email: 'test@test.com',
+      password: '123456',
+    });
+    expect(res.cookie).toHaveBeenCalledWith(
+      'refreshToken',
+      'refresh-token-value',
+      mockServiceResult.cookieOptions,
+    );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       accessToken: 'access-token-value',
@@ -55,7 +70,9 @@ describe('authController.login', () => {
   it('debe pasar errores a next', async () => {
     const error = new Error('Test error');
     vi.mocked(authService.login).mockRejectedValueOnce(error);
-    const req = createMockReq({ body: { email: 'test@test.com', password: '123456' } });
+    const req = createMockReq({
+      body: { email: 'test@test.com', password: '123456' },
+    });
     const res = createMockRes();
 
     await authController.login(req, res, mockNext);
@@ -70,7 +87,9 @@ describe('authController.refresh', () => {
   });
 
   it('debe llamar al servicio con cookie y setear nueva cookie', async () => {
-    const req = createMockReq({ cookies: { refreshToken: 'old-refresh-token' } });
+    const req = createMockReq({
+      cookies: { refreshToken: 'old-refresh-token' },
+    });
     const res = createMockRes();
 
     await authController.refresh(req, res, mockNext);
@@ -90,7 +109,13 @@ describe('authController.logout', () => {
     vi.clearAllMocks();
     vi.mocked(authService.logout).mockResolvedValue({
       success: true,
-      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
+      cookieOptions: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict' as const,
+        path: '/auth',
+        maxAge: 0,
+      },
     });
   });
 
@@ -101,7 +126,11 @@ describe('authController.logout', () => {
     await authController.logout(req, res, mockNext);
 
     expect(authService.logout).toHaveBeenCalledWith('rt');
-    expect(res.cookie).toHaveBeenCalledWith('refreshToken', '', expect.any(Object));
+    expect(res.cookie).toHaveBeenCalledWith(
+      'refreshToken',
+      '',
+      expect.any(Object),
+    );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ success: true });
   });
@@ -112,7 +141,13 @@ describe('authController.logoutAll', () => {
     vi.clearAllMocks();
     vi.mocked(authService.logoutAll).mockResolvedValue({
       success: true,
-      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
+      cookieOptions: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict' as const,
+        path: '/auth',
+        maxAge: 0,
+      },
     });
   });
 
@@ -126,7 +161,11 @@ describe('authController.logoutAll', () => {
     await authController.logoutAll(req, res, mockNext);
 
     expect(authService.logoutAll).toHaveBeenCalledWith('user-1', 'rt');
-    expect(res.cookie).toHaveBeenCalledWith('refreshToken', '', expect.any(Object));
+    expect(res.cookie).toHaveBeenCalledWith(
+      'refreshToken',
+      '',
+      expect.any(Object),
+    );
     expect(res.status).toHaveBeenCalledWith(200);
   });
 });

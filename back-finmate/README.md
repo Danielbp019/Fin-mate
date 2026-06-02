@@ -34,6 +34,7 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 - **Base de Datos**: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DATABASE_URL`
 - **Rate Limiting**: `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX`
 - **JWT**: `JWT_SECRET`, `JWT_EXPIRES_IN_SECONDS`, `JWT_REFRESH_EXPIRES_IN_SECONDS`
+- **Email (SMTP)**: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`
 
 ## Comandos Útiles
 
@@ -44,7 +45,7 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 | `npm run start`       | Ejecuta compilado en producción                                          |
 | `npm run db:generate` | Genera migraciones desde el schema                                       |
 | `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB                                  |
-| `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 4 categorías)                       |
+| `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 6 categorías)                       |
 | `npm test`            | Ejecuta todos los tests (vitest run)                                     |
 | `npm run test:watch`  | Ejecuta tests en modo watch (vitest)                                     |
 
@@ -71,6 +72,9 @@ Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automátic
 | POST   | `/auth/refresh`         | Cookie `refreshToken` (HttpOnly)                                     | 200 `{ accessToken }` + nueva cookie |
 | POST   | `/auth/logout`          | `Authorization: Bearer <token>` + Cookie `refreshToken`              | 200 `{ success }` + cookie limpiada  |
 | POST   | `/auth/logout-all`      | `Authorization: Bearer <token>` + Cookie `refreshToken`              | 200 `{ success }` + cookie limpiada  |
+| POST   | `/auth/forgot-password` | `{ email }`                                                          | 200 `{ message }`                    |
+| POST   | `/auth/reset-password`  | `{ token, newPassword }`                                             | 200 `{ message }`                    |
+| POST   | `/auth/verify-email`    | `{ token }`                                                          | 200 `{ message }`                    |
 | PATCH  | `/auth/profile`         | `Authorization: Bearer <token>` + `{ name }`                         | 200 `{ id, name, email }`            |
 | POST   | `/auth/change-password` | `Authorization: Bearer <token>` + `{ currentPassword, newPassword }` | 200 `{ message }`                    |
 
@@ -81,6 +85,16 @@ Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automátic
 - **Logout**: Revoca el refresh token actual en base de datos.
 - **Logout-all**: Revoca todos los refresh tokens del usuario.
 - Las rutas protegidas validan únicamente el Access Token (stateless, sin consultas a BD).
+- `forgot-password` y `reset-password`: flujo de recuperacion con token unico de 15 minutos almacenado en `password_reset_tokens`.
+- `verify-email`: al registrarse se envia un email con un JWT de 24h. El campo `emailVerifiedAt` en `users` registra la verificacion.
+
+## Email
+
+El envio de correos se maneja via `src/shared/email/` usando **Nodemailer**.
+
+- **Desarrollo**: usa Ethereal Email (SMTP fake). Los emails se capturan y se muestra una URL de previsualizacion en la consola.
+- **Produccion**: configurar via `.env` con un SMTP real (SendGrid, Mailgun, Resend, etc).
+- **Templates HTML**: `email.templates.ts` contiene los templates inline para verificacion, recuperacion de contrasena e invitacion a grupo.
 
 ### Categories
 
@@ -195,21 +209,6 @@ src/modules/debts/
 ```
 
 ## Pendientes
-
-Funcionalidades planificadas para futuras iteraciones:
-
-### Cuenta (features de auth pendientes)
-
-Funcionalidades futuras que extienden el modulo `auth`:
-
-| Metodo | Ruta                    | Descripcion                                    |
-| ------ | ----------------------- | ---------------------------------------------- |
-| POST   | `/auth/forgot-password` | Enviar email con token de recuperacion         |
-| POST   | `/auth/reset-password`  | Resetear contrasena con token                  |
-| POST   | `/auth/verify-email`    | Verificar email con token enviado al registrar |
-
-- Tabla nueva `password_reset_tokens` (o similar) si se implementa forgot-password
-- Verificacion de email puede ser un campo `emailVerifiedAt` en `users`
 
 ## Modulos Existentes
 

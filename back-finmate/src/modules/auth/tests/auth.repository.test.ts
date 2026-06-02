@@ -22,7 +22,11 @@ describe('authRepository', () => {
   describe('findUserByEmail', () => {
     it('debe retornar usuario cuando existe', async () => {
       const mockUser = { id: '1', name: 'Test', email: 'test@test.com' };
-      const selectChain = { from: vi.fn().mockReturnThis(), where: vi.fn().mockReturnThis(), limit: vi.fn().mockResolvedValue([mockUser]) };
+      const selectChain = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([mockUser]),
+      };
       mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findUserByEmail('test@test.com');
@@ -30,7 +34,11 @@ describe('authRepository', () => {
     });
 
     it('debe retornar null cuando no existe', async () => {
-      const selectChain = { from: vi.fn().mockReturnThis(), where: vi.fn().mockReturnThis(), limit: vi.fn().mockResolvedValue([]) };
+      const selectChain = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([]),
+      };
       mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findUserByEmail('no@existe.com');
@@ -40,7 +48,9 @@ describe('authRepository', () => {
 
   describe('createRefreshToken', () => {
     it('debe insertar y retornar el id', async () => {
-      mockDb.insert.mockReturnValue({ values: vi.fn().mockResolvedValue(undefined) } as any);
+      mockDb.insert.mockReturnValue({
+        values: vi.fn().mockResolvedValue(undefined),
+      } as any);
 
       const id = await authRepository.createRefreshToken({
         userId: 'user-1',
@@ -56,7 +66,11 @@ describe('authRepository', () => {
   describe('findRefreshTokenById', () => {
     it('debe retornar el refresh token', async () => {
       const mockToken = { id: 'token-1', userId: 'user-1', revoked: false };
-      const selectChain = { from: vi.fn().mockReturnThis(), where: vi.fn().mockReturnThis(), limit: vi.fn().mockResolvedValue([mockToken]) };
+      const selectChain = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([mockToken]),
+      };
       mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findRefreshTokenById('token-1');
@@ -64,7 +78,11 @@ describe('authRepository', () => {
     });
 
     it('debe retornar null cuando no existe', async () => {
-      const selectChain = { from: vi.fn().mockReturnThis(), where: vi.fn().mockReturnThis(), limit: vi.fn().mockResolvedValue([]) };
+      const selectChain = {
+        from: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue([]),
+      };
       mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findRefreshTokenById('no-existe');
@@ -74,7 +92,10 @@ describe('authRepository', () => {
 
   describe('revokeRefreshToken', () => {
     it('debe actualizar revoked a true', async () => {
-      const updateChain = { set: vi.fn().mockReturnThis(), where: vi.fn().mockResolvedValue(undefined) };
+      const updateChain = {
+        set: vi.fn().mockReturnThis(),
+        where: vi.fn().mockResolvedValue(undefined),
+      };
       mockDb.update.mockReturnValue(updateChain as any);
 
       await authRepository.revokeRefreshToken('token-1');
@@ -84,7 +105,10 @@ describe('authRepository', () => {
 
   describe('revokeAllUserRefreshTokens', () => {
     it('debe revocar todos los tokens activos del usuario', async () => {
-      const updateChain = { set: vi.fn().mockReturnThis(), where: vi.fn().mockResolvedValue(undefined) };
+      const updateChain = {
+        set: vi.fn().mockReturnThis(),
+        where: vi.fn().mockResolvedValue(undefined),
+      };
       mockDb.update.mockReturnValue(updateChain as any);
 
       await authRepository.revokeAllUserRefreshTokens('user-1');

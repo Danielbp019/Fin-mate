@@ -3,6 +3,11 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { env } from '../../config/env.js';
 import { AppError } from '../../shared/errors/AppError.js';
+import { sendEmail } from '../../shared/email/email.service.js';
+import {
+  verificationEmail,
+  passwordResetEmail,
+} from '../../shared/email/email.templates.js';
 import * as authRepository from './auth.repository.js';
 
 const REFRESH_TOKEN_COOKIE = 'refreshToken';
@@ -89,6 +94,19 @@ export async function register(data: {
   };
 
   await authRepository.createUser(user);
+
+  const verificationToken = jwt.sign(
+    { sub: user.id, purpose: 'email-verification' },
+    env.jwtSecret,
+    { expiresIn: '24h' },
+  );
+
+  const verificationUrl = `${env.frontendUrl}/verify-email?token=${verificationToken}`;
+  const { subject, html } = verificationEmail(user.name, verificationUrl);
+
+  sendEmail({ to: user.email, subject, html }).catch(() => {
+    // No bloquear registro si falla el email
+  });
 
   const accessToken = generateAccessToken(user.id);
   const { refreshToken } = await createSession(user.id);
@@ -235,6 +253,95 @@ export async function changePassword(
   await authRepository.updateUserPassword(userId, passwordHash);
 
   return { message: 'Contraseña actualizada correctamente' };
+}
+
+export async function forgotPassword(data: {
+  email: string;
+}): Promise<{ message: string }> {
+  const user = await authRepository.findUserByEmail(data.email);
+  if (!user) {
+    return {
+      message: 'Si el correo existe, recibiras un enlace de recuperacion',
+    };
+  }
+
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 15 * 60 * 1000); // 15 min
+  const tokenId = crypto.randomUUID();
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  await authRepository.createPasswordResetToken({
+    id: tokenId,
+    userId: user.id,
+    token: resetToken,
+    expiresAt,
+  });
+
+  const resetUrl = `${env.frontendUrl}/reset-password?token=${resetToken}`;
+  const { subject, html } = passwordResetEmail(user.name, resetUrl);
+
+  sendEmail({ to: user.email, subject, html }).catch(() => {
+    // No bloquear si falla el email
+  });
+
+  return {
+    message: 'Si el correo existe, recibiras un enlace de recuperacion',
+  };
+}
+
+export async function resetPassword(data: {
+  token: string;
+  newPassword: string;
+}): Promise<{ message: string }> {
+  const record = await authRepository.findPasswordResetToken(data.token);
+  if (!record) {
+    throw new AppError(400, 'Token invalido');
+  }
+
+  if (record.used) {
+    throw new AppError(400, 'El token ya ha sido utilizado');
+  }
+
+  if (new Date() > record.expiresAt) {
+    throw new AppError(400, 'El token ha expirado');
+  }
+
+  const passwordHash = await bcrypt.hash(data.newPassword, 10);
+  await authRepository.updateUserPassword(record.userId, passwordHash);
+  await authRepository.markPasswordResetTokenUsed(record.id);
+
+  return { message: 'Contrasena actualizada correctamente' };
+}
+
+export async function verifyEmail(data: {
+  token: string;
+}): Promise<{ message: string }> {
+  let decoded: { sub: string; purpose: string };
+  try {
+    decoded = jwt.verify(data.token, env.jwtSecret) as {
+      sub: string;
+      purpose: string;
+    };
+  } catch {
+    throw new AppError(400, 'Token invalido o expirado');
+  }
+
+  if (decoded.purpose !== 'email-verification') {
+    throw new AppError(400, 'Token invalido');
+  }
+
+  const user = await authRepository.findUserById(decoded.sub);
+  if (!user) {
+    throw new AppError(404, 'Usuario no encontrado');
+  }
+
+  if (user.emailVerifiedAt) {
+    return { message: 'El correo ya ha sido verificado' };
+  }
+
+  await authRepository.updateUserEmailVerifiedAt(user.id);
+
+  return { message: 'Correo verificado correctamente' };
 }
 
 function clearCookieOptions() {

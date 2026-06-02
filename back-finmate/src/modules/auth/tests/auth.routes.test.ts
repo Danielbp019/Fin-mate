@@ -72,7 +72,9 @@ describe('POST /auth/login', () => {
 
     expect(res.headers['set-cookie']).toBeDefined();
     const cookies = res.headers['set-cookie'] as unknown as string[];
-    const hasRefreshCookie = cookies.some((c: string) => c.startsWith('refreshToken='));
+    const hasRefreshCookie = cookies.some((c: string) =>
+      c.startsWith('refreshToken='),
+    );
     expect(hasRefreshCookie).toBe(true);
   });
 
@@ -86,7 +88,10 @@ describe('POST /auth/login', () => {
 
   it('debe retornar 401 con credenciales inválidas', async () => {
     vi.mocked(authService.login).mockRejectedValueOnce(
-      Object.assign(new Error(), { statusCode: 401, message: 'Credenciales inválidas' }),
+      Object.assign(new Error(), {
+        statusCode: 401,
+        message: 'Credenciales inválidas',
+      }),
     );
 
     const res = await request(app)
@@ -100,7 +105,9 @@ describe('POST /auth/login', () => {
 describe('POST /auth/register', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.register).mockResolvedValue(createMockServiceResponse());
+    vi.mocked(authService.register).mockResolvedValue(
+      createMockServiceResponse(),
+    );
   });
 
   it('debe retornar 201 con accessToken y user', async () => {
@@ -125,7 +132,9 @@ describe('POST /auth/register', () => {
 describe('POST /auth/refresh', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.refresh).mockResolvedValue(createMockServiceResponse());
+    vi.mocked(authService.refresh).mockResolvedValue(
+      createMockServiceResponse(),
+    );
   });
 
   it('debe retornar 200 con nuevo accessToken', async () => {
@@ -139,11 +148,13 @@ describe('POST /auth/refresh', () => {
 
   it('debe retornar 401 sin cookie', async () => {
     vi.mocked(authService.refresh).mockRejectedValueOnce(
-      Object.assign(new Error(), { statusCode: 401, message: 'Refresh token no proporcionado' }),
+      Object.assign(new Error(), {
+        statusCode: 401,
+        message: 'Refresh token no proporcionado',
+      }),
     );
 
-    const res = await request(app)
-      .post('/auth/refresh');
+    const res = await request(app).post('/auth/refresh');
 
     expect(res.status).toBe(401);
   });
@@ -154,13 +165,18 @@ describe('POST /auth/logout', () => {
     vi.clearAllMocks();
     vi.mocked(authService.logout).mockResolvedValue({
       success: true,
-      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
+      cookieOptions: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict' as const,
+        path: '/auth',
+        maxAge: 0,
+      },
     });
   });
 
   it('debe retornar 401 sin token de acceso', async () => {
-    const res = await request(app)
-      .post('/auth/logout');
+    const res = await request(app).post('/auth/logout');
 
     expect(res.status).toBe(401);
   });
@@ -183,7 +199,13 @@ describe('POST /auth/logout-all', () => {
     vi.clearAllMocks();
     vi.mocked(authService.logoutAll).mockResolvedValue({
       success: true,
-      cookieOptions: { httpOnly: true, secure: false, sameSite: 'strict' as const, path: '/auth', maxAge: 0 },
+      cookieOptions: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict' as const,
+        path: '/auth',
+        maxAge: 0,
+      },
     });
   });
 

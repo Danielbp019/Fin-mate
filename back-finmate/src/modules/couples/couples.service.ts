@@ -1,7 +1,10 @@
 import crypto from 'crypto';
+import { env } from '../../config/env.js';
 import { AppError } from '../../shared/errors/AppError.js';
-import * as couplesRepository from './couples.repository.js';
 import { findUserById } from '../auth/auth.repository.js';
+import { sendEmail } from '../../shared/email/email.service.js';
+import { coupleInvitationEmail } from '../../shared/email/email.templates.js';
+import * as couplesRepository from './couples.repository.js';
 import { cancelActiveGoalsOnDissolve } from './goals/goals.service.js';
 import type { CoupleResponse, CoupleMemberResponse } from './couples.types.js';
 
@@ -144,6 +147,20 @@ export async function invite(
   };
 
   await couplesRepository.createInvitation(invitation);
+
+  const inviter = await findUserById(userId);
+  if (inviter) {
+    const coupleName = couple.name ?? 'Sin nombre';
+    const inviteUrl = `${env.frontendUrl}/couples/${coupleId}/join`;
+    const { subject, html } = coupleInvitationEmail(
+      coupleName,
+      inviter.name,
+      inviteUrl,
+    );
+    sendEmail({ to: email, subject, html }).catch(() => {
+      // No bloquear si falla el email
+    });
+  }
 
   return {
     id: invitation.id,
