@@ -40,9 +40,9 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, ESLint, Zod
 src/
   main.ts               Punto de entrada
   App.vue               Componente raíz
-  pages/                Vistas (Login, Register, Dashboard, Profile, Categories, Movements)
+  pages/                Vistas (Login, Register, Dashboard, Profile, Categories, Movements, Debts)
   layouts/              Layouts compartidos (AuthLayout)
-  stores/               Stores de Pinia (auth, categories, movements)
+  stores/               Stores de Pinia (auth, categories, movements, debts)
   services/             Servicios (api.ts - Axios + interceptors)
   types/                Interfaces TypeScript compartidas
   plugins/              Configuración de plugins (Vuetify, Router, Pinia)
@@ -80,7 +80,7 @@ public/                 Archivos públicos estáticos
 | Auth (login, register, profile, refresh, logout) | ✅             |
 | Categories (CRUD + tabs por tipo)                | ✅             |
 | Movements (CRUD + filtros + paginación)          | ✅             |
-| Debts + Payments                                 | ❌ Pendiente   |
+| Debts + Payments                                 | ✅             |
 | Couples + Goals                                  | ❌ Pendiente   |
 | Dashboard (conectar a datos reales)              | 🔶 Placeholder |
 
@@ -109,12 +109,6 @@ Funcionalidades planificadas para futuras iteraciones:
 - Conectar resumen con datos reales (ingresos, gastos, balance del mes actual)
 - Gr&aacute;ficos visuales de evoluci&oacute;n mensual
   idea: los tres cuadros que ya tengo, luego abajo cuadro grande con ingresos gastos generales con una grafica, al lado 3 cuadros independientes, el primero ingresos por categoria, el segundo gastos por categoria, el tercero balance por meses
-
-### Deudas
-
-- Pantalla de administraci&oacute;n de deudas (CRUD): listar, crear, editar, eliminar
-- Detalle de deuda con historial de pagos
-- Registro de pagos a deudas
 
 ### Modo Pareja
 
