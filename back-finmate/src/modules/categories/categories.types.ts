@@ -3,14 +3,12 @@ export interface CreateCategoryBody {
   type: 'income' | 'expense';
   icon?: string;
   color?: string;
-  sortOrder?: string;
 }
 
 export interface UpdateCategoryBody {
   name?: string;
   icon?: string;
   color?: string;
-  sortOrder?: string;
   isActive?: boolean;
 }
 
@@ -21,7 +19,6 @@ export interface CategoryResponse {
   name: string;
   icon: string | null;
   color: string | null;
-  sortOrder: string;
   isActive: boolean;
   isSystem: boolean;
   createdAt: Date;

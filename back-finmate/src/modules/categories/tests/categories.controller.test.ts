@@ -11,7 +11,6 @@ const mockCategory = {
   name: 'Comida',
   icon: 'food',
   color: '#ff0000',
-  sortOrder: '1',
   isActive: true,
   isSystem: false,
   createdAt: new Date('2024-01-01'),

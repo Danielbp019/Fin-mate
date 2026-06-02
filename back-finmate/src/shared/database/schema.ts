@@ -43,9 +43,6 @@ export const categories = mysqlTable(
     name: varchar('name', { length: 100 }).notNull(),
     icon: varchar('icon', { length: 50 }),
     color: varchar('color', { length: 20 }),
-    sortOrder: decimal('sort_order', { precision: 10, scale: 0 })
-      .notNull()
-      .default('0'),
     isActive: boolean('is_active').notNull().default(true),
     isSystem: boolean('is_system').notNull().default(false),
     createdAt: datetime('created_at', { fsp: 3 })

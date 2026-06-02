@@ -16,7 +16,6 @@ export const createCategorySchema = z.object({
     .string()
     .max(20, 'El color no puede exceder 20 caracteres')
     .optional(),
-  sortOrder: z.string().optional(),
 });
 
 export const updateCategorySchema = z.object({
@@ -33,7 +32,6 @@ export const updateCategorySchema = z.object({
     .string()
     .max(20, 'El color no puede exceder 20 caracteres')
     .optional(),
-  sortOrder: z.string().optional(),
   isActive: z.boolean().optional(),
 });
 

@@ -40,7 +40,6 @@ export async function create(data: CreateCategoryBody, userId: string) {
     name: data.name,
     icon: data.icon ?? null,
     color: data.color ?? null,
-    sortOrder: data.sortOrder ?? '0',
     isActive: true,
     isSystem: false,
     createdAt: now,
@@ -86,7 +85,6 @@ export async function update(
   if (data.name !== undefined) updateData.name = data.name;
   if (data.icon !== undefined) updateData.icon = data.icon ?? null;
   if (data.color !== undefined) updateData.color = data.color ?? null;
-  if (data.sortOrder !== undefined) updateData.sortOrder = data.sortOrder;
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
 
   await categoriesRepository.update(

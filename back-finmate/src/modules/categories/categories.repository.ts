@@ -55,7 +55,6 @@ export async function findByUser(userId: string, type?: string) {
     .where(and(...conditions))
     .orderBy(
       sql`${categories.isSystem} DESC`,
-      categories.sortOrder,
       categories.name,
     );
 }
@@ -67,7 +66,6 @@ export async function create(data: {
   name: string;
   icon?: string | null;
   color?: string | null;
-  sortOrder?: string;
   isActive: boolean;
   isSystem: boolean;
   createdAt: Date;
@@ -82,7 +80,6 @@ export async function update(
     name: string;
     icon: string | null;
     color: string | null;
-    sortOrder: string;
     isActive: boolean;
     updatedAt: Date;
   }>,
