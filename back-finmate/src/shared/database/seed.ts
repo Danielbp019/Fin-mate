@@ -98,14 +98,34 @@ async function seed() {
       isSystem: true,
       updatedAt: now,
     },
+    {
+      id: crypto.randomUUID(),
+      userId: null,
+      type: 'expense' as const,
+      name: 'Ahorro Meta de Pareja',
+      sortOrder: '0',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
+    {
+      id: crypto.randomUUID(),
+      userId: null,
+      type: 'income' as const,
+      name: 'Devolucion Meta de Pareja',
+      sortOrder: '0',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
   ];
 
   await db.insert(categories).values(systemCategories);
-  console.log('  ✔ 4 categorías del sistema insertadas');
+  console.log('  ✔ 6 categorías del sistema insertadas');
   console.log('');
 
   console.log(
-    '  ✅ Seed completado — 2 usuarios y 4 categorías del sistema creados',
+    '  ✅ Seed completado — 2 usuarios y 6 categorías del sistema creados',
   );
   console.log('');
 }

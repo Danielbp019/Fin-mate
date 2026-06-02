@@ -5,6 +5,9 @@ vi.mock('../couples.repository.js');
 vi.mock('../../auth/auth.repository.js', () => ({
   findUserById: vi.fn(),
 }));
+vi.mock('../goals/goals.service.js', () => ({
+  cancelActiveGoalsOnDissolve: vi.fn(),
+}));
 
 const mockCouple = {
   id: 'couple-123',

@@ -17,6 +17,7 @@ Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod, JWT (Access + Refresh
 - Aplicar principios SOLID siempre que sea razonable
 - Validar toda entrada externa
 - No uses nunca iconos en textos informativos de consola
+- La aplicación debe seguir la lógica financiera en movimientos de dinero y operaciones
 
 ### Variables de Entorno
 

@@ -233,6 +233,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   movements: many(movements),
   debts: many(debts),
   debtPayments: many(debtPayments),
+  goalContributions: many(goalContributions),
   refreshTokens: many(refreshTokens),
 }));
 
@@ -251,6 +252,56 @@ export const categoriesRelations = relations(categories, ({ one, many }) => ({
   movements: many(movements),
 }));
 
+export const coupleGoals = mysqlTable(
+  'couple_goals',
+  {
+    id: char('id', { length: 36 }).primaryKey(),
+    coupleId: char('couple_id', { length: 36 }).notNull(),
+    title: varchar('title', { length: 150 }).notNull(),
+    targetAmount: decimal('target_amount', {
+      precision: 19,
+      scale: 4,
+    }).notNull(),
+    currentAmount: decimal('current_amount', { precision: 19, scale: 4 })
+      .notNull()
+      .default('0'),
+    deadline: datetime('deadline', { fsp: 3 }),
+    status: mysqlEnum('status', ['active', 'completed', 'cancelled'])
+      .notNull()
+      .default('active'),
+    createdBy: char('created_by', { length: 36 }).notNull(),
+    createdAt: datetime('created_at', { fsp: 3 })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP(3)`),
+    updatedAt: datetime('updated_at', { fsp: 3 }).notNull(),
+    deletedAt: datetime('deleted_at', { fsp: 3 }),
+  },
+  (table) => ({
+    coupleIdIdx: index('idx_couple_goals_couple_id').on(table.coupleId),
+    statusIdx: index('idx_couple_goals_status').on(table.status),
+    createdByIdx: index('idx_couple_goals_created_by').on(table.createdBy),
+  }),
+);
+
+export const goalContributions = mysqlTable(
+  'goal_contributions',
+  {
+    id: char('id', { length: 36 }).primaryKey(),
+    goalId: char('goal_id', { length: 36 }).notNull(),
+    userId: char('user_id', { length: 36 }).notNull(),
+    amount: decimal('amount', { precision: 19, scale: 4 }).notNull(),
+    notes: varchar('notes', { length: 255 }),
+    date: datetime('date', { fsp: 3 }).notNull(),
+    createdAt: datetime('created_at', { fsp: 3 })
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP(3)`),
+  },
+  (table) => ({
+    goalIdIdx: index('idx_goal_contributions_goal_id').on(table.goalId),
+    userIdIdx: index('idx_goal_contributions_user_id').on(table.userId),
+  }),
+);
+
 export const couplesRelations = relations(couples, ({ one, many }) => ({
   createdBy: one(users, {
     fields: [couples.createdBy],
@@ -260,6 +311,7 @@ export const couplesRelations = relations(couples, ({ one, many }) => ({
   invitations: many(coupleInvitations),
   movements: many(movements),
   debts: many(debts),
+  goals: many(coupleGoals),
 }));
 
 export const coupleInvitationsRelations = relations(
@@ -320,3 +372,29 @@ export const debtPaymentsRelations = relations(debtPayments, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const coupleGoalsRelations = relations(coupleGoals, ({ one, many }) => ({
+  couple: one(couples, {
+    fields: [coupleGoals.coupleId],
+    references: [couples.id],
+  }),
+  createdBy: one(users, {
+    fields: [coupleGoals.createdBy],
+    references: [users.id],
+  }),
+  contributions: many(goalContributions),
+}));
+
+export const goalContributionsRelations = relations(
+  goalContributions,
+  ({ one }) => ({
+    goal: one(coupleGoals, {
+      fields: [goalContributions.goalId],
+      references: [coupleGoals.id],
+    }),
+    user: one(users, {
+      fields: [goalContributions.userId],
+      references: [users.id],
+    }),
+  }),
+);

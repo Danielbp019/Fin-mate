@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { AppError } from '../../shared/errors/AppError.js';
 import * as couplesRepository from './couples.repository.js';
 import { findUserById } from '../auth/auth.repository.js';
+import { cancelActiveGoalsOnDissolve } from './goals/goals.service.js';
 import type { CoupleResponse, CoupleMemberResponse } from './couples.types.js';
 
 const INVITATION_EXPIRY_DAYS = 7;
@@ -238,6 +239,8 @@ export async function dissolve(
   if (couple.createdBy !== userId) {
     throw new AppError(403, 'Solo el propietario puede disolver el grupo');
   }
+
+  await cancelActiveGoalsOnDissolve(coupleId);
 
   await Promise.all([
     couplesRepository.unshareMovements(coupleId),

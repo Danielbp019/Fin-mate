@@ -140,6 +140,22 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | DELETE | `/couples/:id/leave`  | —              | 200 `{ message }`        |
 | DELETE | `/couples/:id`        | —              | 200 `{ message }`        |
 
+### Couple Goals (dentro de Couples)
+
+Todas las rutas requieren `Authorization: Bearer <token>`.
+
+| Método | Ruta                                      | Body / Query                                    | Respuesta                  |
+| ------ | ----------------------------------------- | ----------------------------------------------- | -------------------------- |
+| GET    | `/couples/:coupleId/goals`                | —                                               | 200 `GoalResponse[]`       |
+| POST   | `/couples/:coupleId/goals`                | `{ title, targetAmount, deadline? }`            | 201 `GoalResponse`         |
+| PATCH  | `/couples/:coupleId/goals/:id`            | `{ title?, targetAmount?, deadline?, status? }` | 200 `GoalResponse`         |
+| DELETE | `/couples/:coupleId/goals/:id`            | —                                               | 204 Sin contenido          |
+| POST   | `/couples/:coupleId/goals/:id/contribute` | `{ amount, notes?, date? }`                     | 201 `ContributionResponse` |
+
+- Contribuir a una meta auto-genera un `movement` tipo `expense` con categoría "Ahorro Meta de Pareja"
+- Al disolver el grupo, las metas activas con aportes se cancelan y generan un `movement` tipo `income` con categoría "Devolucion Meta de Pareja"
+- Las metas completadas no se ven afectadas por la disolución
+
 - Un usuario solo puede pertenecer a un grupo activo a la vez
 - El `owner` no puede abandonar sin disolver
 - Al disolver, los registros compartidos se desvinculan (`couple_id = NULL`) sin borrar datos financieros
@@ -195,30 +211,14 @@ Funcionalidades futuras que extienden el modulo `auth`:
 - Tabla nueva `password_reset_tokens` (o similar) si se implementa forgot-password
 - Verificacion de email puede ser un campo `emailVerifiedAt` en `users`
 
-### Couple Goals (futuro — `src/modules/couple-goals/`)
-
-Metas de ahorro compartidas entre miembros de un grupo activo. Cada miembro puede contribuir y se trackea el progreso colectivo.
-
-Tablas nuevas:
-
-- `couple_goals` — id, coupleId, title, targetAmount, currentAmount, deadline, status, createdBy, timestamps
-- `goal_contributions` — id, goalId, userId, amount, notes, date
-
-| Metodo | Ruta                                      | Descripcion                |
-| ------ | ----------------------------------------- | -------------------------- |
-| POST   | `/couples/:coupleId/goals`                | Crear meta de ahorro       |
-| GET    | `/couples/:coupleId/goals`                | Listar metas del grupo     |
-| PATCH  | `/couples/:coupleId/goals/:id`            | Editar meta (solo creador) |
-| DELETE | `/couples/:coupleId/goals/:id`            | Eliminar meta              |
-| POST   | `/couples/:coupleId/goals/:id/contribute` | Aportar a la meta          |
-
 ## Modulos Existentes
 
-| Modulo     | Archivos                  |
-| ---------- | ------------------------- |
-| Auth       | `src/modules/auth/`       |
-| Categories | `src/modules/categories/` |
-| Movements  | `src/modules/movements/`  |
-| Debts      | `src/modules/debts/`      |
-| Couples    | `src/modules/couples/`    |
-| Ping       | `src/modules/ping/`       |
+| Modulo       | Archivos                     |
+| ------------ | ---------------------------- |
+| Auth         | `src/modules/auth/`          |
+| Categories   | `src/modules/categories/`    |
+| Movements    | `src/modules/movements/`     |
+| Debts        | `src/modules/debts/`         |
+| Couples      | `src/modules/couples/`       |
+| Couple Goals | `src/modules/couples/goals/` |
+| Ping         | `src/modules/ping/`          |

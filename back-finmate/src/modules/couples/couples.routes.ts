@@ -8,6 +8,7 @@ import {
   leave,
   dissolve,
 } from './couples.controller.js';
+import goalsRouter from './goals/goals.routes.js';
 
 const router = Router();
 
@@ -19,5 +20,7 @@ router.post('/:id/invite', invite);
 router.post('/:id/join', join);
 router.delete('/:id/leave', leave);
 router.delete('/:id', dissolve);
+
+router.use('/:coupleId/goals', goalsRouter);
 
 export default router;

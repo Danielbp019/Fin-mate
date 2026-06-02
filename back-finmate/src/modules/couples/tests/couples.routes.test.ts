@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 
 vi.mock('../couples.repository.js');
 vi.mock('../../auth/auth.repository.js');
+vi.mock('../goals/goals.service.js', () => ({
+  cancelActiveGoalsOnDissolve: vi.fn(),
+}));
 vi.mock('../../../config/env.js', () => ({
   env: {
     jwtSecret: 'test-secret',
