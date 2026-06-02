@@ -41,6 +41,8 @@
         <v-list-item prepend-icon="mdi-shape" title="Categorías" :to="{ name: 'Categories' }" />
 
         <v-list-item prepend-icon="mdi-swap-horizontal-bold" title="Movimientos" :to="{ name: 'Movements' }" />
+
+        <v-list-item prepend-icon="mdi-credit-card-clock-outline" title="Deudas" :to="{ name: 'Debts' }" />
       </v-list>
     </v-navigation-drawer>
 

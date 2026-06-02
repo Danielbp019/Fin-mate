@@ -43,6 +43,11 @@ const router = createRouter({
           name: 'Movements',
           component: () => import('@/pages/Movements.vue'),
         },
+        {
+          path: 'debts',
+          name: 'Debts',
+          component: () => import('@/pages/Debts.vue'),
+        },
       ],
     },
   ],
