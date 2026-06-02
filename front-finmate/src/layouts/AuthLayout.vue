@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar flat elevation="0" class="auth-nav-bar">
-      <template v-slot:prepend>
-        <v-btn variant="text" icon aria-label="Abrir menú" @click="drawer = !drawer" style="color:var(--green-deep)">
+    <v-app-bar class="auth-nav-bar" elevation="0" flat>
+      <template #prepend>
+        <v-btn aria-label="Abrir menú" icon style="color:var(--green-deep)" variant="text" @click="drawer = !drawer">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </template>
@@ -16,13 +16,12 @@
         </div>
       </v-app-bar-title>
 
-      <template v-slot:append>
+      <template #append>
         <div class="d-flex align-center ga-3">
           <span style="color:var(--green-deep);font-size:14px;font-weight:500;">Bienvenido, {{ auth.user?.name }}</span>
 
-          <button class="btn-ghost"
-            :aria-label="`Cambiar tema a ${theme.global.name.value === 'light' ? 'oscuro' : 'claro'}`"
-            @click="toggleTheme">
+          <button :aria-label="`Cambiar tema a ${theme.global.name.value === 'light' ? 'oscuro' : 'claro'}`"
+            class="btn-ghost" @click="toggleTheme">
             <v-icon>{{ theme.global.name.value === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny' }}</v-icon>
           </button>
 
@@ -39,7 +38,9 @@
 
         <v-list-item prepend-icon="mdi-account" title="Perfil" :to="{ name: 'Profile' }" />
 
-        <v-list-item disabled prepend-icon="mdi-shape" title="Categorías" />
+        <v-list-item prepend-icon="mdi-shape" title="Categorías" :to="{ name: 'Categories' }" />
+
+        <v-list-item prepend-icon="mdi-swap-horizontal-bold" title="Movimientos" :to="{ name: 'Movements' }" />
       </v-list>
     </v-navigation-drawer>
 

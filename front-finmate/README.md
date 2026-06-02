@@ -39,13 +39,14 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, ESLint, Zod
 ```
 src/
   main.ts               Punto de entrada
-  App.vue               Componente raíz (inicializa auth store)
-  pages/                Vistas de la aplicación (Login, Register, Dashboard)
+  App.vue               Componente raíz
+  pages/                Vistas (Login, Register, Dashboard, Profile, Categories, Movements)
   layouts/              Layouts compartidos (AuthLayout)
-  stores/               Stores de Pinia (auth)
-  services/             Servicios (api.ts - Axios)
+  stores/               Stores de Pinia (auth, categories, movements)
+  services/             Servicios (api.ts - Axios + interceptors)
+  types/                Interfaces TypeScript compartidas
   plugins/              Configuración de plugins (Vuetify, Router, Pinia)
-  router/               Configuración de rutas (Vue Router)
+  router/               Configuración de rutas (Vue Router + auth guard)
   styles/               Estilos globales y tema
   components/           Componentes reutilizables
 public/                 Archivos públicos estáticos
@@ -68,6 +69,20 @@ public/                 Archivos públicos estáticos
 - Evitar complejidad enterprise innecesaria
 - Aplicar principios SOLID siempre que sea razonable
 - No uses nunca iconos en textos informativos de consola
+- Cada modulo nuevo va en una categoria nueva en el drawer
+- Todas las paginas que se abran a partir del drawer deben solo ser vistas por usuarios autenticados
+- El proyecto usa un solo css styles/theme.css
+
+## Módulos
+
+| Módulo                                           | Estado         |
+| ------------------------------------------------ | -------------- |
+| Auth (login, register, profile, refresh, logout) | ✅             |
+| Categories (CRUD + tabs por tipo)                | ✅             |
+| Movements (CRUD + filtros + paginación)          | ✅             |
+| Debts + Payments                                 | ❌ Pendiente   |
+| Couples + Goals                                  | ❌ Pendiente   |
+| Dashboard (conectar a datos reales)              | 🔶 Placeholder |
 
 ## Validaciones
 
@@ -93,16 +108,7 @@ Funcionalidades planificadas para futuras iteraciones:
 
 - Conectar resumen con datos reales (ingresos, gastos, balance del mes actual)
 - Gr&aacute;ficos visuales de evoluci&oacute;n mensual
-
-### Categor&iacute;as
-
-- Pantalla de administraci&oacute;n de categor&iacute;as (CRUD): listar, crear, editar, eliminar
-
-### Movimientos
-
-- Pantalla de registro de ingresos/gastos con selecci&oacute;n de categor&iacute;a
-- Listado con filtros por tipo, categor&iacute;a y rango de fechas
-- Edici&oacute;n y eliminaci&oacute;n de movimientos
+  idea: los tres cuadros que ya tengo, luego abajo cuadro grande con ingresos gastos generales con una grafica, al lado 3 cuadros independientes, el primero ingresos por categoria, el segundo gastos por categoria, el tercero balance por meses
 
 ### Deudas
 

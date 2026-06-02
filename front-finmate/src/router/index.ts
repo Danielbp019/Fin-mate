@@ -33,6 +33,16 @@ const router = createRouter({
           name: 'Profile',
           component: () => import('@/pages/Profile.vue'),
         },
+        {
+          path: 'categories',
+          name: 'Categories',
+          component: () => import('@/pages/Categories.vue'),
+        },
+        {
+          path: 'movements',
+          name: 'Movements',
+          component: () => import('@/pages/Movements.vue'),
+        },
       ],
     },
   ],
