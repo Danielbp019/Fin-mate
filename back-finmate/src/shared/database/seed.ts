@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { sql } from 'drizzle-orm';
-import { db } from './connection.js';
+import { db, pool } from './connection.js';
 import { users, categories } from './schema.js';
 
 async function seed() {
@@ -129,6 +129,10 @@ async function seed() {
   console.log(
     '  ✅ Seed completado — 2 usuarios y 6 categorías del sistema creados',
   );
+  console.log('');
+
+  await pool.end();
+  console.log('  ✔ Conexión cerrada');
   console.log('');
 }
 
