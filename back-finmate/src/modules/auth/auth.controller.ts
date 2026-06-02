@@ -10,11 +10,7 @@ import {
 } from './auth.schema.js';
 import * as authService from './auth.service.js';
 
-export async function register(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function register(req: Request, res: Response, next: NextFunction) {
   try {
     const data = registerSchema.parse(req.body);
     const result = await authService.register(data);
@@ -71,11 +67,7 @@ export async function logout(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function updateProfile(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function updateProfile(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = (req as any).userId;
     const data = updateProfileSchema.parse(req.body);
@@ -87,11 +79,7 @@ export async function updateProfile(
   }
 }
 
-export async function changePassword(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function changePassword(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = (req as any).userId;
     const data = changePasswordSchema.parse(req.body);
@@ -103,11 +91,7 @@ export async function changePassword(
   }
 }
 
-export async function forgotPassword(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function forgotPassword(req: Request, res: Response, next: NextFunction) {
   try {
     const data = forgotPasswordSchema.parse(req.body);
     const result = await authService.forgotPassword(data);
@@ -117,11 +101,7 @@ export async function forgotPassword(
   }
 }
 
-export async function resetPassword(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function resetPassword(req: Request, res: Response, next: NextFunction) {
   try {
     const data = resetPasswordSchema.parse(req.body);
     const result = await authService.resetPassword(data);
@@ -131,11 +111,7 @@ export async function resetPassword(
   }
 }
 
-export async function verifyEmail(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function verifyEmail(req: Request, res: Response, next: NextFunction) {
   try {
     const data = verifyEmailSchema.parse(req.body);
     const result = await authService.verifyEmail(data);
@@ -145,11 +121,7 @@ export async function verifyEmail(
   }
 }
 
-export async function logoutAll(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function logoutAll(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = (req as any).userId;
     const refreshTokenValue = req.cookies?.refreshToken;

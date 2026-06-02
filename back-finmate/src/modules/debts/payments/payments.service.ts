@@ -5,9 +5,7 @@ import * as paymentsRepository from './payments.repository.js';
 import type { CreatePaymentBody, PaymentResponse } from './payments.types.js';
 
 function toResponse(
-  row: NonNullable<
-    Awaited<ReturnType<typeof paymentsRepository.findByDebt>>
-  >[number],
+  row: NonNullable<Awaited<ReturnType<typeof paymentsRepository.findByDebt>>>[number],
 ): PaymentResponse {
   return {
     id: row.id,
@@ -20,10 +18,7 @@ function toResponse(
   };
 }
 
-export async function list(
-  debtId: string,
-  userId: string,
-): Promise<PaymentResponse[]> {
+export async function list(debtId: string, userId: string): Promise<PaymentResponse[]> {
   const debt = await debtsRepository.findById(debtId);
   if (!debt) {
     throw new AppError(404, 'Deuda no encontrada');

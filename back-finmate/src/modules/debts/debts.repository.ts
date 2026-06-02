@@ -35,16 +35,10 @@ export async function create(data: typeof debts.$inferInsert) {
   await db.insert(debts).values(data);
 }
 
-export async function update(
-  id: string,
-  data: Partial<typeof debts.$inferInsert>,
-) {
+export async function update(id: string, data: Partial<typeof debts.$inferInsert>) {
   await db.update(debts).set(data).where(eq(debts.id, id));
 }
 
 export async function softDelete(id: string, deletedAt: Date) {
-  await db
-    .update(debts)
-    .set({ deletedAt, updatedAt: deletedAt })
-    .where(eq(debts.id, id));
+  await db.update(debts).set({ deletedAt, updatedAt: deletedAt }).where(eq(debts.id, id));
 }

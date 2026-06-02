@@ -72,16 +72,12 @@ describe('POST /auth/login', () => {
 
     expect(res.headers['set-cookie']).toBeDefined();
     const cookies = res.headers['set-cookie'] as unknown as string[];
-    const hasRefreshCookie = cookies.some((c: string) =>
-      c.startsWith('refreshToken='),
-    );
+    const hasRefreshCookie = cookies.some((c: string) => c.startsWith('refreshToken='));
     expect(hasRefreshCookie).toBe(true);
   });
 
   it('debe retornar 400 con datos inválidos', async () => {
-    const res = await request(app)
-      .post('/auth/login')
-      .send({ email: 'invalido', password: '' });
+    const res = await request(app).post('/auth/login').send({ email: 'invalido', password: '' });
 
     expect(res.status).toBe(400);
   });
@@ -105,9 +101,7 @@ describe('POST /auth/login', () => {
 describe('POST /auth/register', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.register).mockResolvedValue(
-      createMockServiceResponse(),
-    );
+    vi.mocked(authService.register).mockResolvedValue(createMockServiceResponse());
   });
 
   it('debe retornar 201 con accessToken y user', async () => {
@@ -132,9 +126,7 @@ describe('POST /auth/register', () => {
 describe('POST /auth/refresh', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.refresh).mockResolvedValue(
-      createMockServiceResponse(),
-    );
+    vi.mocked(authService.refresh).mockResolvedValue(createMockServiceResponse());
   });
 
   it('debe retornar 200 con nuevo accessToken', async () => {
@@ -217,9 +209,7 @@ describe('POST /auth/logout-all', () => {
   it('debe retornar 200 con token válido', async () => {
     const token = jwt.sign({ sub: 'user-1' }, 'test-secret');
 
-    const res = await request(app)
-      .post('/auth/logout-all')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).post('/auth/logout-all').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ success: true });

@@ -11,9 +11,7 @@ import type { CoupleResponse, CoupleMemberResponse } from './couples.types.js';
 const INVITATION_EXPIRY_DAYS = 7;
 
 function buildCoupleResponse(
-  couple: NonNullable<
-    Awaited<ReturnType<typeof couplesRepository.findCoupleById>>
-  >,
+  couple: NonNullable<Awaited<ReturnType<typeof couplesRepository.findCoupleById>>>,
   members: CoupleMemberResponse[],
 ): CoupleResponse {
   return {
@@ -34,10 +32,7 @@ export async function getMyCouple(userId: string): Promise<CoupleResponse> {
   return buildCoupleResponse(active.couple, members);
 }
 
-export async function create(
-  data: { name?: string },
-  userId: string,
-): Promise<CoupleResponse> {
+export async function create(data: { name?: string }, userId: string): Promise<CoupleResponse> {
   const existing = await couplesRepository.findActiveCoupleByUserId(userId);
   if (existing) {
     throw new AppError(409, 'Ya perteneces a un grupo activo');
@@ -91,10 +86,7 @@ export async function invite(
     throw new AppError(400, 'El grupo no esta activo');
   }
 
-  const member = await couplesRepository.findMemberByUserAndCouple(
-    userId,
-    coupleId,
-  );
+  const member = await couplesRepository.findMemberByUserAndCouple(userId, coupleId);
   if (!member || member.role !== 'owner') {
     throw new AppError(403, 'Solo el propietario del grupo puede invitar');
   }
@@ -104,36 +96,23 @@ export async function invite(
     throw new AppError(404, 'No existe un usuario con ese correo electronico');
   }
 
-  const alreadyMember = await couplesRepository.findMemberByUserAndCouple(
-    invitedUser.id,
-    coupleId,
-  );
+  const alreadyMember = await couplesRepository.findMemberByUserAndCouple(invitedUser.id, coupleId);
   if (alreadyMember) {
     throw new AppError(409, 'El usuario ya es miembro del grupo');
   }
 
-  const activeCouple = await couplesRepository.findActiveCoupleByUserId(
-    invitedUser.id,
-  );
+  const activeCouple = await couplesRepository.findActiveCoupleByUserId(invitedUser.id);
   if (activeCouple) {
     throw new AppError(409, 'El usuario ya pertenece a otro grupo activo');
   }
 
-  const pending = await couplesRepository.findPendingInvitation(
-    coupleId,
-    email,
-  );
+  const pending = await couplesRepository.findPendingInvitation(coupleId, email);
   if (pending) {
-    throw new AppError(
-      409,
-      'Ya existe una invitacion pendiente para este usuario',
-    );
+    throw new AppError(409, 'Ya existe una invitacion pendiente para este usuario');
   }
 
   const now = new Date();
-  const expiresAt = new Date(
-    now.getTime() + INVITATION_EXPIRY_DAYS * 24 * 60 * 60 * 1000,
-  );
+  const expiresAt = new Date(now.getTime() + INVITATION_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
   const invitationId = crypto.randomUUID();
 
   const invitation = {
@@ -152,11 +131,7 @@ export async function invite(
   if (inviter) {
     const coupleName = couple.name ?? 'Sin nombre';
     const inviteUrl = `${env.frontendUrl}/couples/${coupleId}/join`;
-    const { subject, html } = coupleInvitationEmail(
-      coupleName,
-      inviter.name,
-      inviteUrl,
-    );
+    const { subject, html } = coupleInvitationEmail(coupleName, inviter.name, inviteUrl);
     sendEmail({ to: email, subject, html }).catch(() => {
       // No bloquear si falla el email
     });
@@ -171,10 +146,7 @@ export async function invite(
   };
 }
 
-export async function join(
-  coupleId: string,
-  userId: string,
-): Promise<CoupleResponse> {
+export async function join(coupleId: string, userId: string): Promise<CoupleResponse> {
   const couple = await couplesRepository.findCoupleById(coupleId);
   if (!couple) {
     throw new AppError(404, 'Grupo no encontrado');
@@ -194,10 +166,7 @@ export async function join(
     userRecord.email,
   );
   if (!invitation) {
-    throw new AppError(
-      404,
-      'No tienes una invitacion pendiente para este grupo',
-    );
+    throw new AppError(404, 'No tienes una invitacion pendiente para este grupo');
   }
 
   if (new Date() > invitation.expiresAt) {
@@ -226,10 +195,7 @@ export async function join(
 }
 
 export async function leave(coupleId: string, userId: string): Promise<void> {
-  const member = await couplesRepository.findMemberByUserAndCouple(
-    userId,
-    coupleId,
-  );
+  const member = await couplesRepository.findMemberByUserAndCouple(userId, coupleId);
   if (!member) {
     throw new AppError(404, 'No eres miembro de este grupo');
   }
@@ -244,10 +210,7 @@ export async function leave(coupleId: string, userId: string): Promise<void> {
   await couplesRepository.deleteMember(member.id);
 }
 
-export async function dissolve(
-  coupleId: string,
-  userId: string,
-): Promise<void> {
+export async function dissolve(coupleId: string, userId: string): Promise<void> {
   const couple = await couplesRepository.findCoupleById(coupleId);
   if (!couple) {
     throw new AppError(404, 'Grupo no encontrado');

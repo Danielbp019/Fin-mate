@@ -1,12 +1,6 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../shared/middlewares/auth.middleware.js';
-import {
-  list,
-  getById,
-  create,
-  update,
-  remove,
-} from './movements.controller.js';
+import { list, getById, create, update, remove } from './movements.controller.js';
 
 const router = Router();
 

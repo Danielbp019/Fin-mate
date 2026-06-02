@@ -35,8 +35,7 @@ function toGoalResponse(
 ): GoalResponse {
   const target = Number(goal.targetAmount);
   const current = Number(goal.currentAmount);
-  const progressPercent =
-    target > 0 ? Math.min(100, Math.round((current / target) * 100)) : 0;
+  const progressPercent = target > 0 ? Math.min(100, Math.round((current / target) * 100)) : 0;
 
   return {
     id: goal.id,
@@ -54,19 +53,14 @@ function toGoalResponse(
   };
 }
 
-export async function list(
-  coupleId: string,
-  userId: string,
-): Promise<GoalResponse[]> {
+export async function list(coupleId: string, userId: string): Promise<GoalResponse[]> {
   await assertMember(coupleId, userId);
 
   const goals = await goalsRepository.findByCouple(coupleId);
   const result: GoalResponse[] = [];
 
   for (const goal of goals) {
-    const contributions = await goalsRepository.findContributionsByGoal(
-      goal.id,
-    );
+    const contributions = await goalsRepository.findContributionsByGoal(goal.id);
     const mapped: ContributionResponse[] = contributions.map((c) => ({
       ...c,
       amount: c.amount,
@@ -117,8 +111,7 @@ export async function update(
 
   const updateData: Record<string, unknown> = { updatedAt: new Date() };
   if (data.title !== undefined) updateData.title = data.title;
-  if (data.targetAmount !== undefined)
-    updateData.targetAmount = data.targetAmount;
+  if (data.targetAmount !== undefined) updateData.targetAmount = data.targetAmount;
   if (data.deadline !== undefined) {
     updateData.deadline = data.deadline ? new Date(data.deadline) : null;
   }
@@ -143,11 +136,7 @@ export async function update(
   return toGoalResponse(updated, mapped);
 }
 
-export async function remove(
-  goalId: string,
-  coupleId: string,
-  userId: string,
-): Promise<void> {
+export async function remove(goalId: string, coupleId: string, userId: string): Promise<void> {
   await findGoalOwnedBy(goalId, coupleId, userId);
   await goalsRepository.softDelete(goalId);
 }
@@ -187,9 +176,7 @@ export async function contribute(
   const newCurrent = Number(goal.currentAmount) + Number(data.amount);
   const newCurrentStr = newCurrent.toFixed(4);
   const newStatus =
-    newCurrent >= Number(goal.targetAmount)
-      ? ('completed' as const)
-      : ('active' as const);
+    newCurrent >= Number(goal.targetAmount) ? ('completed' as const) : ('active' as const);
 
   const categoryId = await findCategoryIdByName(CATEGORY_AHORRO);
 
@@ -226,9 +213,7 @@ export async function contribute(
   };
 }
 
-export async function cancelActiveGoalsOnDissolve(
-  coupleId: string,
-): Promise<void> {
+export async function cancelActiveGoalsOnDissolve(coupleId: string): Promise<void> {
   const activeGoals = await goalsRepository.findActiveByCouple(coupleId);
 
   for (const goal of activeGoals) {
@@ -261,20 +246,13 @@ export async function cancelActiveGoalsOnDissolve(
 }
 
 async function assertMember(coupleId: string, userId: string): Promise<void> {
-  const member = await couplesRepository.findMemberByUserAndCouple(
-    userId,
-    coupleId,
-  );
+  const member = await couplesRepository.findMemberByUserAndCouple(userId, coupleId);
   if (!member) {
     throw new AppError(403, 'No eres miembro de este grupo');
   }
 }
 
-async function findGoalOwnedBy(
-  goalId: string,
-  coupleId: string,
-  userId: string,
-) {
+async function findGoalOwnedBy(goalId: string, coupleId: string, userId: string) {
   const goal = await goalsRepository.findById(goalId);
   if (!goal) {
     throw new AppError(404, 'Meta no encontrada');

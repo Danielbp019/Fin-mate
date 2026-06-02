@@ -5,16 +5,10 @@ export const createDebtSchema = z.object({
     .string()
     .min(1, 'El titulo es requerido')
     .max(150, 'El titulo no puede exceder 150 caracteres'),
-  description: z
-    .string()
-    .max(255, 'La descripcion no puede exceder 255 caracteres')
-    .optional(),
+  description: z.string().max(255, 'La descripcion no puede exceder 255 caracteres').optional(),
   initialAmount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    ),
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
   interestRate: z
     .string()
     .regex(/^\d+(\.\d{1,4})?$/, 'La tasa de interes debe ser un numero valido')
@@ -34,10 +28,7 @@ export const createDebtSchema = z.object({
       errorMap: () => ({ message: 'La prioridad debe ser low, medium o high' }),
     })
     .optional(),
-  startDate: z
-    .string()
-    .datetime({ message: 'Fecha de inicio invalida' })
-    .optional(),
+  startDate: z.string().datetime({ message: 'Fecha de inicio invalida' }).optional(),
 });
 
 export const updateDebtSchema = z.object({
@@ -46,23 +37,14 @@ export const updateDebtSchema = z.object({
     .min(1, 'El titulo es requerido')
     .max(150, 'El titulo no puede exceder 150 caracteres')
     .optional(),
-  description: z
-    .string()
-    .max(255, 'La descripcion no puede exceder 255 caracteres')
-    .optional(),
+  description: z.string().max(255, 'La descripcion no puede exceder 255 caracteres').optional(),
   initialAmount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    )
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
     .optional(),
   currentAmount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    )
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
     .optional(),
   interestRate: z
     .string()
@@ -90,10 +72,7 @@ export const updateDebtSchema = z.object({
       }),
     })
     .optional(),
-  startDate: z
-    .string()
-    .datetime({ message: 'Fecha de inicio invalida' })
-    .optional(),
+  startDate: z.string().datetime({ message: 'Fecha de inicio invalida' }).optional(),
   endDate: z.string().datetime({ message: 'Fecha de fin invalida' }).optional(),
 });
 

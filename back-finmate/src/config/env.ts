@@ -8,8 +8,7 @@ export const env = {
   rateLimitMax: Number(process.env.RATE_LIMIT_MAX) || 100,
   jwtSecret: process.env.JWT_SECRET || 'dev-jwt-secret',
   jwtExpiresInSeconds: Number(process.env.JWT_EXPIRES_IN_SECONDS) || 900,
-  jwtRefreshExpiresInSeconds:
-    Number(process.env.JWT_REFRESH_EXPIRES_IN_SECONDS) || 2592000,
+  jwtRefreshExpiresInSeconds: Number(process.env.JWT_REFRESH_EXPIRES_IN_SECONDS) || 2592000,
   smtp: {
     host: process.env.SMTP_HOST || 'smtp.ethereal.email',
     port: Number(process.env.SMTP_PORT) || 587,

@@ -56,9 +56,7 @@ describe('authService.login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(authRepository.findUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(
-      mockRefreshTokenRecord.id,
-    );
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
   });
 
   it('debe retornar accessToken y refreshToken con credenciales válidas', async () => {
@@ -124,9 +122,7 @@ describe('authService.register', () => {
     vi.clearAllMocks();
     vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
     vi.mocked(authRepository.createUser).mockResolvedValue(undefined);
-    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(
-      mockRefreshTokenRecord.id,
-    );
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
   });
 
   it('debe registrar y retornar tokens', async () => {
@@ -157,13 +153,9 @@ describe('authService.register', () => {
 describe('authService.refresh', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(
-      mockRefreshTokenRecord,
-    );
+    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(mockRefreshTokenRecord);
     vi.mocked(authRepository.revokeRefreshToken).mockResolvedValue(undefined);
-    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(
-      mockRefreshTokenRecord.id,
-    );
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
     vi.mocked(authRepository.findUserById).mockResolvedValue(mockUser);
   });
 
@@ -179,9 +171,7 @@ describe('authService.refresh', () => {
     expect(result.accessToken).toBeTruthy();
     expect(result.refreshToken).toBeTruthy();
     expect(result.cookieOptions).toBeTruthy();
-    expect(authRepository.revokeRefreshToken).toHaveBeenCalledWith(
-      mockRefreshTokenRecord.id,
-    );
+    expect(authRepository.revokeRefreshToken).toHaveBeenCalledWith(mockRefreshTokenRecord.id);
     expect(authRepository.createRefreshToken).toHaveBeenCalledTimes(1);
   });
 
@@ -209,9 +199,7 @@ describe('authService.refresh', () => {
       { expiresIn: 2592000 },
     );
 
-    await expect(
-      authService.refresh(revokedRefreshToken),
-    ).rejects.toMatchObject({
+    await expect(authService.refresh(revokedRefreshToken)).rejects.toMatchObject({
       statusCode: 401,
     });
   });
@@ -220,9 +208,7 @@ describe('authService.refresh', () => {
 describe('authService.logout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(
-      mockRefreshTokenRecord,
-    );
+    vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(mockRefreshTokenRecord);
     vi.mocked(authRepository.revokeRefreshToken).mockResolvedValue(undefined);
   });
 
@@ -236,9 +222,7 @@ describe('authService.logout', () => {
     const result = await authService.logout(refreshToken);
 
     expect(result.success).toBe(true);
-    expect(authRepository.revokeRefreshToken).toHaveBeenCalledWith(
-      mockRefreshTokenRecord.id,
-    );
+    expect(authRepository.revokeRefreshToken).toHaveBeenCalledWith(mockRefreshTokenRecord.id);
   });
 
   it('debe retornar éxito incluso sin refresh token', async () => {
@@ -251,16 +235,12 @@ describe('authService.logout', () => {
 describe('authService.logoutAll', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authRepository.revokeAllUserRefreshTokens).mockResolvedValue(
-      undefined,
-    );
+    vi.mocked(authRepository.revokeAllUserRefreshTokens).mockResolvedValue(undefined);
   });
 
   it('debe revocar todos los refresh tokens del usuario', async () => {
     const result = await authService.logoutAll(mockUser.id, undefined);
     expect(result.success).toBe(true);
-    expect(authRepository.revokeAllUserRefreshTokens).toHaveBeenCalledWith(
-      mockUser.id,
-    );
+    expect(authRepository.revokeAllUserRefreshTokens).toHaveBeenCalledWith(mockUser.id);
   });
 });

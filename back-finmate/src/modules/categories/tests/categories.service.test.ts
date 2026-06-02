@@ -66,17 +66,19 @@ describe('getById', () => {
   it('throws 404 when not found', async () => {
     vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
 
-    await expect(
-      categoriesService.getById('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Categoría no encontrada' });
+    await expect(categoriesService.getById('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Categoría no encontrada',
+    });
   });
 
   it('throws 404 when not owned and not system', async () => {
     vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
 
-    await expect(
-      categoriesService.getById(mockCategory.id, 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Categoría no encontrada' });
+    await expect(categoriesService.getById(mockCategory.id, 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Categoría no encontrada',
+    });
   });
 });
 
@@ -85,10 +87,7 @@ describe('create', () => {
     vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
     vi.mocked(categoriesRepository.create).mockResolvedValue(undefined as never);
 
-    const result = await categoriesService.create(
-      { name: 'Comida', type: 'expense' },
-      'user-123',
-    );
+    const result = await categoriesService.create({ name: 'Comida', type: 'expense' }, 'user-123');
 
     expect(categoriesRepository.findByNameAndUser).toHaveBeenCalledWith('Comida', 'user-123');
     expect(categoriesRepository.create).toHaveBeenCalledTimes(1);
@@ -143,7 +142,10 @@ describe('update', () => {
 
     await expect(
       categoriesService.update('system-id', { name: 'Nuevo' }, 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 403, message: 'No puedes modificar una categoría del sistema' });
+    ).rejects.toMatchObject({
+      statusCode: 403,
+      message: 'No puedes modificar una categoría del sistema',
+    });
   });
 
   it('throws 404 when not owned', async () => {
@@ -183,34 +185,33 @@ describe('remove', () => {
   it('throws 404 when not found', async () => {
     vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
 
-    await expect(
-      categoriesService.remove('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(categoriesService.remove('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 
   it('throws 403 when category is system', async () => {
     vi.mocked(categoriesRepository.findById).mockResolvedValue(mockSystemCategory);
 
-    await expect(
-      categoriesService.remove('system-id', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 403, message: 'No puedes eliminar una categoría del sistema' });
+    await expect(categoriesService.remove('system-id', 'user-123')).rejects.toMatchObject({
+      statusCode: 403,
+      message: 'No puedes eliminar una categoría del sistema',
+    });
   });
 
   it('throws 404 when not owned', async () => {
     vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
 
-    await expect(
-      categoriesService.remove(mockCategory.id, 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(categoriesService.remove(mockCategory.id, 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 
   it('throws 409 when category has movements', async () => {
     vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
     vi.mocked(categoriesRepository.countMovementsByCategory).mockResolvedValue(5);
 
-    await expect(
-      categoriesService.remove(mockCategory.id, 'user-123'),
-    ).rejects.toMatchObject({
+    await expect(categoriesService.remove(mockCategory.id, 'user-123')).rejects.toMatchObject({
       statusCode: 409,
       message: 'No puedes eliminar una categoría que tiene movimientos asociados',
     });

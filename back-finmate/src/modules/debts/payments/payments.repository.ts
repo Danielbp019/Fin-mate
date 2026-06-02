@@ -11,11 +11,7 @@ export async function findByDebt(debtId: string) {
 }
 
 export async function findById(id: string) {
-  const result = await db
-    .select()
-    .from(debtPayments)
-    .where(eq(debtPayments.id, id))
-    .limit(1);
+  const result = await db.select().from(debtPayments).where(eq(debtPayments.id, id)).limit(1);
 
   return result[0] ?? null;
 }

@@ -29,18 +29,12 @@ function toResponse(row: typeof debts.$inferSelect): DebtResponse {
   };
 }
 
-export async function list(
-  userId: string,
-  filters: DebtListFilters,
-): Promise<DebtResponse[]> {
+export async function list(userId: string, filters: DebtListFilters): Promise<DebtResponse[]> {
   const rows = await debtsRepository.findByUser(userId, filters);
   return rows.map(toResponse);
 }
 
-export async function getById(
-  id: string,
-  userId: string,
-): Promise<DebtResponse> {
+export async function getById(id: string, userId: string): Promise<DebtResponse> {
   const debt = await debtsRepository.findById(id);
   if (!debt) {
     throw new AppError(404, 'Deuda no encontrada');
@@ -51,10 +45,7 @@ export async function getById(
   return toResponse(debt);
 }
 
-export async function create(
-  data: CreateDebtBody,
-  userId: string,
-): Promise<DebtResponse> {
+export async function create(data: CreateDebtBody, userId: string): Promise<DebtResponse> {
   const now = new Date();
 
   const debt = {
@@ -98,23 +89,17 @@ export async function update(
   const updateData: Record<string, unknown> = { updatedAt: now };
 
   if (data.title !== undefined) updateData.title = data.title;
-  if (data.description !== undefined)
-    updateData.description = data.description ?? null;
-  if (data.initialAmount !== undefined)
-    updateData.initialAmount = data.initialAmount;
-  if (data.currentAmount !== undefined)
-    updateData.currentAmount = data.currentAmount;
-  if (data.interestRate !== undefined)
-    updateData.interestRate = data.interestRate;
-  if (data.minimumPayment !== undefined)
-    updateData.minimumPayment = data.minimumPayment;
+  if (data.description !== undefined) updateData.description = data.description ?? null;
+  if (data.initialAmount !== undefined) updateData.initialAmount = data.initialAmount;
+  if (data.currentAmount !== undefined) updateData.currentAmount = data.currentAmount;
+  if (data.interestRate !== undefined) updateData.interestRate = data.interestRate;
+  if (data.minimumPayment !== undefined) updateData.minimumPayment = data.minimumPayment;
   if (data.dueDay !== undefined) updateData.dueDay = data.dueDay;
   if (data.priority !== undefined) updateData.priority = data.priority;
   if (data.status !== undefined) updateData.status = data.status;
   if (data.startDate !== undefined)
     updateData.startDate = data.startDate ? new Date(data.startDate) : null;
-  if (data.endDate !== undefined)
-    updateData.endDate = data.endDate ? new Date(data.endDate) : null;
+  if (data.endDate !== undefined) updateData.endDate = data.endDate ? new Date(data.endDate) : null;
 
   await debtsRepository.update(id, updateData);
 

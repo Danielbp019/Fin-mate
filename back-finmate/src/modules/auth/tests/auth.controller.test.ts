@@ -126,11 +126,7 @@ describe('authController.logout', () => {
     await authController.logout(req, res, mockNext);
 
     expect(authService.logout).toHaveBeenCalledWith('rt');
-    expect(res.cookie).toHaveBeenCalledWith(
-      'refreshToken',
-      '',
-      expect.any(Object),
-    );
+    expect(res.cookie).toHaveBeenCalledWith('refreshToken', '', expect.any(Object));
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ success: true });
   });
@@ -161,11 +157,7 @@ describe('authController.logoutAll', () => {
     await authController.logoutAll(req, res, mockNext);
 
     expect(authService.logoutAll).toHaveBeenCalledWith('user-1', 'rt');
-    expect(res.cookie).toHaveBeenCalledWith(
-      'refreshToken',
-      '',
-      expect.any(Object),
-    );
+    expect(res.cookie).toHaveBeenCalledWith('refreshToken', '', expect.any(Object));
     expect(res.status).toHaveBeenCalledWith(200);
   });
 });

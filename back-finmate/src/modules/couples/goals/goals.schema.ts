@@ -7,14 +7,8 @@ export const createGoalSchema = z.object({
     .max(150, 'El titulo no puede exceder 150 caracteres'),
   targetAmount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    ),
-  deadline: z
-    .string()
-    .datetime({ message: 'Fecha de vencimiento invalida' })
-    .optional(),
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+  deadline: z.string().datetime({ message: 'Fecha de vencimiento invalida' }).optional(),
 });
 
 export const updateGoalSchema = z.object({
@@ -25,30 +19,17 @@ export const updateGoalSchema = z.object({
     .optional(),
   targetAmount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    )
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
     .optional(),
-  deadline: z
-    .string()
-    .datetime({ message: 'Fecha de vencimiento invalida' })
-    .optional()
-    .nullable(),
+  deadline: z.string().datetime({ message: 'Fecha de vencimiento invalida' }).optional().nullable(),
   status: z.enum(['active', 'completed', 'cancelled']).optional(),
 });
 
 export const contributeSchema = z.object({
   amount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    ),
-  notes: z
-    .string()
-    .max(255, 'Las notas no pueden exceder 255 caracteres')
-    .optional(),
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+  notes: z.string().max(255, 'Las notas no pueden exceder 255 caracteres').optional(),
   date: z.string().datetime({ message: 'Fecha invalida' }).optional(),
 });
 

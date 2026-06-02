@@ -2,11 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { createCoupleSchema, inviteSchema } from './couples.schema.js';
 import * as couplesService from './couples.service.js';
 
-export async function getMyCouple(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function getMyCouple(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const result = await couplesService.getMyCouple(userId);
@@ -61,11 +57,7 @@ export async function leave(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function dissolve(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function dissolve(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req as unknown as { userId: string };
     const coupleId = req.params.id as string;

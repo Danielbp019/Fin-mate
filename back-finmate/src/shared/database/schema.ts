@@ -19,9 +19,7 @@ export const users = mysqlTable(
     name: varchar('name', { length: 120 }).notNull(),
     email: varchar('email', { length: 190 }).notNull().unique(),
     passwordHash: varchar('password_hash', { length: 255 }).notNull(),
-    status: mysqlEnum('status', ['active', 'inactive'])
-      .notNull()
-      .default('active'),
+    status: mysqlEnum('status', ['active', 'inactive']).notNull().default('active'),
     emailVerifiedAt: datetime('email_verified_at', { fsp: 3 }),
     createdAt: datetime('created_at', { fsp: 3 })
       .notNull()
@@ -63,9 +61,7 @@ export const couples = mysqlTable(
     id: char('id', { length: 36 }).primaryKey(),
     createdBy: char('created_by', { length: 36 }).notNull(),
     name: varchar('name', { length: 120 }),
-    status: mysqlEnum('status', ['active', 'inactive'])
-      .notNull()
-      .default('active'),
+    status: mysqlEnum('status', ['active', 'inactive']).notNull().default('active'),
     createdAt: datetime('created_at', { fsp: 3 })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP(3)`),
@@ -117,10 +113,7 @@ export const movements = mysqlTable(
     userIdIdx: index('idx_movements_user_id').on(table.userId),
     coupleIdIdx: index('idx_movements_couple_id').on(table.coupleId),
     categoryIdIdx: index('idx_movements_category_id').on(table.categoryId),
-    typeDateIdx: index('idx_movements_type_date').on(
-      table.type,
-      table.movementDate,
-    ),
+    typeDateIdx: index('idx_movements_type_date').on(table.type, table.movementDate),
   }),
 );
 
@@ -140,19 +133,11 @@ export const debts = mysqlTable(
       precision: 19,
       scale: 4,
     }).notNull(),
-    interestRate: decimal('interest_rate', { precision: 10, scale: 4 })
-      .notNull()
-      .default('0'),
-    minimumPayment: decimal('minimum_payment', { precision: 19, scale: 4 })
-      .notNull()
-      .default('0'),
+    interestRate: decimal('interest_rate', { precision: 10, scale: 4 }).notNull().default('0'),
+    minimumPayment: decimal('minimum_payment', { precision: 19, scale: 4 }).notNull().default('0'),
     dueDay: tinyint('due_day'),
-    priority: mysqlEnum('priority', ['low', 'medium', 'high'])
-      .notNull()
-      .default('medium'),
-    status: mysqlEnum('status', ['pending', 'paid', 'overdue'])
-      .notNull()
-      .default('pending'),
+    priority: mysqlEnum('priority', ['low', 'medium', 'high']).notNull().default('medium'),
+    status: mysqlEnum('status', ['pending', 'paid', 'overdue']).notNull().default('pending'),
     startDate: datetime('start_date', { fsp: 3 }),
     endDate: datetime('end_date', { fsp: 3 }),
     createdAt: datetime('created_at', { fsp: 3 })
@@ -242,15 +227,12 @@ export const passwordResetTokens = mysqlTable(
   }),
 );
 
-export const passwordResetTokensRelations = relations(
-  passwordResetTokens,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [passwordResetTokens.userId],
-      references: [users.id],
-    }),
+export const passwordResetTokensRelations = relations(passwordResetTokens, ({ one }) => ({
+  user: one(users, {
+    fields: [passwordResetTokens.userId],
+    references: [users.id],
   }),
-);
+}));
 
 export const usersRelations = relations(users, ({ many }) => ({
   categories: many(categories),
@@ -288,13 +270,9 @@ export const coupleGoals = mysqlTable(
       precision: 19,
       scale: 4,
     }).notNull(),
-    currentAmount: decimal('current_amount', { precision: 19, scale: 4 })
-      .notNull()
-      .default('0'),
+    currentAmount: decimal('current_amount', { precision: 19, scale: 4 }).notNull().default('0'),
     deadline: datetime('deadline', { fsp: 3 }),
-    status: mysqlEnum('status', ['active', 'completed', 'cancelled'])
-      .notNull()
-      .default('active'),
+    status: mysqlEnum('status', ['active', 'completed', 'cancelled']).notNull().default('active'),
     createdBy: char('created_by', { length: 36 }).notNull(),
     createdAt: datetime('created_at', { fsp: 3 })
       .notNull()
@@ -340,15 +318,12 @@ export const couplesRelations = relations(couples, ({ one, many }) => ({
   goals: many(coupleGoals),
 }));
 
-export const coupleInvitationsRelations = relations(
-  coupleInvitations,
-  ({ one }) => ({
-    couple: one(couples, {
-      fields: [coupleInvitations.coupleId],
-      references: [couples.id],
-    }),
+export const coupleInvitationsRelations = relations(coupleInvitations, ({ one }) => ({
+  couple: one(couples, {
+    fields: [coupleInvitations.coupleId],
+    references: [couples.id],
   }),
-);
+}));
 
 export const coupleMembersRelations = relations(coupleMembers, ({ one }) => ({
   couple: one(couples, {
@@ -411,16 +386,13 @@ export const coupleGoalsRelations = relations(coupleGoals, ({ one, many }) => ({
   contributions: many(goalContributions),
 }));
 
-export const goalContributionsRelations = relations(
-  goalContributions,
-  ({ one }) => ({
-    goal: one(coupleGoals, {
-      fields: [goalContributions.goalId],
-      references: [coupleGoals.id],
-    }),
-    user: one(users, {
-      fields: [goalContributions.userId],
-      references: [users.id],
-    }),
+export const goalContributionsRelations = relations(goalContributions, ({ one }) => ({
+  goal: one(coupleGoals, {
+    fields: [goalContributions.goalId],
+    references: [coupleGoals.id],
   }),
-);
+  user: one(users, {
+    fields: [goalContributions.userId],
+    references: [users.id],
+  }),
+}));

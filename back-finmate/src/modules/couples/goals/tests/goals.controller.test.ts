@@ -166,11 +166,7 @@ describe('remove', () => {
 
     await goalsController.remove(req, res, next);
 
-    expect(goalsService.remove).toHaveBeenCalledWith(
-      'goal-123',
-      'couple-123',
-      'user-owner',
-    );
+    expect(goalsService.remove).toHaveBeenCalledWith('goal-123', 'couple-123', 'user-owner');
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalled();
   });

@@ -78,17 +78,19 @@ describe('getById', () => {
   it('throws 404 when not found', async () => {
     vi.mocked(movementsRepository.findById).mockResolvedValue(null as never);
 
-    await expect(
-      movementsService.getById('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Movimiento no encontrado' });
+    await expect(movementsService.getById('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Movimiento no encontrado',
+    });
   });
 
   it('throws 404 when not owned', async () => {
     vi.mocked(movementsRepository.findById).mockResolvedValue(mockMovement);
 
-    await expect(
-      movementsService.getById(mockMovement.id, 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Movimiento no encontrado' });
+    await expect(movementsService.getById(mockMovement.id, 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Movimiento no encontrado',
+    });
   });
 });
 
@@ -133,11 +135,7 @@ describe('update', () => {
 
     vi.mocked(movementsRepository.update).mockResolvedValue(undefined as never);
 
-    const result = await movementsService.update(
-      mockMovement.id,
-      { amount: '200.00' },
-      'user-123',
-    );
+    const result = await movementsService.update(mockMovement.id, { amount: '200.00' }, 'user-123');
 
     expect(movementsRepository.update).toHaveBeenCalled();
     expect(result.amount).toBe('200.00');
@@ -167,25 +165,22 @@ describe('remove', () => {
 
     await movementsService.remove(mockMovement.id, 'user-123');
 
-    expect(movementsRepository.softDelete).toHaveBeenCalledWith(
-      mockMovement.id,
-      expect.any(Date),
-    );
+    expect(movementsRepository.softDelete).toHaveBeenCalledWith(mockMovement.id, expect.any(Date));
   });
 
   it('throws 404 when not found', async () => {
     vi.mocked(movementsRepository.findById).mockResolvedValue(null as never);
 
-    await expect(
-      movementsService.remove('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(movementsService.remove('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 
   it('throws 404 when not owned', async () => {
     vi.mocked(movementsRepository.findById).mockResolvedValue(mockMovement);
 
-    await expect(
-      movementsService.remove(mockMovement.id, 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(movementsService.remove(mockMovement.id, 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 });

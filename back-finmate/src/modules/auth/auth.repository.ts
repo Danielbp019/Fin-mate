@@ -1,27 +1,15 @@
 import crypto from 'crypto';
 import { eq, and } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
-import {
-  users,
-  refreshTokens,
-  passwordResetTokens,
-} from '../../shared/database/schema.js';
+import { users, refreshTokens, passwordResetTokens } from '../../shared/database/schema.js';
 
-export async function findUserByEmail(
-  email: string,
-): Promise<typeof users.$inferSelect | null> {
-  const result = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
+export async function findUserByEmail(email: string): Promise<typeof users.$inferSelect | null> {
+  const result = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
   return result[0] ?? null;
 }
 
-export async function findUserById(
-  id: string,
-): Promise<typeof users.$inferSelect | null> {
+export async function findUserById(id: string): Promise<typeof users.$inferSelect | null> {
   const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
 
   return result[0] ?? null;
@@ -31,10 +19,7 @@ export async function createUser(data: typeof users.$inferInsert) {
   await db.insert(users).values(data);
 }
 
-export async function createRefreshToken(data: {
-  userId: string;
-  expiresAt: Date;
-}) {
+export async function createRefreshToken(data: { userId: string; expiresAt: Date }) {
   const id = crypto.randomUUID();
   const now = new Date();
 
@@ -53,11 +38,7 @@ export async function createRefreshToken(data: {
 export async function findRefreshTokenById(
   id: string,
 ): Promise<typeof refreshTokens.$inferSelect | null> {
-  const result = await db
-    .select()
-    .from(refreshTokens)
-    .where(eq(refreshTokens.id, id))
-    .limit(1);
+  const result = await db.select().from(refreshTokens).where(eq(refreshTokens.id, id)).limit(1);
 
   return result[0] ?? null;
 }
@@ -73,23 +54,15 @@ export async function revokeAllUserRefreshTokens(userId: string) {
   await db
     .update(refreshTokens)
     .set({ revoked: true, updatedAt: new Date() })
-    .where(
-      and(eq(refreshTokens.userId, userId), eq(refreshTokens.revoked, false)),
-    );
+    .where(and(eq(refreshTokens.userId, userId), eq(refreshTokens.revoked, false)));
 }
 
 export async function updateUserName(userId: string, name: string) {
-  await db
-    .update(users)
-    .set({ name, updatedAt: new Date() })
-    .where(eq(users.id, userId));
+  await db.update(users).set({ name, updatedAt: new Date() }).where(eq(users.id, userId));
 }
 
 export async function updateUserPassword(userId: string, passwordHash: string) {
-  await db
-    .update(users)
-    .set({ passwordHash, updatedAt: new Date() })
-    .where(eq(users.id, userId));
+  await db.update(users).set({ passwordHash, updatedAt: new Date() }).where(eq(users.id, userId));
 }
 
 export async function createPasswordResetToken(data: {
@@ -112,10 +85,7 @@ export async function findPasswordResetToken(token: string) {
 }
 
 export async function markPasswordResetTokenUsed(id: string) {
-  await db
-    .update(passwordResetTokens)
-    .set({ used: true })
-    .where(eq(passwordResetTokens.id, id));
+  await db.update(passwordResetTokens).set({ used: true }).where(eq(passwordResetTokens.id, id));
 }
 
 export async function updateUserEmailVerifiedAt(userId: string) {

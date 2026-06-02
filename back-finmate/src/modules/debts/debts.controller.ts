@@ -10,18 +10,10 @@ export async function list(req: Request, res: Response, next: NextFunction) {
       status?: 'pending' | 'paid' | 'overdue';
       priority?: 'low' | 'medium' | 'high';
     } = {};
-    if (
-      query.status === 'pending' ||
-      query.status === 'paid' ||
-      query.status === 'overdue'
-    ) {
+    if (query.status === 'pending' || query.status === 'paid' || query.status === 'overdue') {
       filters.status = query.status;
     }
-    if (
-      query.priority === 'low' ||
-      query.priority === 'medium' ||
-      query.priority === 'high'
-    ) {
+    if (query.priority === 'low' || query.priority === 'medium' || query.priority === 'high') {
       filters.priority = query.priority;
     }
     const result = await debtsService.list(userId, filters);

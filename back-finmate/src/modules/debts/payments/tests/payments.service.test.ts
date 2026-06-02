@@ -57,17 +57,18 @@ describe('list', () => {
   it('throws 404 when debt not found', async () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(null as never);
 
-    await expect(
-      paymentsService.list('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Deuda no encontrada' });
+    await expect(paymentsService.list('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Deuda no encontrada',
+    });
   });
 
   it('throws 404 when debt not owned', async () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(mockDebt);
 
-    await expect(
-      paymentsService.list('debt-550e8400', 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(paymentsService.list('debt-550e8400', 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 });
 

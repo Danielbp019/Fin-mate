@@ -55,14 +55,10 @@ describe('loginSchema', () => {
   });
 
   it('debe rechazar email inválido', () => {
-    expect(() =>
-      loginSchema.parse({ email: 'invalido', password: '123456' }),
-    ).toThrow();
+    expect(() => loginSchema.parse({ email: 'invalido', password: '123456' })).toThrow();
   });
 
   it('debe rechazar contraseña vacía', () => {
-    expect(() =>
-      loginSchema.parse({ email: 'test@example.com', password: '' }),
-    ).toThrow();
+    expect(() => loginSchema.parse({ email: 'test@example.com', password: '' })).toThrow();
   });
 });

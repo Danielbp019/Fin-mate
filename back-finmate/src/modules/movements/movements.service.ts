@@ -44,10 +44,7 @@ export async function list(
   };
 }
 
-export async function getById(
-  id: string,
-  userId: string,
-): Promise<MovementResponse> {
+export async function getById(id: string, userId: string): Promise<MovementResponse> {
   const movement = await movementsRepository.findById(id);
   if (!movement) {
     throw new AppError(404, 'Movimiento no encontrado');
@@ -58,10 +55,7 @@ export async function getById(
   return toResponse(movement);
 }
 
-export async function create(
-  data: CreateMovementBody,
-  userId: string,
-): Promise<MovementResponse> {
+export async function create(data: CreateMovementBody, userId: string): Promise<MovementResponse> {
   const category = await db
     .select({ id: categories.id })
     .from(categories)
@@ -124,10 +118,8 @@ export async function update(
   if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
   if (data.type !== undefined) updateData.type = data.type;
   if (data.amount !== undefined) updateData.amount = data.amount;
-  if (data.description !== undefined)
-    updateData.description = data.description ?? null;
-  if (data.movementDate !== undefined)
-    updateData.movementDate = new Date(data.movementDate);
+  if (data.description !== undefined) updateData.description = data.description ?? null;
+  if (data.movementDate !== undefined) updateData.movementDate = new Date(data.movementDate);
 
   await movementsRepository.update(id, updateData);
 

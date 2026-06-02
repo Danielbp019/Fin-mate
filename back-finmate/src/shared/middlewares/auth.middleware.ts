@@ -3,11 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../../config/env.js';
 import { AppError } from '../errors/AppError.js';
 
-export async function authMiddleware(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) {
+export async function authMiddleware(req: Request, _res: Response, next: NextFunction) {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

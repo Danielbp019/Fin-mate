@@ -66,13 +66,9 @@ beforeEach(async () => {
 
 describe('list', () => {
   it('returns goals with contributions for a couple', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
     vi.mocked(goalsRepository.findByCouple).mockResolvedValue([mockGoal]);
-    vi.mocked(goalsRepository.findContributionsByGoal).mockResolvedValue([
-      mockContribution,
-    ]);
+    vi.mocked(goalsRepository.findContributionsByGoal).mockResolvedValue([mockContribution]);
 
     const result = await goalsService.list('couple-123', 'user-owner');
 
@@ -83,9 +79,7 @@ describe('list', () => {
   });
 
   it('returns empty array when no goals', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
     vi.mocked(goalsRepository.findByCouple).mockResolvedValue([]);
 
     const result = await goalsService.list('couple-123', 'user-owner');
@@ -94,21 +88,17 @@ describe('list', () => {
   });
 
   it('throws 403 when user is not a member', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(null);
 
-    await expect(
-      goalsService.list('couple-123', 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 403 });
+    await expect(goalsService.list('couple-123', 'other-user')).rejects.toMatchObject({
+      statusCode: 403,
+    });
   });
 });
 
 describe('create', () => {
   it('creates a goal and returns it', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
 
     const result = await goalsService.create(
       { title: 'Viaje a la playa', targetAmount: '5000.00' },
@@ -123,16 +113,10 @@ describe('create', () => {
   });
 
   it('throws 403 when user is not a member', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(null);
 
     await expect(
-      goalsService.create(
-        { title: 'Meta', targetAmount: '1000.00' },
-        'couple-123',
-        'other-user',
-      ),
+      goalsService.create({ title: 'Meta', targetAmount: '1000.00' }, 'couple-123', 'other-user'),
     ).rejects.toMatchObject({ statusCode: 403 });
   });
 });
@@ -163,12 +147,7 @@ describe('update', () => {
     vi.mocked(goalsRepository.findById).mockResolvedValue(mockGoal);
 
     await expect(
-      goalsService.update(
-        'goal-123',
-        { title: 'Hackeado' },
-        'couple-123',
-        'other-user',
-      ),
+      goalsService.update('goal-123', { title: 'Hackeado' }, 'couple-123', 'other-user'),
     ).rejects.toMatchObject({ statusCode: 403 });
   });
 
@@ -176,12 +155,7 @@ describe('update', () => {
     vi.mocked(goalsRepository.findById).mockResolvedValue(null);
 
     await expect(
-      goalsService.update(
-        'nonexistent',
-        { title: 'Nope' },
-        'couple-123',
-        'user-owner',
-      ),
+      goalsService.update('nonexistent', { title: 'Nope' }, 'couple-123', 'user-owner'),
     ).rejects.toMatchObject({ statusCode: 404 });
   });
 });
@@ -198,17 +172,15 @@ describe('remove', () => {
   it('throws 403 when not the creator', async () => {
     vi.mocked(goalsRepository.findById).mockResolvedValue(mockGoal);
 
-    await expect(
-      goalsService.remove('goal-123', 'couple-123', 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 403 });
+    await expect(goalsService.remove('goal-123', 'couple-123', 'other-user')).rejects.toMatchObject(
+      { statusCode: 403 },
+    );
   });
 });
 
 describe('contribute', () => {
   it('creates contribution and movement expense', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
     vi.mocked(goalsRepository.findById).mockResolvedValue(mockGoal);
 
     const result = await goalsService.contribute(
@@ -233,17 +205,10 @@ describe('contribute', () => {
 
   it('marks goal as completed when target reached', async () => {
     const almostCompleteGoal = { ...mockGoal, currentAmount: '4800.00' };
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
     vi.mocked(goalsRepository.findById).mockResolvedValue(almostCompleteGoal);
 
-    await goalsService.contribute(
-      'goal-123',
-      { amount: '500.00' },
-      'couple-123',
-      'user-owner',
-    );
+    await goalsService.contribute('goal-123', { amount: '500.00' }, 'couple-123', 'user-owner');
 
     expect(goalsRepository.update).toHaveBeenCalledWith(
       'goal-123',
@@ -255,50 +220,29 @@ describe('contribute', () => {
   });
 
   it('throws 403 when user is not a member', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(null);
 
     await expect(
-      goalsService.contribute(
-        'goal-123',
-        { amount: '100.00' },
-        'couple-123',
-        'other-user',
-      ),
+      goalsService.contribute('goal-123', { amount: '100.00' }, 'couple-123', 'other-user'),
     ).rejects.toMatchObject({ statusCode: 403 });
   });
 
   it('throws 404 when goal not found', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
     vi.mocked(goalsRepository.findById).mockResolvedValue(null);
 
     await expect(
-      goalsService.contribute(
-        'nonexistent',
-        { amount: '100.00' },
-        'couple-123',
-        'user-owner',
-      ),
+      goalsService.contribute('nonexistent', { amount: '100.00' }, 'couple-123', 'user-owner'),
     ).rejects.toMatchObject({ statusCode: 404 });
   });
 
   it('throws 400 when goal is not active', async () => {
     const completedGoal = { ...mockGoal, status: 'completed' as const };
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
-      mockMember,
-    );
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
     vi.mocked(goalsRepository.findById).mockResolvedValue(completedGoal);
 
     await expect(
-      goalsService.contribute(
-        'goal-123',
-        { amount: '100.00' },
-        'couple-123',
-        'user-owner',
-      ),
+      goalsService.contribute('goal-123', { amount: '100.00' }, 'couple-123', 'user-owner'),
     ).rejects.toMatchObject({
       statusCode: 400,
       message: 'La meta no esta activa',
@@ -309,15 +253,11 @@ describe('contribute', () => {
 describe('cancelActiveGoalsOnDissolve', () => {
   it('cancels active goals and creates income movements', async () => {
     const activeGoal = { ...mockGoal, status: 'active' as const };
-    vi.mocked(goalsRepository.findActiveByCouple).mockResolvedValue([
-      activeGoal,
-    ]);
+    vi.mocked(goalsRepository.findActiveByCouple).mockResolvedValue([activeGoal]);
 
     await goalsService.cancelActiveGoalsOnDissolve('couple-123');
 
-    expect(goalsRepository.findActiveByCouple).toHaveBeenCalledWith(
-      'couple-123',
-    );
+    expect(goalsRepository.findActiveByCouple).toHaveBeenCalledWith('couple-123');
     expect(mockModules.db.insert).toHaveBeenCalledTimes(1);
     expect(mockModules.db.values).toHaveBeenCalledTimes(1);
     expect(goalsRepository.update).toHaveBeenCalledWith(

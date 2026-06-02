@@ -66,17 +66,19 @@ describe('getById', () => {
   it('throws 404 when not found', async () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(null as never);
 
-    await expect(
-      debtsService.getById('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Deuda no encontrada' });
+    await expect(debtsService.getById('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Deuda no encontrada',
+    });
   });
 
   it('throws 404 when not owned', async () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(mockDebt);
 
-    await expect(
-      debtsService.getById(mockDebt.id, 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404, message: 'Deuda no encontrada' });
+    await expect(debtsService.getById(mockDebt.id, 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+      message: 'Deuda no encontrada',
+    });
   });
 });
 
@@ -117,11 +119,7 @@ describe('update', () => {
       .mockResolvedValueOnce({ ...mockDebt, currentAmount: '3000.00' });
     vi.mocked(debtsRepository.update).mockResolvedValue(undefined as never);
 
-    const result = await debtsService.update(
-      mockDebt.id,
-      { currentAmount: '3000.00' },
-      'user-123',
-    );
+    const result = await debtsService.update(mockDebt.id, { currentAmount: '3000.00' }, 'user-123');
 
     expect(debtsRepository.update).toHaveBeenCalled();
     expect(result.currentAmount).toBe('3000.00');
@@ -151,25 +149,22 @@ describe('remove', () => {
 
     await debtsService.remove(mockDebt.id, 'user-123');
 
-    expect(debtsRepository.softDelete).toHaveBeenCalledWith(
-      mockDebt.id,
-      expect.any(Date),
-    );
+    expect(debtsRepository.softDelete).toHaveBeenCalledWith(mockDebt.id, expect.any(Date));
   });
 
   it('throws 404 when not found', async () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(null as never);
 
-    await expect(
-      debtsService.remove('nonexistent', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(debtsService.remove('nonexistent', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 
   it('throws 404 when not owned', async () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(mockDebt);
 
-    await expect(
-      debtsService.remove(mockDebt.id, 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(debtsService.remove(mockDebt.id, 'other-user')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 });

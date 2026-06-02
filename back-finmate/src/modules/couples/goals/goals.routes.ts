@@ -1,12 +1,6 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../../shared/middlewares/auth.middleware.js';
-import {
-  list,
-  create,
-  update,
-  remove,
-  contribute,
-} from './goals.controller.js';
+import { list, create, update, remove, contribute } from './goals.controller.js';
 
 const router = Router({ mergeParams: true });
 

@@ -24,11 +24,7 @@ export async function findActiveCoupleByUserId(userId: string) {
 }
 
 export async function findCoupleById(id: string) {
-  const result = await db
-    .select()
-    .from(couples)
-    .where(eq(couples.id, id))
-    .limit(1);
+  const result = await db.select().from(couples).where(eq(couples.id, id)).limit(1);
 
   return result[0] ?? null;
 }
@@ -48,30 +44,18 @@ export async function findCoupleMembers(coupleId: string) {
     .where(eq(coupleMembers.coupleId, coupleId));
 }
 
-export async function findMemberByUserAndCouple(
-  userId: string,
-  coupleId: string,
-) {
+export async function findMemberByUserAndCouple(userId: string, coupleId: string) {
   const result = await db
     .select()
     .from(coupleMembers)
-    .where(
-      and(
-        eq(coupleMembers.userId, userId),
-        eq(coupleMembers.coupleId, coupleId),
-      ),
-    )
+    .where(and(eq(coupleMembers.userId, userId), eq(coupleMembers.coupleId, coupleId)))
     .limit(1);
 
   return result[0] ?? null;
 }
 
 export async function findUserByEmail(email: string) {
-  const result = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
+  const result = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
   return result[0] ?? null;
 }
@@ -92,10 +76,7 @@ export async function findPendingInvitation(coupleId: string, email: string) {
   return result[0] ?? null;
 }
 
-export async function findInvitationByCoupleAndEmail(
-  coupleId: string,
-  email: string,
-) {
+export async function findInvitationByCoupleAndEmail(coupleId: string, email: string) {
   const result = await db
     .select()
     .from(coupleInvitations)
@@ -163,27 +144,16 @@ export async function dissolveCouple(id: string) {
 }
 
 export async function unshareMovements(coupleId: string) {
-  await db
-    .update(movements)
-    .set({ coupleId: null })
-    .where(eq(movements.coupleId, coupleId));
+  await db.update(movements).set({ coupleId: null }).where(eq(movements.coupleId, coupleId));
 }
 
 export async function unshareDebts(coupleId: string) {
-  await db
-    .update(debts)
-    .set({ coupleId: null })
-    .where(eq(debts.coupleId, coupleId));
+  await db.update(debts).set({ coupleId: null }).where(eq(debts.coupleId, coupleId));
 }
 
 export async function expireInvitations(coupleId: string) {
   await db
     .update(coupleInvitations)
     .set({ status: 'expired', updatedAt: new Date() })
-    .where(
-      and(
-        eq(coupleInvitations.coupleId, coupleId),
-        eq(coupleInvitations.status, 'pending'),
-      ),
-    );
+    .where(and(eq(coupleInvitations.coupleId, coupleId), eq(coupleInvitations.status, 'pending')));
 }

@@ -16,9 +16,7 @@ async function seed() {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`  ✖ Error de conexión: ${message}`);
-    console.error(
-      '    Verifica que las migraciones estén aplicadas con "npm run db:migrate"',
-    );
+    console.error('    Verifica que las migraciones estén aplicadas con "npm run db:migrate"');
     console.error('');
     process.exit(1);
   }
@@ -120,9 +118,7 @@ async function seed() {
   console.log('  ✔ 6 categorías del sistema insertadas');
   console.log('');
 
-  console.log(
-    '  ✅ Seed completado — 2 usuarios y 6 categorías del sistema creados',
-  );
+  console.log('  ✅ Seed completado — 2 usuarios y 6 categorías del sistema creados');
   console.log('');
 
   await pool.end();

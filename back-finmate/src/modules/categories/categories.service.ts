@@ -1,10 +1,7 @@
 import crypto from 'crypto';
 import { AppError } from '../../shared/errors/AppError.js';
 import * as categoriesRepository from './categories.repository.js';
-import type {
-  CreateCategoryBody,
-  UpdateCategoryBody,
-} from './categories.types.js';
+import type { CreateCategoryBody, UpdateCategoryBody } from './categories.types.js';
 
 export async function list(userId: string, type?: string) {
   return await categoriesRepository.findByUser(userId, type);
@@ -24,10 +21,7 @@ export async function getById(id: string, userId: string) {
 }
 
 export async function create(data: CreateCategoryBody, userId: string) {
-  const existing = await categoriesRepository.findByNameAndUser(
-    data.name,
-    userId,
-  );
+  const existing = await categoriesRepository.findByNameAndUser(data.name, userId);
   if (existing) {
     throw new AppError(409, 'Ya tienes una categoría con ese nombre');
   }
@@ -50,11 +44,7 @@ export async function create(data: CreateCategoryBody, userId: string) {
   return category;
 }
 
-export async function update(
-  id: string,
-  data: UpdateCategoryBody,
-  userId: string,
-) {
+export async function update(id: string, data: UpdateCategoryBody, userId: string) {
   const category = await categoriesRepository.findById(id);
   if (!category) {
     throw new AppError(404, 'Categoría no encontrada');
@@ -69,11 +59,7 @@ export async function update(
   }
 
   if (data.name && data.name !== category.name) {
-    const existing = await categoriesRepository.findByNameAndUser(
-      data.name,
-      userId,
-      id,
-    );
+    const existing = await categoriesRepository.findByNameAndUser(data.name, userId, id);
     if (existing) {
       throw new AppError(409, 'Ya tienes una categoría con ese nombre');
     }
@@ -112,10 +98,7 @@ export async function remove(id: string, userId: string) {
 
   const movementCount = await categoriesRepository.countMovementsByCategory(id);
   if (movementCount > 0) {
-    throw new AppError(
-      409,
-      'No puedes eliminar una categoría que tiene movimientos asociados',
-    );
+    throw new AppError(409, 'No puedes eliminar una categoría que tiene movimientos asociados');
   }
 
   await categoriesRepository.softDelete(id, new Date());

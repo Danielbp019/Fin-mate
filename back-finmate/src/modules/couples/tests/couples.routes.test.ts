@@ -85,9 +85,7 @@ describe('GET /couples', () => {
 
 describe('POST /couples', () => {
   it('returns 201 with created couple', async () => {
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue([
       {
         id: 'member-1',
@@ -117,9 +115,7 @@ describe('POST /couples', () => {
       .send({ name: 'A'.repeat(121) })
       .expect(400);
 
-    expect(res.body.error).toBe(
-      'Datos inv' + String.fromCharCode(225) + 'lidos',
-    );
+    expect(res.body.error).toBe('Datos inv' + String.fromCharCode(225) + 'lidos');
   });
 });
 
@@ -137,9 +133,7 @@ describe('POST /couples/:id/invite', () => {
       id: 'invited-123',
       email: 'invited@test.com',
     } as any);
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
     vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(null);
 
     const token = createToken();

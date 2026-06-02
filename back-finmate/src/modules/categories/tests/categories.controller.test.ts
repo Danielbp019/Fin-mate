@@ -18,7 +18,13 @@ const mockCategory = {
 };
 
 function createAuthReq(overrides: Record<string, unknown> = {}): Request {
-  return { userId: 'user-123', query: {}, params: {}, body: {}, ...overrides } as unknown as Request;
+  return {
+    userId: 'user-123',
+    query: {},
+    params: {},
+    body: {},
+    ...overrides,
+  } as unknown as Request;
 }
 
 function createRes(): Response {

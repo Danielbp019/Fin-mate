@@ -4,10 +4,7 @@ import { movements } from '../../shared/database/schema.js';
 import type { MovementListFilters } from './movements.types.js';
 
 function buildConditions(userId: string, filters: MovementListFilters) {
-  const conditions = [
-    eq(movements.userId, userId),
-    isNull(movements.deletedAt),
-  ];
+  const conditions = [eq(movements.userId, userId), isNull(movements.deletedAt)];
 
   if (filters.type) {
     conditions.push(eq(movements.type, filters.type));
@@ -49,18 +46,12 @@ export async function findByUser(userId: string, filters: MovementListFilters) {
     .select()
     .from(movements)
     .where(and(...conditions))
-    .orderBy(
-      sql`${movements.movementDate} DESC`,
-      sql`${movements.createdAt} DESC`,
-    )
+    .orderBy(sql`${movements.movementDate} DESC`, sql`${movements.createdAt} DESC`)
     .limit(limit)
     .offset(offset);
 }
 
-export async function countByUser(
-  userId: string,
-  filters: MovementListFilters,
-) {
+export async function countByUser(userId: string, filters: MovementListFilters) {
   const conditions = buildConditions(userId, filters);
 
   const result = await db
@@ -75,16 +66,10 @@ export async function create(data: typeof movements.$inferInsert) {
   await db.insert(movements).values(data);
 }
 
-export async function update(
-  id: string,
-  data: Partial<typeof movements.$inferInsert>,
-) {
+export async function update(id: string, data: Partial<typeof movements.$inferInsert>) {
   await db.update(movements).set(data).where(eq(movements.id, id));
 }
 
 export async function softDelete(id: string, deletedAt: Date) {
-  await db
-    .update(movements)
-    .set({ deletedAt, updatedAt: deletedAt })
-    .where(eq(movements.id, id));
+  await db.update(movements).set({ deletedAt, updatedAt: deletedAt }).where(eq(movements.id, id));
 }

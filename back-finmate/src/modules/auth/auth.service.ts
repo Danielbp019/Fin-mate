@@ -4,10 +4,7 @@ import crypto from 'crypto';
 import { env } from '../../config/env.js';
 import { AppError } from '../../shared/errors/AppError.js';
 import { sendEmail } from '../../shared/email/email.service.js';
-import {
-  verificationEmail,
-  passwordResetEmail,
-} from '../../shared/email/email.templates.js';
+import { verificationEmail, passwordResetEmail } from '../../shared/email/email.templates.js';
 import * as authRepository from './auth.repository.js';
 
 const REFRESH_TOKEN_COOKIE = 'refreshToken';
@@ -70,11 +67,7 @@ export async function login(data: { email: string; password: string }) {
   };
 }
 
-export async function register(data: {
-  name: string;
-  email: string;
-  password: string;
-}) {
+export async function register(data: { name: string; email: string; password: string }) {
   const existing = await authRepository.findUserByEmail(data.email);
   if (existing) {
     throw new AppError(409, 'El correo electrónico ya está registrado');
@@ -194,10 +187,7 @@ export async function refresh(refreshTokenValue: string | undefined) {
   };
 }
 
-export async function logoutAll(
-  userId: string,
-  refreshTokenValue: string | undefined,
-) {
+export async function logoutAll(userId: string, refreshTokenValue: string | undefined) {
   await authRepository.revokeAllUserRefreshTokens(userId);
 
   if (refreshTokenValue) {
@@ -241,10 +231,7 @@ export async function changePassword(
     throw new AppError(404, 'Usuario no encontrado');
   }
 
-  const validPassword = await bcrypt.compare(
-    data.currentPassword,
-    user.passwordHash,
-  );
+  const validPassword = await bcrypt.compare(data.currentPassword, user.passwordHash);
   if (!validPassword) {
     throw new AppError(401, 'La contraseña actual no es correcta');
   }
@@ -255,9 +242,7 @@ export async function changePassword(
   return { message: 'Contraseña actualizada correctamente' };
 }
 
-export async function forgotPassword(data: {
-  email: string;
-}): Promise<{ message: string }> {
+export async function forgotPassword(data: { email: string }): Promise<{ message: string }> {
   const user = await authRepository.findUserByEmail(data.email);
   if (!user) {
     return {
@@ -313,9 +298,7 @@ export async function resetPassword(data: {
   return { message: 'Contrasena actualizada correctamente' };
 }
 
-export async function verifyEmail(data: {
-  token: string;
-}): Promise<{ message: string }> {
+export async function verifyEmail(data: { token: string }): Promise<{ message: string }> {
   let decoded: { sub: string; purpose: string };
   try {
     decoded = jwt.verify(data.token, env.jwtSecret) as {

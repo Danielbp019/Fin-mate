@@ -7,17 +7,9 @@ export const createMovementSchema = z.object({
   }),
   amount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    ),
-  description: z
-    .string()
-    .max(255, 'La descripcion no puede exceder 255 caracteres')
-    .optional(),
-  movementDate: z
-    .string()
-    .datetime({ message: 'Fecha de movimiento invalida' }),
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+  description: z.string().max(255, 'La descripcion no puede exceder 255 caracteres').optional(),
+  movementDate: z.string().datetime({ message: 'Fecha de movimiento invalida' }),
 });
 
 export const updateMovementSchema = z.object({
@@ -29,19 +21,10 @@ export const updateMovementSchema = z.object({
     .optional(),
   amount: z
     .string()
-    .regex(
-      /^\d+(\.\d{1,4})?$/,
-      'El monto debe ser un numero valido con hasta 4 decimales',
-    )
+    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
     .optional(),
-  description: z
-    .string()
-    .max(255, 'La descripcion no puede exceder 255 caracteres')
-    .optional(),
-  movementDate: z
-    .string()
-    .datetime({ message: 'Fecha de movimiento invalida' })
-    .optional(),
+  description: z.string().max(255, 'La descripcion no puede exceder 255 caracteres').optional(),
+  movementDate: z.string().datetime({ message: 'Fecha de movimiento invalida' }).optional(),
 });
 
 export const movementParamsSchema = z.object({

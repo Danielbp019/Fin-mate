@@ -1,8 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import {
-  createCategorySchema,
-  updateCategorySchema,
-} from './categories.schema.js';
+import { createCategorySchema, updateCategorySchema } from './categories.schema.js';
 import * as categoriesService from './categories.service.js';
 import type { AuthenticatedRequest } from '../auth/auth.types.js';
 

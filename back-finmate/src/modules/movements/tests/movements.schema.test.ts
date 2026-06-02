@@ -119,9 +119,7 @@ describe('updateMovementSchema', () => {
   });
 
   it('rejects invalid type in update', () => {
-    expect(() =>
-      updateMovementSchema.parse({ type: 'invalid' }),
-    ).toThrow();
+    expect(() => updateMovementSchema.parse({ type: 'invalid' })).toThrow();
   });
 });
 

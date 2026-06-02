@@ -71,10 +71,7 @@ describe('create', () => {
 
     await couplesController.create(req, res, next);
 
-    expect(couplesService.create).toHaveBeenCalledWith(
-      { name: 'Nuestro grupo' },
-      'user-123',
-    );
+    expect(couplesService.create).toHaveBeenCalledWith({ name: 'Nuestro grupo' }, 'user-123');
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(mockCoupleResponse);
   });
@@ -151,10 +148,7 @@ describe('dissolve', () => {
 
     await couplesController.dissolve(req, res, next);
 
-    expect(couplesService.dissolve).toHaveBeenCalledWith(
-      'couple-123',
-      'user-123',
-    );
+    expect(couplesService.dissolve).toHaveBeenCalledWith('couple-123', 'user-123');
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: 'Grupo disuelto correctamente',

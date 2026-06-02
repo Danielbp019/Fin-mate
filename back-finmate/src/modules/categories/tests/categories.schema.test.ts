@@ -30,21 +30,15 @@ describe('createCategorySchema', () => {
   });
 
   it('rejects empty name', () => {
-    expect(() =>
-      createCategorySchema.parse({ name: '', type: 'expense' }),
-    ).toThrow();
+    expect(() => createCategorySchema.parse({ name: '', type: 'expense' })).toThrow();
   });
 
   it('rejects name longer than 100 characters', () => {
-    expect(() =>
-      createCategorySchema.parse({ name: 'A'.repeat(101), type: 'expense' }),
-    ).toThrow();
+    expect(() => createCategorySchema.parse({ name: 'A'.repeat(101), type: 'expense' })).toThrow();
   });
 
   it('rejects invalid type', () => {
-    expect(() =>
-      createCategorySchema.parse({ name: 'Test', type: 'invalid' }),
-    ).toThrow();
+    expect(() => createCategorySchema.parse({ name: 'Test', type: 'invalid' })).toThrow();
   });
 
   it('rejects icon longer than 50 characters', () => {

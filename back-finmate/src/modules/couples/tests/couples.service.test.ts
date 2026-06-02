@@ -44,9 +44,7 @@ describe('getMyCouple', () => {
       couple: mockCouple,
       member: mockMembers[0],
     });
-    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(
-      mockMembers,
-    );
+    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
     const result = await couplesService.getMyCouple('owner-123');
 
@@ -55,29 +53,20 @@ describe('getMyCouple', () => {
   });
 
   it('throws 404 when user has no active couple', async () => {
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
 
-    await expect(
-      couplesService.getMyCouple('user-without-couple'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(couplesService.getMyCouple('user-without-couple')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 });
 
 describe('create', () => {
   it('creates couple and returns it with members', async () => {
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
-      null,
-    );
-    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(
-      mockMembers,
-    );
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
-    const result = await couplesService.create(
-      { name: 'Nuestro grupo' },
-      'owner-123',
-    );
+    const result = await couplesService.create({ name: 'Nuestro grupo' }, 'owner-123');
 
     expect(couplesRepository.createCouple).toHaveBeenCalled();
     expect(couplesRepository.createMember).toHaveBeenCalled();
@@ -90,9 +79,9 @@ describe('create', () => {
       member: mockMembers[0],
     });
 
-    await expect(
-      couplesService.create({ name: 'Otro grupo' }, 'owner-123'),
-    ).rejects.toMatchObject({ statusCode: 409 });
+    await expect(couplesService.create({ name: 'Otro grupo' }, 'owner-123')).rejects.toMatchObject({
+      statusCode: 409,
+    });
   });
 });
 
@@ -106,16 +95,10 @@ describe('invite', () => {
       id: 'invited-123',
       email: 'invited@test.com',
     } as any);
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
-      null,
-    );
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
     vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(null);
 
-    const result = await couplesService.invite(
-      'couple-123',
-      'invited@test.com',
-      'owner-123',
-    );
+    const result = await couplesService.invite('couple-123', 'invited@test.com', 'owner-123');
 
     expect(couplesRepository.createInvitation).toHaveBeenCalled();
     expect(result.status).toBe('pending');
@@ -148,21 +131,15 @@ describe('join', () => {
       id: 'invited-123',
       email: 'invited@test.com',
     } as any);
-    vi.mocked(
-      couplesRepository.findInvitationByCoupleAndEmail,
-    ).mockResolvedValue({
+    vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue({
       id: 'invitation-1',
       coupleId: 'couple-123',
       invitedEmail: 'invited@test.com',
       status: 'pending',
       expiresAt: new Date(Date.now() + 86400000),
     } as any);
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
-      null,
-    );
-    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(
-      mockMembers,
-    );
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
     const result = await couplesService.join('couple-123', 'invited-123');
 
@@ -177,13 +154,11 @@ describe('join', () => {
       id: 'user-123',
       email: 'user@test.com',
     } as any);
-    vi.mocked(
-      couplesRepository.findInvitationByCoupleAndEmail,
-    ).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue(null);
 
-    await expect(
-      couplesService.join('couple-123', 'user-123'),
-    ).rejects.toMatchObject({ statusCode: 404 });
+    await expect(couplesService.join('couple-123', 'user-123')).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 });
 
@@ -209,24 +184,20 @@ describe('leave', () => {
       role: 'owner',
     } as any);
 
-    await expect(
-      couplesService.leave('couple-123', 'owner-123'),
-    ).rejects.toMatchObject({ statusCode: 403 });
+    await expect(couplesService.leave('couple-123', 'owner-123')).rejects.toMatchObject({
+      statusCode: 403,
+    });
   });
 });
 
 describe('dissolve', () => {
   it('dissolves couple when owner', async () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
-    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(
-      mockMembers,
-    );
+    vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
     await couplesService.dissolve('couple-123', 'owner-123');
 
-    expect(couplesRepository.unshareMovements).toHaveBeenCalledWith(
-      'couple-123',
-    );
+    expect(couplesRepository.unshareMovements).toHaveBeenCalledWith('couple-123');
     expect(couplesRepository.unshareDebts).toHaveBeenCalledWith('couple-123');
     expect(couplesRepository.dissolveCouple).toHaveBeenCalledWith('couple-123');
   });
@@ -237,8 +208,8 @@ describe('dissolve', () => {
       createdBy: 'owner-123',
     });
 
-    await expect(
-      couplesService.dissolve('couple-123', 'other-user'),
-    ).rejects.toMatchObject({ statusCode: 403 });
+    await expect(couplesService.dissolve('couple-123', 'other-user')).rejects.toMatchObject({
+      statusCode: 403,
+    });
   });
 });

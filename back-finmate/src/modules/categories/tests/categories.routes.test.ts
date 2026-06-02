@@ -219,8 +219,6 @@ describe('DELETE /categories/:id', () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(409);
 
-    expect(res.body.error).toBe(
-      'No puedes eliminar una categoría que tiene movimientos asociados',
-    );
+    expect(res.body.error).toBe('No puedes eliminar una categoría que tiene movimientos asociados');
   });
 });

@@ -12,11 +12,7 @@ export async function findById(id: string) {
   return result[0] ?? null;
 }
 
-export async function findByNameAndUser(
-  name: string,
-  userId: string,
-  excludeId?: string,
-) {
+export async function findByNameAndUser(name: string, userId: string, excludeId?: string) {
   const conditions = [
     eq(categories.name, name),
     eq(categories.userId, userId),
@@ -53,10 +49,7 @@ export async function findByUser(userId: string, type?: string) {
     .select()
     .from(categories)
     .where(and(...conditions))
-    .orderBy(
-      sql`${categories.isSystem} DESC`,
-      categories.name,
-    );
+    .orderBy(sql`${categories.isSystem} DESC`, categories.name);
 }
 
 export async function create(data: {

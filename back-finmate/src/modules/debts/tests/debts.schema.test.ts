@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  createDebtSchema,
-  updateDebtSchema,
-  debtParamsSchema,
-} from '../debts.schema.js';
+import { createDebtSchema, updateDebtSchema, debtParamsSchema } from '../debts.schema.js';
 
 describe('createDebtSchema', () => {
   it('accepts valid data with only required fields', () => {
@@ -34,9 +30,7 @@ describe('createDebtSchema', () => {
   });
 
   it('rejects empty title', () => {
-    expect(() =>
-      createDebtSchema.parse({ title: '', initialAmount: '100' }),
-    ).toThrow();
+    expect(() => createDebtSchema.parse({ title: '', initialAmount: '100' })).toThrow();
   });
 
   it('rejects title exceeding 150 characters', () => {
@@ -46,9 +40,7 @@ describe('createDebtSchema', () => {
   });
 
   it('rejects invalid initialAmount', () => {
-    expect(() =>
-      createDebtSchema.parse({ title: 'Test', initialAmount: 'abc' }),
-    ).toThrow();
+    expect(() => createDebtSchema.parse({ title: 'Test', initialAmount: 'abc' })).toThrow();
   });
 
   it('rejects dueDay below 1', () => {

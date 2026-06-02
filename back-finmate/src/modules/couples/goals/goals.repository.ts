@@ -1,18 +1,12 @@
 import { eq, and, isNull } from 'drizzle-orm';
 import { db } from '../../../shared/database/connection.js';
-import {
-  coupleGoals,
-  goalContributions,
-  users,
-} from '../../../shared/database/schema.js';
+import { coupleGoals, goalContributions, users } from '../../../shared/database/schema.js';
 
 export async function findByCouple(coupleId: string) {
   return await db
     .select()
     .from(coupleGoals)
-    .where(
-      and(eq(coupleGoals.coupleId, coupleId), isNull(coupleGoals.deletedAt)),
-    )
+    .where(and(eq(coupleGoals.coupleId, coupleId), isNull(coupleGoals.deletedAt)))
     .orderBy(coupleGoals.createdAt);
 }
 
@@ -43,18 +37,12 @@ export async function create(data: typeof coupleGoals.$inferInsert) {
   await db.insert(coupleGoals).values(data);
 }
 
-export async function update(
-  id: string,
-  data: Partial<typeof coupleGoals.$inferInsert>,
-) {
+export async function update(id: string, data: Partial<typeof coupleGoals.$inferInsert>) {
   await db.update(coupleGoals).set(data).where(eq(coupleGoals.id, id));
 }
 
 export async function softDelete(id: string) {
-  await db
-    .update(coupleGoals)
-    .set({ deletedAt: new Date() })
-    .where(eq(coupleGoals.id, id));
+  await db.update(coupleGoals).set({ deletedAt: new Date() }).where(eq(coupleGoals.id, id));
 }
 
 export async function findContributionsByGoal(goalId: string) {
@@ -75,8 +63,6 @@ export async function findContributionsByGoal(goalId: string) {
     .orderBy(goalContributions.date);
 }
 
-export async function createContribution(
-  data: typeof goalContributions.$inferInsert,
-) {
+export async function createContribution(data: typeof goalContributions.$inferInsert) {
   await db.insert(goalContributions).values(data);
 }
