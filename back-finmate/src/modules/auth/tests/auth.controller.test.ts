@@ -150,7 +150,7 @@ describe('authController.logoutAll', () => {
   it('debe llamar al servicio con userId y limpiar cookie', async () => {
     const req = createMockReq({
       cookies: { refreshToken: 'rt' },
-    }) as any;
+    });
     req.userId = 'user-1';
     const res = createMockRes();
 

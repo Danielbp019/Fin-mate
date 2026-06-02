@@ -1,5 +1,3 @@
-import { env } from '../../config/env.js';
-
 function baseHtml(content: string): string {
   return `<!DOCTYPE html>
 <html lang="es">

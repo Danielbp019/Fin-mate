@@ -60,7 +60,7 @@ describe('GET /couples', () => {
         createdBy: 'user-123',
       },
       member: { id: 'member-1', userId: 'user-123', role: 'owner' },
-    } as any);
+    });
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue([
       {
         id: 'member-1',
@@ -125,14 +125,14 @@ describe('POST /couples/:id/invite', () => {
       id: 'couple-123',
       createdBy: 'user-123',
       status: 'active',
-    } as any);
+    });
     vi.mocked(couplesRepository.findMemberByUserAndCouple)
-      .mockResolvedValueOnce({ role: 'owner' } as any)
+      .mockResolvedValueOnce({ role: 'owner' })
       .mockResolvedValueOnce(null);
     vi.mocked(couplesRepository.findUserByEmail).mockResolvedValue({
       id: 'invited-123',
       email: 'invited@test.com',
-    } as any);
+    });
     vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
     vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(null);
 
@@ -154,7 +154,7 @@ describe('DELETE /couples/:id/leave', () => {
       userId: 'user-123',
       coupleId: 'couple-123',
       role: 'member',
-    } as any);
+    });
 
     const token = createToken();
     const res = await request(app)
@@ -172,7 +172,7 @@ describe('DELETE /couples/:id', () => {
       id: 'couple-123',
       createdBy: 'user-123',
       status: 'active',
-    } as any);
+    });
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue([]);
 
     const token = createToken();

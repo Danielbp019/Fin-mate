@@ -7,7 +7,6 @@ import { sendEmail } from '../../shared/email/email.service.js';
 import { verificationEmail, passwordResetEmail } from '../../shared/email/email.templates.js';
 import * as authRepository from './auth.repository.js';
 
-const REFRESH_TOKEN_COOKIE = 'refreshToken';
 const ACCESS_TOKEN_EXPIRY = env.jwtExpiresInSeconds;
 const REFRESH_TOKEN_EXPIRY = env.jwtRefreshExpiresInSeconds;
 

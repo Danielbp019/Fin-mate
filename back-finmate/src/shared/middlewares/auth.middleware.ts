@@ -12,7 +12,7 @@ export async function authMiddleware(req: Request, _res: Response, next: NextFun
 
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, env.jwtSecret) as { sub: string };
-    (req as any).userId = decoded.sub;
+    req.userId = decoded.sub;
     next();
   } catch (error) {
     next(error);

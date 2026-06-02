@@ -89,12 +89,12 @@ describe('invite', () => {
   it('creates invitation when valid', async () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
     vi.mocked(couplesRepository.findMemberByUserAndCouple)
-      .mockResolvedValueOnce({ ...mockMembers[0], role: 'owner' } as any)
+      .mockResolvedValueOnce({ ...mockMembers[0], role: 'owner' })
       .mockResolvedValueOnce(null);
     vi.mocked(couplesRepository.findUserByEmail).mockResolvedValue({
       id: 'invited-123',
       email: 'invited@test.com',
-    } as any);
+    });
     vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
     vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(null);
 
@@ -116,7 +116,7 @@ describe('invite', () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
     vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue({
       role: 'member',
-    } as any);
+    });
 
     await expect(
       couplesService.invite('couple-123', 'test@test.com', 'member-123'),
@@ -130,14 +130,14 @@ describe('join', () => {
     vi.mocked(authRepository.findUserById).mockResolvedValue({
       id: 'invited-123',
       email: 'invited@test.com',
-    } as any);
+    });
     vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue({
       id: 'invitation-1',
       coupleId: 'couple-123',
       invitedEmail: 'invited@test.com',
       status: 'pending',
       expiresAt: new Date(Date.now() + 86400000),
-    } as any);
+    });
     vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
@@ -153,7 +153,7 @@ describe('join', () => {
     vi.mocked(authRepository.findUserById).mockResolvedValue({
       id: 'user-123',
       email: 'user@test.com',
-    } as any);
+    });
     vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue(null);
 
     await expect(couplesService.join('couple-123', 'user-123')).rejects.toMatchObject({
@@ -169,7 +169,7 @@ describe('leave', () => {
       userId: 'user-123',
       coupleId: 'couple-123',
       role: 'member',
-    } as any);
+    });
 
     await couplesService.leave('couple-123', 'user-123');
 
@@ -182,7 +182,7 @@ describe('leave', () => {
       userId: 'owner-123',
       coupleId: 'couple-123',
       role: 'owner',
-    } as any);
+    });
 
     await expect(couplesService.leave('couple-123', 'owner-123')).rejects.toMatchObject({
       statusCode: 403,

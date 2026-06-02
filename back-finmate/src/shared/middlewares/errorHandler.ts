@@ -11,7 +11,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
     return;
   }
 
-  const statusCode = (err as any).statusCode;
+  const statusCode = 'statusCode' in err ? (err as { statusCode?: number }).statusCode : undefined;
   if (statusCode && typeof statusCode === 'number') {
     res.status(statusCode).json({
       error: err.message,

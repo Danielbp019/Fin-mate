@@ -69,7 +69,7 @@ export async function logout(req: Request, res: Response, next: NextFunction) {
 
 export async function updateProfile(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId;
     const data = updateProfileSchema.parse(req.body);
     const result = await authService.updateProfile(userId, data);
 
@@ -81,7 +81,7 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
 
 export async function changePassword(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId;
     const data = changePasswordSchema.parse(req.body);
     const result = await authService.changePassword(userId, data);
 
@@ -123,7 +123,7 @@ export async function verifyEmail(req: Request, res: Response, next: NextFunctio
 
 export async function logoutAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId;
     const refreshTokenValue = req.cookies?.refreshToken;
     const result = await authService.logoutAll(userId, refreshTokenValue);
 

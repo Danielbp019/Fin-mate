@@ -107,7 +107,7 @@ export async function update(
   coupleId: string,
   userId: string,
 ): Promise<GoalResponse> {
-  const goal = await findGoalOwnedBy(goalId, coupleId, userId);
+  await findGoalOwnedBy(goalId, coupleId, userId);
 
   const updateData: Record<string, unknown> = { updatedAt: new Date() };
   if (data.title !== undefined) updateData.title = data.title;
