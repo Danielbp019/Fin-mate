@@ -14,14 +14,13 @@
 
         <div class="fm-panel-body">
           <h2 class="fm-panel-headline">
-            Empieza tu<br>
-            camino a la<br>
-            <em>libertad</em><br>
+            Empieza tu<br />
+            camino a la<br />
+            <em>libertad</em><br />
             financiera.
           </h2>
           <p class="fm-panel-sub">
-            Crea tu cuenta gratis y toma el control de cada peso desde el primer
-            día.
+            Crea tu cuenta gratis y toma el control de cada peso desde el primer día.
           </p>
         </div>
 
@@ -63,10 +62,11 @@
             <span class="fm-deco-badge">👫 Sincronizado</span>
           </div>
           <div class="fm-deco-pair">
-            <div class="fm-deco-avatar" style="background: rgba(186, 117, 23, 0.4)">
-              A
-            </div>
-            <div class="fm-deco-avatar" style="background: rgba(24, 95, 165, 0.4); margin-left: -8px">
+            <div class="fm-deco-avatar" style="background: rgba(186, 117, 23, 0.4)">A</div>
+            <div
+              class="fm-deco-avatar"
+              style="background: rgba(24, 95, 165, 0.4); margin-left: -8px"
+            >
               M
             </div>
             <div class="fm-deco-pair-text">
@@ -92,43 +92,94 @@
           <h1 class="fm-form-title">Crea tu cuenta</h1>
         </div>
 
-        <v-alert v-if="error" class="fm-alert mb-5" closable density="compact" rounded="lg" type="error" variant="tonal"
-          @click:close="error = ''">
+        <v-alert
+          v-if="error"
+          class="fm-alert mb-5"
+          closable
+          density="compact"
+          rounded="lg"
+          type="error"
+          variant="tonal"
+          @click:close="error = ''"
+        >
           {{ error }}
         </v-alert>
 
         <v-form class="fm-form" @submit.prevent="handleRegister">
           <div class="fm-field-group">
             <label class="fm-label">Nombre completo</label>
-            <v-text-field v-model="name" class="fm-input" density="comfortable" hide-details="auto"
-              placeholder="Tu nombre" prepend-inner-icon="mdi-account-outline" required rounded="lg"
-              variant="outlined" />
+            <v-text-field
+              v-model="name"
+              class="fm-input"
+              density="comfortable"
+              hide-details="auto"
+              placeholder="Tu nombre"
+              prepend-inner-icon="mdi-account-outline"
+              required
+              rounded="lg"
+              variant="outlined"
+            />
           </div>
 
           <div class="fm-field-group">
             <label class="fm-label">Correo electrónico</label>
-            <v-text-field v-model="email" class="fm-input" density="comfortable" hide-details="auto"
-              placeholder="tu@correo.com" prepend-inner-icon="mdi-email-outline" required rounded="lg" type="email"
-              variant="outlined" />
+            <v-text-field
+              v-model="email"
+              class="fm-input"
+              density="comfortable"
+              hide-details="auto"
+              placeholder="tu@correo.com"
+              prepend-inner-icon="mdi-email-outline"
+              required
+              rounded="lg"
+              type="email"
+              variant="outlined"
+            />
           </div>
 
           <div class="fm-field-row">
             <div class="fm-field-group">
               <label class="fm-label">Contraseña</label>
-              <v-text-field v-model="password" class="fm-input" density="comfortable" hide-details="auto"
-                placeholder="••••••••" prepend-inner-icon="mdi-lock-outline" required rounded="lg" type="password"
-                variant="outlined" />
+              <v-text-field
+                v-model="password"
+                class="fm-input"
+                density="comfortable"
+                hide-details="auto"
+                placeholder="••••••••"
+                prepend-inner-icon="mdi-lock-outline"
+                required
+                rounded="lg"
+                type="password"
+                variant="outlined"
+              />
             </div>
 
             <div class="fm-field-group">
               <label class="fm-label">Confirmar contraseña</label>
-              <v-text-field v-model="confirmPassword" class="fm-input" density="comfortable" hide-details="auto"
-                placeholder="••••••••" prepend-inner-icon="mdi-lock-check-outline" required rounded="lg"
-                :rules="[confirmMatch]" type="password" variant="outlined" />
+              <v-text-field
+                v-model="confirmPassword"
+                class="fm-input"
+                density="comfortable"
+                hide-details="auto"
+                placeholder="••••••••"
+                prepend-inner-icon="mdi-lock-check-outline"
+                required
+                rounded="lg"
+                :rules="[confirmMatch]"
+                type="password"
+                variant="outlined"
+              />
             </div>
           </div>
 
-          <v-btn block class="fm-btn-submit mt-5" :loading="loading" rounded="lg" size="large" type="submit">
+          <v-btn
+            block
+            class="fm-btn-submit mt-5"
+            :loading="loading"
+            rounded="lg"
+            size="large"
+            type="submit"
+          >
             <template #loader>
               <v-progress-circular color="white" indeterminate size="20" width="2" />
             </template>
@@ -155,40 +206,40 @@
 </template>
 
 <script lang="ts" setup>
-import type { AxiosError } from 'axios'
-import { ref } from 'vue'
-import LegalModal from '@/components/LegalModal.vue'
-import { useAuthStore } from '@/stores/auth'
-import '@/styles/theme.css'
+import type { AxiosError } from 'axios';
+import { ref } from 'vue';
+import LegalModal from '@/components/LegalModal.vue';
+import { useAuthStore } from '@/stores/auth';
+import '@/styles/theme.css';
 
-const auth = useAuthStore()
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const loading = ref(false)
-const error = ref('')
-const showPrivacy = ref(false)
-const showTerms = ref(false)
+const auth = useAuthStore();
+const name = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const loading = ref(false);
+const error = ref('');
+const showPrivacy = ref(false);
+const showTerms = ref(false);
 
 function confirmMatch(v: string) {
-  return v === password.value || 'Las contraseñas no coinciden'
+  return v === password.value || 'Las contraseñas no coinciden';
 }
 
 async function handleRegister() {
   if (password.value !== confirmPassword.value) {
-    error.value = 'Las contraseñas no coinciden'
-    return
+    error.value = 'Las contraseñas no coinciden';
+    return;
   }
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = '';
   try {
-    await auth.register(name.value, email.value, password.value)
+    await auth.register(name.value, email.value, password.value);
   } catch (error_) {
-    const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message
-    error.value = msg || 'Error al registrarse'
+    const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message;
+    error.value = msg || 'Error al registrarse';
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>

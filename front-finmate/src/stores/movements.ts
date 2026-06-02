@@ -50,8 +50,8 @@ export const useMovementsStore = defineStore('movements', () => {
       pagination.value = res.data.pagination;
     } catch (error_: unknown) {
       const msg =
-        (error_ as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error ?? 'Error al cargar movimientos';
+        (error_ as { response?: { data?: { error?: string } } })?.response?.data?.error ??
+        'Error al cargar movimientos';
       error.value = msg;
     } finally {
       loading.value = false;

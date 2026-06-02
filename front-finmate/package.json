@@ -10,8 +10,9 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "prettier --check . && eslint",
+    "lint:fix": "prettier --write . && eslint --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@fontsource/dm-sans": "5.2.8",
@@ -31,8 +32,10 @@
     "@vitejs/plugin-vue": "6.0.5",
     "@vue/tsconfig": "0.9.0",
     "eslint": "9.39.4",
+    "eslint-config-prettier": "10.1.8",
     "eslint-config-vuetify": "4.3.4",
     "npm-run-all2": "8.0.4",
+    "prettier": "3.8.3",
     "sass-embedded": "1.98.0",
     "typescript": "~5.9.3",
     "unplugin-fonts": "1.4.0",

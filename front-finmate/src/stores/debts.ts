@@ -30,8 +30,8 @@ export const useDebtsStore = defineStore('debts', () => {
       debts.value = res.data;
     } catch (error_: unknown) {
       const msg =
-        (error_ as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error ?? 'Error al cargar deudas';
+        (error_ as { response?: { data?: { error?: string } } })?.response?.data?.error ??
+        'Error al cargar deudas';
       error.value = msg;
     } finally {
       loading.value = false;

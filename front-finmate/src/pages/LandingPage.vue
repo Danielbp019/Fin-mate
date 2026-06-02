@@ -1,6 +1,8 @@
 <template>
   <div class="lp-root">
-    <h1 class="sr-only">FinMate — Tu asistente financiero personal. Controla ingresos, gastos y deudas.</h1>
+    <h1 class="sr-only">
+      FinMate — Tu asistente financiero personal. Controla ingresos, gastos y deudas.
+    </h1>
 
     <!-- NAV -->
     <nav class="lp-nav">
@@ -15,7 +17,9 @@
       <div class="lp-nav-actions">
         <button class="btn-ghost">¿Cómo funciona?</button>
         <button class="btn-ghost" @click="router.push({ name: 'Login' })">Iniciar sesión</button>
-        <button class="btn-primary" @click="router.push({ name: 'Register' })">Empezar gratis</button>
+        <button class="btn-primary" @click="router.push({ name: 'Register' })">
+          Empezar gratis
+        </button>
       </div>
     </nav>
 
@@ -28,25 +32,32 @@
         </div>
 
         <h2 class="lp-headline">
-          Tu dinero,<br>
-          bajo <em>control</em><br>
+          Tu dinero,<br />
+          bajo <em>control</em><br />
           por fin.
         </h2>
 
         <p class="lp-sub">
-          Registra ingresos y gastos, gestiona deudas con estrategia y sincroniza finanzas con tu pareja. Todo en un
-          solo lugar.
+          Registra ingresos y gastos, gestiona deudas con estrategia y sincroniza finanzas con tu
+          pareja. Todo en un solo lugar.
         </p>
 
         <div class="lp-cta-row">
           <button class="btn-cta" @click="router.push({ name: 'Register' })">
             <svg aria-hidden="true" fill="none" height="16" viewBox="0 0 24 24" width="16">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="white" stroke-linecap="round" stroke-linejoin="round"
-                stroke-width="2" />
+              <path
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+                stroke="white"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
             </svg>
             Comenzar gratis
           </button>
-          <button class="btn-outline" @click="router.push({ name: 'Login' })">Iniciar sesión</button>
+          <button class="btn-outline" @click="router.push({ name: 'Login' })">
+            Iniciar sesión
+          </button>
         </div>
       </div>
 
@@ -55,8 +66,16 @@
 
         <div class="hero-card-stack">
           <div class="hero-card hc-back1">
-            <div style="height:12px; background:#e8f0e8; border-radius:4px; margin-bottom:8px; width:60%" />
-            <div style="height:24px; background:#e8f0e8; border-radius:4px; width:80%" />
+            <div
+              style="
+                height: 12px;
+                background: #e8f0e8;
+                border-radius: 4px;
+                margin-bottom: 8px;
+                width: 60%;
+              "
+            />
+            <div style="height: 24px; background: #e8f0e8; border-radius: 4px; width: 80%" />
           </div>
 
           <div class="hero-card hc-main">
@@ -72,25 +91,29 @@
 
             <div class="hc-bar-label">
               <span>Gastos vs presupuesto</span>
-              <span style="color:var(--green-deep);font-weight:500">68%</span>
+              <span style="color: var(--green-deep); font-weight: 500">68%</span>
             </div>
             <div class="hc-bar-track">
-              <div class="hc-bar-fill" style="width:68%" />
+              <div class="hc-bar-fill" style="width: 68%" />
             </div>
 
             <div class="hc-divider" />
 
-            <div class="hc-mini-stat" style="margin-bottom:8px">
+            <div class="hc-mini-stat" style="margin-bottom: 8px">
               <div>
-                <div style="font-size:12px;color:var(--ink-soft);margin-bottom:2px">Ingresos</div>
+                <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
+                  Ingresos
+                </div>
                 <div class="hc-stat-num">$7,200</div>
               </div>
               <div class="hc-mini-pill pill-green">↑ 12%</div>
             </div>
 
-            <div class="hc-mini-stat" style="margin-bottom:8px">
+            <div class="hc-mini-stat" style="margin-bottom: 8px">
               <div>
-                <div style="font-size:12px;color:var(--ink-soft);margin-bottom:2px">Gastos</div>
+                <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
+                  Gastos
+                </div>
                 <div class="hc-stat-num">$2,380</div>
               </div>
               <div class="hc-mini-pill pill-gold">→ estable</div>
@@ -98,7 +121,9 @@
 
             <div class="hc-mini-stat">
               <div>
-                <div style="font-size:12px;color:var(--ink-soft);margin-bottom:2px">Deuda activa</div>
+                <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
+                  Deuda activa
+                </div>
                 <div class="hc-stat-num">$1,450</div>
               </div>
               <div class="hc-mini-pill pill-blue">En plan</div>
@@ -108,8 +133,16 @@
           <div class="fb fb2">
             <div class="fb-icon fi-gold">💰</div>
             <div>
-              <div style="font-size:11px;color:var(--ink-soft)">Ahorro del mes</div>
-              <div style="font-size:13px;font-weight:600;color:var(--gold);font-family:'Playfair Display',serif">+$820
+              <div style="font-size: 11px; color: var(--ink-soft)">Ahorro del mes</div>
+              <div
+                style="
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: var(--gold);
+                  font-family: 'Playfair Display', serif;
+                "
+              >
+                +$820
               </div>
             </div>
           </div>
@@ -117,8 +150,10 @@
           <div class="fb fb1">
             <div class="fb-icon fi-blue">👫</div>
             <div>
-              <div style="font-size:11px;color:var(--ink-soft)">Modo pareja</div>
-              <div style="font-size:12px;font-weight:500;color:var(--blue-deep)">Sincronizado</div>
+              <div style="font-size: 11px; color: var(--ink-soft)">Modo pareja</div>
+              <div style="font-size: 12px; font-weight: 500; color: var(--blue-deep)">
+                Sincronizado
+              </div>
             </div>
           </div>
         </div>
@@ -150,12 +185,19 @@
         <div class="feat-card">
           <div class="feat-icon fi-green">
             <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#0F6E56" stroke-linecap="round"
-                stroke-linejoin="round" stroke-width="2" />
+              <path
+                d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"
+                stroke="#0F6E56"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
             </svg>
           </div>
           <div class="feat-name">Control de ingresos y gastos</div>
-          <div class="feat-desc">Registra cada movimiento y visualiza a dónde va tu dinero con claridad absoluta.</div>
+          <div class="feat-desc">
+            Registra cada movimiento y visualiza a dónde va tu dinero con claridad absoluta.
+          </div>
         </div>
 
         <div class="feat-card">
@@ -163,23 +205,34 @@
             <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path
                 d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
-                stroke="#185FA5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                stroke="#185FA5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
             </svg>
           </div>
           <div class="feat-name">Modo pareja</div>
-          <div class="feat-desc">Sincroniza las finanzas con tu pareja, define responsabilidades y alcancen metas
-            juntos.</div>
+          <div class="feat-desc">
+            Sincroniza las finanzas con tu pareja, define responsabilidades y alcancen metas juntos.
+          </div>
         </div>
 
         <div class="feat-card">
           <div class="feat-icon fi-gold">
             <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#BA7517" stroke-linecap="round" stroke-linejoin="round"
-                stroke-width="2" />
+              <path
+                d="M22 12h-4l-3 9L9 3l-3 9H2"
+                stroke="#BA7517"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
             </svg>
           </div>
           <div class="feat-name">Gestión de deudas</div>
-          <div class="feat-desc">Estrategias probadas como bola de nieve o avalancha para liquidar deudas más rápido.
+          <div class="feat-desc">
+            Estrategias probadas como bola de nieve o avalancha para liquidar deudas más rápido.
           </div>
         </div>
       </div>
@@ -193,7 +246,9 @@
       </div>
       <div class="strip-right">
         <button class="btn-ghost-white">Ver demo</button>
-        <button class="btn-white" @click="router.push({ name: 'Register' })">Crear cuenta gratis</button>
+        <button class="btn-white" @click="router.push({ name: 'Register' })">
+          Crear cuenta gratis
+        </button>
       </div>
     </div>
 
@@ -201,14 +256,14 @@
     <footer class="lp-footer">
       <div class="footer-logo">
         FinMate — una aplicación de
-        <img alt="firma" class="footer-signature" :src="firmaNegra">
+        <img alt="firma" class="footer-signature" :src="firmaNegra" />
       </div>
       <div class="footer-right">
         <div class="footer-links">
           <button type="button" @click="showPrivacy = true">Privacidad</button>
           <button type="button" @click="showTerms = true">Términos</button>
         </div>
-        <div style="font-size:13px;color:var(--ink-soft);opacity:0.6">© 2026 FinMate</div>
+        <div style="font-size: 13px; color: var(--ink-soft); opacity: 0.6">© 2026 FinMate</div>
       </div>
     </footer>
 
@@ -218,13 +273,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import firmaNegra from '@/assets/daniel_firma_black.svg'
-import LegalModal from '@/components/LegalModal.vue'
-import '@/styles/theme.css'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import firmaNegra from '@/assets/daniel_firma_black.svg';
+import LegalModal from '@/components/LegalModal.vue';
+import '@/styles/theme.css';
 
-const router = useRouter()
-const showPrivacy = ref(false)
-const showTerms = ref(false)
+const router = useRouter();
+const showPrivacy = ref(false);
+const showTerms = ref(false);
 </script>

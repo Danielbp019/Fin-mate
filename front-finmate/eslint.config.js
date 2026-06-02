@@ -1,5 +1,6 @@
-import vuetify from 'eslint-config-vuetify'
+import prettier from 'eslint-config-prettier';
+import vuetify from 'eslint-config-vuetify';
 
-export default vuetify({
-  ts: true,
-})
+const config = await vuetify({ ts: true });
+
+export default [...config, prettier];

@@ -28,8 +28,8 @@ export const useCategoriesStore = defineStore('categories', () => {
       categories.value = res.data;
     } catch (error_: unknown) {
       const msg =
-        (error_ as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error ?? 'Error al cargar categorías';
+        (error_ as { response?: { data?: { error?: string } } })?.response?.data?.error ??
+        'Error al cargar categorías';
       error.value = msg;
     } finally {
       loading.value = false;

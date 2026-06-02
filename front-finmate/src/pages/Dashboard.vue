@@ -43,8 +43,7 @@
     <div class="dashboard-content">
       <div class="content-card">
         <h3 class="content-card-title">Últimos movimientos</h3>
-        <p>Aún no hay movimientos registrados. Comienza
-          agregando tus ingresos y gastos.</p>
+        <p>Aún no hay movimientos registrados. Comienza agregando tus ingresos y gastos.</p>
       </div>
 
       <div class="content-card">
@@ -56,8 +55,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from '@/stores/auth'
-import '@/styles/theme.css'
+import { useAuthStore } from '@/stores/auth';
+import '@/styles/theme.css';
 
-const auth = useAuthStore()
+const auth = useAuthStore();
 </script>

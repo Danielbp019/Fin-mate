@@ -309,11 +309,7 @@ body {
   width: 420px;
   height: 420px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(29, 158, 117, 0.12) 0%,
-    rgba(29, 158, 117, 0) 70%
-  );
+  background: radial-gradient(circle, rgba(29, 158, 117, 0.12) 0%, rgba(29, 158, 117, 0) 70%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
