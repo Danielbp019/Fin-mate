@@ -43,13 +43,13 @@
     <div class="dashboard-content">
       <div class="content-card">
         <h3 class="content-card-title">Últimos movimientos</h3>
-        <p style="font-size:13px;color:var(--ink-soft);font-weight:300">Aún no hay movimientos registrados. Comienza
+        <p>Aún no hay movimientos registrados. Comienza
           agregando tus ingresos y gastos.</p>
       </div>
 
       <div class="content-card">
         <h3 class="content-card-title">Deudas activas</h3>
-        <p style="font-size:13px;color:var(--ink-soft);font-weight:300">No tienes deudas registradas.</p>
+        <p>No tienes deudas registradas.</p>
       </div>
     </div>
   </div>

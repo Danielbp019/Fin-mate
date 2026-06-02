@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,26 +28,31 @@ const router = createRouter({
           name: 'Dashboard',
           component: () => import('@/pages/Dashboard.vue'),
         },
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: () => import('@/pages/Profile.vue'),
+        },
       ],
     },
   ],
-})
+});
 
-router.beforeEach(async to => {
-  const auth = useAuthStore()
+router.beforeEach(async (to) => {
+  const auth = useAuthStore();
 
-  const guestRoutes = new Set(['Landing', 'Login', 'Register'])
+  const guestRoutes = new Set(['Landing', 'Login', 'Register']);
 
   if (!auth.appReady && !guestRoutes.has(to.name as string)) {
-    await auth.initialize()
+    await auth.initialize();
   }
 
   if (!auth.isAuthenticated && !guestRoutes.has(to.name as string)) {
-    return { name: 'Login' }
+    return { name: 'Login' };
   }
   if (auth.isAuthenticated && guestRoutes.has(to.name as string)) {
-    return { name: 'Dashboard' }
+    return { name: 'Dashboard' };
   }
-})
+});
 
-export default router
+export default router;

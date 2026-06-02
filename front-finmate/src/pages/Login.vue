@@ -149,21 +149,4 @@ async function handleLogin() {
   top: -60px;
   left: -80px;
 }
-
-/* Vuetify input overrides */
-.fm-input :deep(.v-field__outline__start),
-.fm-input :deep(.v-field__outline__end),
-.fm-input :deep(.v-field__outline__notch) {
-  border-color: rgba(15, 110, 86, 0.25) !important;
-}
-
-.fm-input :deep(.v-field--focused .v-field__outline__start),
-.fm-input :deep(.v-field--focused .v-field__outline__end),
-.fm-input :deep(.v-field--focused .v-field__outline__notch) {
-  border-color: var(--green-mid) !important;
-}
-
-.fm-input :deep(.v-icon) {
-  color: var(--green-mid) !important;
-}
 </style>

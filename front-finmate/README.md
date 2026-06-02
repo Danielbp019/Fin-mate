@@ -77,12 +77,43 @@ Todas las entradas deben validarse usando Zod.
 
 - Validar toda entrada externa.
 - No exponer errores internos en producción.
+- Todas las rutas, salvo login, register, landing page y las de recuperación de cuenta, deben estar protegidas para que no puedan verse si el usuario no está autenticado.
 
 ## Pendientes
 
 Funcionalidades planificadas para futuras iteraciones:
 
-- Pantalla de registro de gastos/ingresos
-- Dashboard con gráficos
-- Modo finanzas de pareja
-- Consejos para administrar deudas
+### Auth
+
+- Cerrar sesi&oacute;n en todos los dispositivos (`logout-all`)
+- Pantalla de recuperaci&oacute;n de contrase&ntilde;a (`forgot-password`, `reset-password`)
+- Verificaci&oacute;n de email (`verify-email`)
+
+### Dashboard
+
+- Conectar resumen con datos reales (ingresos, gastos, balance del mes actual)
+- Gr&aacute;ficos visuales de evoluci&oacute;n mensual
+
+### Categor&iacute;as
+
+- Pantalla de administraci&oacute;n de categor&iacute;as (CRUD): listar, crear, editar, eliminar
+
+### Movimientos
+
+- Pantalla de registro de ingresos/gastos con selecci&oacute;n de categor&iacute;a
+- Listado con filtros por tipo, categor&iacute;a y rango de fechas
+- Edici&oacute;n y eliminaci&oacute;n de movimientos
+
+### Deudas
+
+- Pantalla de administraci&oacute;n de deudas (CRUD): listar, crear, editar, eliminar
+- Detalle de deuda con historial de pagos
+- Registro de pagos a deudas
+
+### Modo Pareja
+
+- Pantalla para crear o unirse a un grupo de pareja
+- Invitar a la pareja por email
+- Metas de pareja: crear, editar, eliminar metas compartidas
+- Contribuir a metas de pareja
+- Abandonar o disolver el grupo

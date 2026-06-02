@@ -37,6 +37,8 @@
       <v-list>
         <v-list-item prepend-icon="mdi-view-dashboard" title="Dashboard" :to="{ name: 'Dashboard' }" />
 
+        <v-list-item prepend-icon="mdi-account" title="Perfil" :to="{ name: 'Profile' }" />
+
         <v-list-item disabled prepend-icon="mdi-shape" title="Categorías" />
       </v-list>
     </v-navigation-drawer>

@@ -157,8 +157,8 @@
 <script lang="ts" setup>
 import type { AxiosError } from 'axios'
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
 import LegalModal from '@/components/LegalModal.vue'
+import { useAuthStore } from '@/stores/auth'
 import '@/styles/theme.css'
 
 const auth = useAuthStore()
@@ -241,30 +241,5 @@ async function handleRegister() {
 
 .fm-form-header {
   margin-bottom: 28px;
-}
-
-.fm-field-group {
-  margin-bottom: 16px;
-}
-
-.fm-switch-link {
-  margin-top: 16px;
-}
-
-/* Vuetify input overrides */
-.fm-input :deep(.v-field__outline__start),
-.fm-input :deep(.v-field__outline__end),
-.fm-input :deep(.v-field__outline__notch) {
-  border-color: rgba(15, 110, 86, 0.25) !important;
-}
-
-.fm-input :deep(.v-field--focused .v-field__outline__start),
-.fm-input :deep(.v-field--focused .v-field__outline__end),
-.fm-input :deep(.v-field--focused .v-field__outline__notch) {
-  border-color: var(--green-mid) !important;
-}
-
-.fm-input :deep(.v-icon) {
-  color: var(--green-mid) !important;
 }
 </style>
