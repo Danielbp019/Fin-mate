@@ -52,7 +52,7 @@ CREATE TABLE `couple_members` (
 CREATE TABLE `couples` (
 	`id` char(36) NOT NULL,
 	`created_by` char(36) NOT NULL,
-	`name` varchar(120),
+	`name` varchar(120) NOT NULL,
 	`status` enum('active','inactive') NOT NULL DEFAULT 'active',
 	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 	`updated_at` datetime(3) NOT NULL,

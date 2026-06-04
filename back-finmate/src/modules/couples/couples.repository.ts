@@ -95,7 +95,7 @@ export async function findInvitationByCoupleAndEmail(coupleId: string, email: st
 export async function createCouple(data: {
   id: string;
   createdBy: string;
-  name: string | null;
+  name: string;
   status: 'active';
   createdAt: Date;
   updatedAt: Date;

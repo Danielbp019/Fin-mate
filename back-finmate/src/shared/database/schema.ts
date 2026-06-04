@@ -60,7 +60,7 @@ export const couples = mysqlTable(
   {
     id: char('id', { length: 36 }).primaryKey(),
     createdBy: char('created_by', { length: 36 }).notNull(),
-    name: varchar('name', { length: 120 }),
+    name: varchar('name', { length: 120 }).notNull(),
     status: mysqlEnum('status', ['active', 'inactive']).notNull().default('active'),
     createdAt: datetime('created_at', { fsp: 3 })
       .notNull()
