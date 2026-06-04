@@ -1,7 +1,9 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { ZodError } from 'zod';
 import { AppError } from '../errors/AppError.js';
+
+const { TokenExpiredError } = jwt;
 import { env } from '../../config/env.js';
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {

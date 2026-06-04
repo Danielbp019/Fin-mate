@@ -1,7 +1,9 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import jwt, { TokenExpiredError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { env } from '../../config/env.js';
 import { AppError } from '../errors/AppError.js';
+
+const { TokenExpiredError } = jwt;
 
 export async function authMiddleware(req: Request, _res: Response, next: NextFunction) {
   try {
