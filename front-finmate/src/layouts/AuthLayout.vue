@@ -47,15 +47,19 @@
 
     <v-navigation-drawer v-model="drawer">
       <v-list>
+        <v-list-item prepend-icon="mdi-shape" title="Categorías" :to="{ name: 'Categories' }" />
+
         <v-list-item
           prepend-icon="mdi-view-dashboard"
           title="Dashboard"
           :to="{ name: 'Dashboard' }"
         />
 
-        <v-list-item prepend-icon="mdi-account" title="Perfil" :to="{ name: 'Profile' }" />
-
-        <v-list-item prepend-icon="mdi-shape" title="Categorías" :to="{ name: 'Categories' }" />
+        <v-list-item
+          prepend-icon="mdi-credit-card-clock-outline"
+          title="Deudas"
+          :to="{ name: 'Debts' }"
+        />
 
         <v-list-item
           prepend-icon="mdi-swap-horizontal-bold"
@@ -64,10 +68,12 @@
         />
 
         <v-list-item
-          prepend-icon="mdi-credit-card-clock-outline"
-          title="Deudas"
-          :to="{ name: 'Debts' }"
+          prepend-icon="mdi-account-heart"
+          title="Pareja"
+          :to="{ name: 'Couples' }"
         />
+
+        <v-list-item prepend-icon="mdi-account" title="Perfil" :to="{ name: 'Profile' }" />
       </v-list>
     </v-navigation-drawer>
 

@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { createCoupleSchema, inviteSchema } from './couples.schema.js';
+import { createCoupleSchema, updateCoupleSchema, inviteSchema } from './couples.schema.js';
 import * as couplesService from './couples.service.js';
 
 export async function getMyCouple(req: Request, res: Response, next: NextFunction) {
@@ -18,6 +18,18 @@ export async function create(req: Request, res: Response, next: NextFunction) {
     const data = createCoupleSchema.parse(req.body);
     const result = await couplesService.create(data, userId);
     res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function update(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req as unknown as { userId: string };
+    const coupleId = req.params.id as string;
+    const data = updateCoupleSchema.parse(req.body);
+    const result = await couplesService.update(coupleId, data, userId);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

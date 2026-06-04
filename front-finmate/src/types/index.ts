@@ -136,3 +136,69 @@ export interface CreatePaymentBody {
   paymentDate: string;
   notes?: string;
 }
+
+export interface CoupleMember {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  role: 'owner' | 'member';
+  joinedAt: string;
+}
+
+export interface Couple {
+  id: string;
+  name: string;
+  status: 'active' | 'inactive';
+  members: CoupleMember[];
+}
+
+export interface CreateCoupleBody {
+  name: string;
+}
+
+export interface UpdateCoupleBody {
+  name: string;
+}
+
+export interface Goal {
+  id: string;
+  coupleId: string;
+  title: string;
+  targetAmount: string;
+  currentAmount: string;
+  deadline: string | null;
+  status: 'active' | 'completed' | 'cancelled';
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateGoalBody {
+  title: string;
+  targetAmount: string;
+  deadline?: string;
+}
+
+export interface UpdateGoalBody {
+  title?: string;
+  targetAmount?: string;
+  deadline?: string;
+  status?: 'active' | 'completed' | 'cancelled';
+}
+
+export interface Contribution {
+  id: string;
+  goalId: string;
+  userId: string;
+  amount: string;
+  notes: string | null;
+  date: string;
+  createdAt: string;
+}
+
+export interface CreateContributionBody {
+  amount: string;
+  notes?: string;
+  date?: string;
+}

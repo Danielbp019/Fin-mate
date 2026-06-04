@@ -1,5 +1,9 @@
 export interface CreateCoupleBody {
-  name?: string;
+  name: string;
+}
+
+export interface UpdateCoupleBody {
+  name: string;
 }
 
 export interface InviteBody {

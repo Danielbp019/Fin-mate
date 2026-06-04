@@ -148,7 +148,8 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | Método | Ruta                  | Body / Headers | Respuesta                |
 | ------ | --------------------- | -------------- | ------------------------ |
 | GET    | `/couples`            | —              | 200 `CoupleResponse`     |
-| POST   | `/couples`            | `{ name? }`    | 201 `CoupleResponse`     |
+| POST   | `/couples`            | `{ name }`     | 201 `CoupleResponse`     |
+| PATCH  | `/couples/:id`        | `{ name }`     | 200 `CoupleResponse`     |
 | POST   | `/couples/:id/invite` | `{ email }`    | 201 `InvitationResponse` |
 | POST   | `/couples/:id/join`   | —              | 200 `CoupleResponse`     |
 | DELETE | `/couples/:id/leave`  | —              | 200 `{ message }`        |

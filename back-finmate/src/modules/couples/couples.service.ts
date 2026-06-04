@@ -12,13 +12,20 @@ const INVITATION_EXPIRY_DAYS = 7;
 
 function buildCoupleResponse(
   couple: NonNullable<Awaited<ReturnType<typeof couplesRepository.findCoupleById>>>,
-  members: CoupleMemberResponse[],
+  members: { id: string; userId: string; name: string; email: string; role: 'owner' | 'member'; joinedAt: Date }[],
 ): CoupleResponse {
   return {
     id: couple.id,
     name: couple.name,
     status: couple.status,
-    members,
+    members: members.map((m) => ({
+      id: m.id,
+      userId: m.userId,
+      name: m.name,
+      email: m.email,
+      role: m.role,
+      joinedAt: m.joinedAt instanceof Date ? m.joinedAt.toISOString() : m.joinedAt,
+    })),
   };
 }
 
@@ -32,7 +39,27 @@ export async function getMyCouple(userId: string): Promise<CoupleResponse> {
   return buildCoupleResponse(active.couple, members);
 }
 
-export async function create(data: { name?: string }, userId: string): Promise<CoupleResponse> {
+export async function update(coupleId: string, data: { name: string }, userId: string): Promise<CoupleResponse> {
+  const couple = await couplesRepository.findCoupleById(coupleId);
+  if (!couple) {
+    throw new AppError(404, 'Grupo no encontrado');
+  }
+
+  if (couple.status !== 'active') {
+    throw new AppError(400, 'El grupo no está activo');
+  }
+
+  const member = await couplesRepository.findMemberByUserAndCouple(userId, coupleId);
+  if (!member || member.role !== 'owner') {
+    throw new AppError(403, 'Solo el propietario puede cambiar el nombre del grupo');
+  }
+
+  const updated = await couplesRepository.updateCouple(coupleId, data);
+  const members = await couplesRepository.findCoupleMembers(coupleId);
+  return buildCoupleResponse(updated, members);
+}
+
+export async function create(data: { name: string }, userId: string): Promise<CoupleResponse> {
   const existing = await couplesRepository.findActiveCoupleByUserId(userId);
   if (existing) {
     throw new AppError(409, 'Ya perteneces a un grupo activo');
@@ -44,7 +71,7 @@ export async function create(data: { name?: string }, userId: string): Promise<C
   const couple = {
     id: coupleId,
     createdBy: userId,
-    name: data.name ?? null,
+    name: data.name,
     status: 'active' as const,
     createdAt: now,
     updatedAt: now,

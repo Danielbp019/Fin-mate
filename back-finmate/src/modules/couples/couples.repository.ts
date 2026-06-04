@@ -151,6 +151,16 @@ export async function unshareDebts(coupleId: string) {
   await db.update(debts).set({ coupleId: null }).where(eq(debts.coupleId, coupleId));
 }
 
+export async function updateCouple(id: string, data: { name: string }) {
+  await db
+    .update(couples)
+    .set({ name: data.name, updatedAt: new Date() })
+    .where(eq(couples.id, id));
+
+  const [updated] = await db.select().from(couples).where(eq(couples.id, id)).limit(1);
+  return updated;
+}
+
 export async function expireInvitations(coupleId: string) {
   await db
     .update(coupleInvitations)

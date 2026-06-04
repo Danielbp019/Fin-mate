@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../shared/middlewares/auth.middleware.js';
-import { getMyCouple, create, invite, join, leave, dissolve } from './couples.controller.js';
+import { getMyCouple, create, update, invite, join, leave, dissolve } from './couples.controller.js';
 import goalsRouter from './goals/goals.routes.js';
 
 const router = Router();
@@ -9,6 +9,7 @@ router.use(authMiddleware);
 
 router.get('/', getMyCouple);
 router.post('/', create);
+router.patch('/:id', update);
 router.post('/:id/invite', invite);
 router.post('/:id/join', join);
 router.delete('/:id/leave', leave);

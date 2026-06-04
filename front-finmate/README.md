@@ -81,7 +81,7 @@ public/                 Archivos públicos estáticos
 | Categories (CRUD + tabs por tipo)                | ✅             |
 | Movements (CRUD + filtros + paginación)          | ✅             |
 | Debts + Payments                                 | ✅             |
-| Couples + Goals                                  | ❌ Pendiente   |
+| Couples + Goals                                  | ✅             |
 | Dashboard (conectar a datos reales)              | 🔶 Placeholder |
 
 ## Validaciones
