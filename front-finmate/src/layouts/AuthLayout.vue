@@ -95,18 +95,18 @@ import '@/styles/theme.css';
 
 const auth = useAuthStore();
 const theme = useTheme();
-const drawer = shallowRef(false);
+const drawer = shallowRef(true);
 
 onMounted(() => {
   const saved = localStorage.getItem('theme');
   if (saved === 'dark' || saved === 'light') {
-    theme.global.name.value = saved;
+    theme.change(saved);
   }
 });
 
 function toggleTheme() {
   const next = theme.global.name.value === 'light' ? 'dark' : 'light';
-  theme.global.name.value = next;
+    theme.change(next);
   localStorage.setItem('theme', next);
 }
 </script>
