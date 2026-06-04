@@ -124,31 +124,9 @@
               />
             </div>
 
-            <div class="fm-field-row">
-              <div class="fm-field-group">
-                <label class="fm-label">Icono (opcional)</label>
-                <v-text-field
-                  v-model="form.icon"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  placeholder="mdi-food"
-                  rounded="lg"
-                  variant="outlined"
-                />
-              </div>
-              <div class="fm-field-group">
-                <label class="fm-label">Color (opcional)</label>
-                <v-text-field
-                  v-model="form.color"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  placeholder="#FF5733"
-                  rounded="lg"
-                  variant="outlined"
-                />
-              </div>
+            <div class="fm-field-group">
+              <label class="fm-label">Icono (opcional)</label>
+              <IconPicker v-model="form.icon" />
             </div>
 
             <v-btn
@@ -205,6 +183,7 @@ import type { AxiosError } from 'axios';
 import type { Category, CreateCategoryBody, UpdateCategoryBody } from '@/types';
 import { computed, onMounted, ref } from 'vue';
 import { useCategoriesStore } from '@/stores/categories';
+import IconPicker from '@/components/IconPicker.vue';
 import '@/styles/theme.css';
 
 const store = useCategoriesStore();
@@ -221,7 +200,6 @@ const form = ref<CreateCategoryBody>({
   name: '',
   type: 'expense',
   icon: '',
-  color: '',
 });
 
 const typeOptions = [
@@ -247,7 +225,7 @@ onMounted(() => {
 
 function openCreate() {
   editingId.value = null;
-  form.value = { name: '', type: 'expense', icon: '', color: '' };
+  form.value = { name: '', type: 'expense', icon: '' };
   formError.value = '';
   dialogOpen.value = true;
 }
@@ -258,7 +236,6 @@ function openEdit(cat: Category) {
     name: cat.name,
     type: cat.type,
     icon: cat.icon ?? '',
-    color: cat.color ?? '',
   };
   formError.value = '';
   dialogOpen.value = true;
@@ -282,7 +259,6 @@ async function handleSave() {
       type: form.value.type,
     };
     if (form.value.icon) payload.icon = form.value.icon;
-    if (form.value.color) payload.color = form.value.color;
 
     await (editingId.value
       ? store.updateCategory(editingId.value, payload as UpdateCategoryBody)
