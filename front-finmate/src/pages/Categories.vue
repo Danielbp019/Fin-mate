@@ -41,6 +41,10 @@
         :items-per-page="-1"
         :loading="store.loading"
       >
+        <template #item.icon="{ item }">
+          <v-icon v-if="item.icon" size="24">{{ item.icon }}</v-icon>
+          <span v-else class="text-caption text-disabled">&mdash;</span>
+        </template>
         <template #item.type="{ item }">
           <v-chip :color="item.type === 'income' ? 'green' : 'orange'" size="small">
             {{ item.type === 'income' ? 'Ingreso' : 'Gasto' }}
@@ -209,6 +213,7 @@ const typeOptions = [
 
 const headers = [
   { title: 'Nombre', key: 'name', align: 'start' as const },
+  { title: 'Icono', key: 'icon', sortable: false, align: 'center' as const },
   { title: 'Tipo', key: 'type', sortable: false },
   { title: 'Origen', key: 'isSystem', sortable: false },
   { title: 'Acciones', key: 'actions', sortable: false, align: 'end' as const },
