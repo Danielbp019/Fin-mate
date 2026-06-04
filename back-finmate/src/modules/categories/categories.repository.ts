@@ -58,7 +58,6 @@ export async function create(data: {
   type: 'income' | 'expense';
   name: string;
   icon?: string | null;
-  color?: string | null;
   isActive: boolean;
   isSystem: boolean;
   createdAt: Date;
@@ -72,7 +71,6 @@ export async function update(
   data: Partial<{
     name: string;
     icon: string | null;
-    color: string | null;
     isActive: boolean;
     updatedAt: Date;
   }>,

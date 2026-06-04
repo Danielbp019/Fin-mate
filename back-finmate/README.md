@@ -104,8 +104,8 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | ------ | ----------------- | ------------------------------------------------------------ | ------------------------ |
 | GET    | `/categories`     | `?type=income\|expense`                                      | 200 `CategoryResponse[]` |
 | GET    | `/categories/:id` | —                                                            | 200 `CategoryResponse`   |
-| POST   | `/categories`     | `{ name, type, icon?, color?, parentId?, sortOrder? }`       | 201 `CategoryResponse`   |
-| PATCH  | `/categories/:id` | `{ name?, icon?, color?, parentId?, sortOrder?, isActive? }` | 200 `CategoryResponse`   |
+| POST   | `/categories`     | `{ name, type, icon?, parentId?, sortOrder? }`       | 201 `CategoryResponse`   |
+| PATCH  | `/categories/:id` | `{ name?, icon?, parentId?, sortOrder?, isActive? }` | 200 `CategoryResponse`   |
 | DELETE | `/categories/:id` | —                                                            | 204 Sin contenido        |
 
 ### Movements
@@ -174,7 +174,6 @@ Requiere `Authorization: Bearer <token>`.
       "categoryId": "...",
       "categoryName": "Salario",
       "icon": "mdi-briefcase",
-      "color": "#1D9E75",
       "total": "5000.00"
     }
   ],
@@ -183,7 +182,6 @@ Requiere `Authorization: Bearer <token>`.
       "categoryId": "...",
       "categoryName": "Comida",
       "icon": "mdi-food",
-      "color": "#BA7517",
       "total": "1200.00"
     }
   ],

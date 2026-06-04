@@ -19,13 +19,11 @@ describe('createCategorySchema', () => {
       name: 'Salario',
       type: 'income',
       icon: 'salary',
-      color: '#00ff00',
     });
     expect(result).toEqual({
       name: 'Salario',
       type: 'income',
       icon: 'salary',
-      color: '#00ff00',
     });
   });
 

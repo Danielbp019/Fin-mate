@@ -9,7 +9,6 @@ export const createCategorySchema = z.object({
     errorMap: () => ({ message: 'El tipo debe ser income o expense' }),
   }),
   icon: z.string().max(50, 'El icono no puede exceder 50 caracteres').optional(),
-  color: z.string().max(20, 'El color no puede exceder 20 caracteres').optional(),
 });
 
 export const updateCategorySchema = z.object({
@@ -19,7 +18,6 @@ export const updateCategorySchema = z.object({
     .max(100, 'El nombre no puede exceder 100 caracteres')
     .optional(),
   icon: z.string().max(50, 'El icono no puede exceder 50 caracteres').optional(),
-  color: z.string().max(20, 'El color no puede exceder 20 caracteres').optional(),
   isActive: z.boolean().optional(),
 });
 

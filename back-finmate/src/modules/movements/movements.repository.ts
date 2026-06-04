@@ -107,7 +107,6 @@ export async function getTotalsByCategory(
       categoryId: movements.categoryId,
       categoryName: categories.name,
       icon: categories.icon,
-      color: categories.color,
       total: sql<string>`COALESCE(SUM(${movements.amount}), 0)`,
     })
     .from(movements)
@@ -121,7 +120,7 @@ export async function getTotalsByCategory(
         lte(movements.movementDate, to),
       ),
     )
-    .groupBy(movements.categoryId, categories.name, categories.icon, categories.color)
+    .groupBy(movements.categoryId, categories.name, categories.icon)
     .orderBy(desc(sql`SUM(${movements.amount})`));
 
   return rows;

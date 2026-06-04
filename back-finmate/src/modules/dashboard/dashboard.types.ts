@@ -2,7 +2,6 @@ export interface CategoryBreakdown {
   categoryId: string;
   categoryName: string;
   icon: string | null;
-  color: string | null;
   total: string;
 }
 
