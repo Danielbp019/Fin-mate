@@ -1,6 +1,6 @@
-import { and, eq, isNull, gte, lte, sql, count } from 'drizzle-orm';
+import { and, eq, isNull, gte, lte, sql, count, sum, desc } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
-import { movements } from '../../shared/database/schema.js';
+import { movements, categories } from '../../shared/database/schema.js';
 import type { MovementListFilters } from './movements.types.js';
 
 function buildConditions(userId: string, filters: MovementListFilters) {
@@ -72,4 +72,96 @@ export async function update(id: string, data: Partial<typeof movements.$inferIn
 
 export async function softDelete(id: string, deletedAt: Date) {
   await db.update(movements).set({ deletedAt, updatedAt: deletedAt }).where(eq(movements.id, id));
+}
+
+export async function getPeriodTotals(userId: string, from: Date, to: Date) {
+  const result = await db
+    .select({
+      totalIncome: sql<string>`COALESCE(SUM(CASE WHEN ${movements.type} = 'income' THEN ${movements.amount} ELSE 0 END), 0)`,
+      totalExpense: sql<string>`COALESCE(SUM(CASE WHEN ${movements.type} = 'expense' THEN ${movements.amount} ELSE 0 END), 0)`,
+    })
+    .from(movements)
+    .where(
+      and(
+        eq(movements.userId, userId),
+        isNull(movements.deletedAt),
+        gte(movements.movementDate, from),
+        lte(movements.movementDate, to),
+      ),
+    );
+
+  return {
+    totalIncome: result[0]?.totalIncome ?? '0',
+    totalExpense: result[0]?.totalExpense ?? '0',
+  };
+}
+
+export async function getTotalsByCategory(
+  userId: string,
+  type: 'income' | 'expense',
+  from: Date,
+  to: Date,
+) {
+  const rows = await db
+    .select({
+      categoryId: movements.categoryId,
+      categoryName: categories.name,
+      icon: categories.icon,
+      color: categories.color,
+      total: sql<string>`COALESCE(SUM(${movements.amount}), 0)`,
+    })
+    .from(movements)
+    .innerJoin(categories, eq(movements.categoryId, categories.id))
+    .where(
+      and(
+        eq(movements.userId, userId),
+        eq(movements.type, type),
+        isNull(movements.deletedAt),
+        gte(movements.movementDate, from),
+        lte(movements.movementDate, to),
+      ),
+    )
+    .groupBy(movements.categoryId, categories.name, categories.icon, categories.color)
+    .orderBy(desc(sql`SUM(${movements.amount})`));
+
+  return rows;
+}
+
+export async function getMonthlyTotals(userId: string, limitMonths = 12) {
+  const rows = await db
+    .select({
+      month: sql<string>`DATE_FORMAT(${movements.movementDate}, '%Y-%m')`,
+      income: sql<string>`COALESCE(SUM(CASE WHEN ${movements.type} = 'income' THEN ${movements.amount} ELSE 0 END), 0)`,
+      expense: sql<string>`COALESCE(SUM(CASE WHEN ${movements.type} = 'expense' THEN ${movements.amount} ELSE 0 END), 0)`,
+    })
+    .from(movements)
+    .where(and(eq(movements.userId, userId), isNull(movements.deletedAt)))
+    .groupBy(sql`DATE_FORMAT(${movements.movementDate}, '%Y-%m')`)
+    .orderBy(desc(sql`DATE_FORMAT(${movements.movementDate}, '%Y-%m')`))
+    .limit(limitMonths);
+
+  return rows.reverse();
+}
+
+export async function getRecentWithCategory(userId: string, limitRows = 5) {
+  const rows = await db
+    .select({
+      id: movements.id,
+      type: movements.type,
+      amount: movements.amount,
+      categoryName: categories.name,
+      categoryIcon: categories.icon,
+      description: movements.description,
+      movementDate: movements.movementDate,
+    })
+    .from(movements)
+    .innerJoin(categories, eq(movements.categoryId, categories.id))
+    .where(and(eq(movements.userId, userId), isNull(movements.deletedAt)))
+    .orderBy(desc(movements.movementDate))
+    .limit(limitRows);
+
+  return rows.map((r) => ({
+    ...r,
+    movementDate: r.movementDate instanceof Date ? r.movementDate.toISOString() : String(r.movementDate),
+  }));
 }

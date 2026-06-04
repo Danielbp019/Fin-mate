@@ -1,4 +1,4 @@
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
 import { debts } from '../../shared/database/schema.js';
 import type { DebtListFilters } from './debts.types.js';
@@ -41,4 +41,28 @@ export async function update(id: string, data: Partial<typeof debts.$inferInsert
 
 export async function softDelete(id: string, deletedAt: Date) {
   await db.update(debts).set({ deletedAt, updatedAt: deletedAt }).where(eq(debts.id, id));
+}
+
+export async function getActiveSummary(userId: string) {
+  const result = await db
+    .select({
+      count: sql<number>`COUNT(*)`,
+      totalRemaining: sql<string>`COALESCE(SUM(${debts.currentAmount}), 0)`,
+    })
+    .from(debts)
+    .where(
+      and(
+        eq(debts.userId, userId),
+        eq(debts.status, 'pending'),
+        isNull(debts.deletedAt),
+      ),
+    );
+
+  const row = result[0];
+  if (!row || row.count === 0) return null;
+
+  return {
+    count: Number(row.count),
+    totalRemaining: row.totalRemaining,
+  };
 }

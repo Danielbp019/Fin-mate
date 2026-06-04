@@ -75,14 +75,14 @@ public/                 Archivos públicos estáticos
 
 ## Módulos
 
-| Módulo                                           | Estado         |
-| ------------------------------------------------ | -------------- |
-| Auth (login, register, profile, refresh, logout) | ✅             |
-| Categories (CRUD + tabs por tipo)                | ✅             |
-| Movements (CRUD + filtros + paginación)          | ✅             |
-| Debts + Payments                                 | ✅             |
-| Couples + Goals                                  | ✅             |
-| Dashboard (conectar a datos reales)              | 🔶 Placeholder |
+| Módulo                                           | Estado |
+| ------------------------------------------------ | ------ |
+| Auth (login, register, profile, refresh, logout) | ✅     |
+| Categories (CRUD + tabs por tipo)                | ✅     |
+| Movements (CRUD + filtros + paginación)          | ✅     |
+| Debts + Payments                                 | ✅     |
+| Couples + Goals                                  | ✅     |
+| Dashboard (summary + gráficos + datos en vivo)   | ✅     |
 
 ## Validaciones
 
@@ -106,9 +106,14 @@ Funcionalidades planificadas para futuras iteraciones:
 
 ### Dashboard
 
-- Conectar resumen con datos reales (ingresos, gastos, balance del mes actual)
-- Gr&aacute;ficos visuales de evoluci&oacute;n mensual
-  idea: los tres cuadros que ya tengo, luego abajo cuadro grande con ingresos gastos generales con una grafica, al lado 3 cuadros independientes, el primero ingresos por categoria, el segundo gastos por categoria, el tercero balance por meses
+- Resumen del mes actual: ingresos, gastos y balance con comparaci&oacute;n vs mes anterior
+- Gr&aacute;fico de evoluci&oacute;n mensual (Chart.js Line) — &uacute;ltimos 12 meses
+- Distribuci&oacute;n de ingresos y gastos por categor&iacute;a (Chart.js Doughnut)
+- Balance por mes (Chart.js Bar) — &uacute;ltimos 12 meses
+- &Uacute;ltimos 5 movimientos con categor&iacute;a y monto
+- Resumen de deudas activas (cantidad + total pendiente)
+- Progreso de metas de pareja (si hay grupo activo)
+- Todos los datos se obtienen de `GET /dashboard/summary`
 
 ### Modo Pareja
 

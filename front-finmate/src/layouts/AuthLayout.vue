@@ -67,11 +67,7 @@
           :to="{ name: 'Movements' }"
         />
 
-        <v-list-item
-          prepend-icon="mdi-account-heart"
-          title="Pareja"
-          :to="{ name: 'Couples' }"
-        />
+        <v-list-item prepend-icon="mdi-account-heart" title="Pareja" :to="{ name: 'Couples' }" />
 
         <v-list-item prepend-icon="mdi-account" title="Perfil" :to="{ name: 'Profile' }" />
       </v-list>

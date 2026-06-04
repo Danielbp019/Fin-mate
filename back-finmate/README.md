@@ -155,6 +155,57 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | DELETE | `/couples/:id/leave`  | —              | 200 `{ message }`        |
 | DELETE | `/couples/:id`        | —              | 200 `{ message }`        |
 
+### Dashboard
+
+Requiere `Authorization: Bearer <token>`.
+
+| Método | Ruta                 | Respuesta              |
+| ------ | -------------------- | ---------------------- |
+| GET    | `/dashboard/summary` | 200 `DashboardSummary` |
+
+**Respuesta:**
+
+```json
+{
+  "currentMonth": { "totalIncome": "5000.00", "totalExpense": "3200.00", "balance": "1800.00" },
+  "comparison": { "incomeChange": 12, "expenseChange": -5 },
+  "incomeByCategory": [
+    {
+      "categoryId": "...",
+      "categoryName": "Salario",
+      "icon": "mdi-briefcase",
+      "color": "#1D9E75",
+      "total": "5000.00"
+    }
+  ],
+  "expenseByCategory": [
+    {
+      "categoryId": "...",
+      "categoryName": "Comida",
+      "icon": "mdi-food",
+      "color": "#BA7517",
+      "total": "1200.00"
+    }
+  ],
+  "monthlyBalance": [
+    { "month": "2026-01", "income": "4800.00", "expense": "3100.00", "balance": "1700.00" }
+  ],
+  "recentMovements": [
+    {
+      "id": "...",
+      "type": "income",
+      "amount": "5000.00",
+      "categoryName": "Salario",
+      "categoryIcon": "mdi-briefcase",
+      "description": null,
+      "movementDate": "2026-06-01T..."
+    }
+  ],
+  "activeDebts": { "count": 2, "totalRemaining": "15000.00" },
+  "coupleGoals": { "active": 1, "totalProgress": 45 }
+}
+```
+
 ### Couple Goals (dentro de Couples)
 
 Todas las rutas requieren `Authorization: Bearer <token>`.
@@ -221,4 +272,5 @@ src/modules/debts/
 | Debts        | `src/modules/debts/`         |
 | Couples      | `src/modules/couples/`       |
 | Couple Goals | `src/modules/couples/goals/` |
+| Dashboard    | `src/modules/dashboard/`     |
 | Ping         | `src/modules/ping/`          |
