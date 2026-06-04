@@ -29,6 +29,14 @@ const mockMembers = [
   },
 ];
 
+const mockRawMember = {
+  id: 'member-1',
+  coupleId: 'couple-123',
+  userId: 'owner-123',
+  role: 'owner' as const,
+  joinedAt: new Date('2026-06-01T12:00:00.000Z'),
+};
+
 let couplesService: typeof import('../couples.service.js');
 let authRepository: typeof import('../../auth/auth.repository.js');
 
@@ -42,7 +50,7 @@ describe('getMyCouple', () => {
   it('returns active couple for user', async () => {
     vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue({
       couple: mockCouple,
-      member: mockMembers[0],
+      member: mockRawMember,
     });
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
@@ -53,7 +61,9 @@ describe('getMyCouple', () => {
   });
 
   it('throws 404 when user has no active couple', async () => {
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findActiveCoupleByUserId>>,
+    );
 
     await expect(couplesService.getMyCouple('user-without-couple')).rejects.toMatchObject({
       statusCode: 404,
@@ -63,7 +73,9 @@ describe('getMyCouple', () => {
 
 describe('create', () => {
   it('creates couple and returns it with members', async () => {
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findActiveCoupleByUserId>>,
+    );
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
     const result = await couplesService.create({ name: 'Nuestro grupo' }, 'owner-123');
@@ -76,7 +88,7 @@ describe('create', () => {
   it('throws 409 when user already has an active couple', async () => {
     vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue({
       couple: mockCouple,
-      member: mockMembers[0],
+      member: mockRawMember,
     });
 
     await expect(couplesService.create({ name: 'Otro grupo' }, 'owner-123')).rejects.toMatchObject({
@@ -89,14 +101,27 @@ describe('invite', () => {
   it('creates invitation when valid', async () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
     vi.mocked(couplesRepository.findMemberByUserAndCouple)
-      .mockResolvedValueOnce({ ...mockMembers[0], role: 'owner' })
-      .mockResolvedValueOnce(null);
+      .mockResolvedValueOnce(mockRawMember)
+      .mockResolvedValueOnce(
+        null as unknown as Awaited<ReturnType<typeof couplesRepository.findMemberByUserAndCouple>>,
+      );
     vi.mocked(couplesRepository.findUserByEmail).mockResolvedValue({
       id: 'invited-123',
+      name: 'Invited',
       email: 'invited@test.com',
+      passwordHash: 'hash',
+      status: 'active' as const,
+      emailVerifiedAt: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     });
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
-    vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findActiveCoupleByUserId>>,
+    );
+    vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findPendingInvitation>>,
+    );
 
     const result = await couplesService.invite('couple-123', 'invited@test.com', 'owner-123');
 
@@ -105,7 +130,9 @@ describe('invite', () => {
   });
 
   it('throws 404 when couple not found', async () => {
-    vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findCoupleById>>,
+    );
 
     await expect(
       couplesService.invite('nonexistent', 'test@test.com', 'user-123'),
@@ -115,6 +142,7 @@ describe('invite', () => {
   it('throws 403 when not owner', async () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
     vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue({
+      ...mockRawMember,
       role: 'member',
     });
 
@@ -129,7 +157,14 @@ describe('join', () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
     vi.mocked(authRepository.findUserById).mockResolvedValue({
       id: 'invited-123',
+      name: 'Invited',
       email: 'invited@test.com',
+      passwordHash: 'hash',
+      status: 'active' as const,
+      emailVerifiedAt: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     });
     vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue({
       id: 'invitation-1',
@@ -137,8 +172,12 @@ describe('join', () => {
       invitedEmail: 'invited@test.com',
       status: 'pending',
       expiresAt: new Date(Date.now() + 86400000),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findActiveCoupleByUserId>>,
+    );
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue(mockMembers);
 
     const result = await couplesService.join('couple-123', 'invited-123');
@@ -152,9 +191,18 @@ describe('join', () => {
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
     vi.mocked(authRepository.findUserById).mockResolvedValue({
       id: 'user-123',
+      name: 'User',
       email: 'user@test.com',
+      passwordHash: 'hash',
+      status: 'active' as const,
+      emailVerifiedAt: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     });
-    vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findInvitationByCoupleAndEmail>>,
+    );
 
     await expect(couplesService.join('couple-123', 'user-123')).rejects.toMatchObject({
       statusCode: 404,
@@ -165,9 +213,9 @@ describe('join', () => {
 describe('leave', () => {
   it('removes member from couple', async () => {
     vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue({
+      ...mockRawMember,
       id: 'member-1',
       userId: 'user-123',
-      coupleId: 'couple-123',
       role: 'member',
     });
 
@@ -178,9 +226,9 @@ describe('leave', () => {
 
   it('throws 403 when owner tries to leave', async () => {
     vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue({
+      ...mockRawMember,
       id: 'member-1',
       userId: 'owner-123',
-      coupleId: 'couple-123',
       role: 'owner',
     });
 
@@ -203,10 +251,7 @@ describe('dissolve', () => {
   });
 
   it('throws 403 when not owner', async () => {
-    vi.mocked(couplesRepository.findCoupleById).mockResolvedValue({
-      ...mockCouple,
-      createdBy: 'owner-123',
-    });
+    vi.mocked(couplesRepository.findCoupleById).mockResolvedValue(mockCouple);
 
     await expect(couplesService.dissolve('couple-123', 'other-user')).rejects.toMatchObject({
       statusCode: 403,

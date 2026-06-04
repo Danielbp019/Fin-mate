@@ -1,19 +1,41 @@
 import { describe, it, expect } from 'vitest';
-import { createCoupleSchema, inviteSchema, coupleParamsSchema } from '../couples.schema.js';
+import { createCoupleSchema, updateCoupleSchema, inviteSchema, coupleParamsSchema } from '../couples.schema.js';
 
 describe('createCoupleSchema', () => {
-  it('accepts empty body', () => {
-    const result = createCoupleSchema.parse({});
-    expect(result).toEqual({});
+  it('rejects empty body', () => {
+    expect(() => createCoupleSchema.parse({})).toThrow();
   });
 
-  it('accepts optional name', () => {
+  it('rejects empty name string', () => {
+    expect(() => createCoupleSchema.parse({ name: '' })).toThrow('El nombre es obligatorio');
+  });
+
+  it('accepts name', () => {
     const result = createCoupleSchema.parse({ name: 'Nuestro grupo' });
     expect(result.name).toBe('Nuestro grupo');
   });
 
   it('rejects name exceeding 120 characters', () => {
     expect(() => createCoupleSchema.parse({ name: 'A'.repeat(121) })).toThrow();
+  });
+});
+
+describe('updateCoupleSchema', () => {
+  it('accepts valid name', () => {
+    const result = updateCoupleSchema.parse({ name: 'Nuevo nombre' });
+    expect(result.name).toBe('Nuevo nombre');
+  });
+
+  it('rejects empty name', () => {
+    expect(() => updateCoupleSchema.parse({})).toThrow();
+  });
+
+  it('rejects empty name string', () => {
+    expect(() => updateCoupleSchema.parse({ name: '' })).toThrow('El nombre es obligatorio');
+  });
+
+  it('rejects name exceeding 120 characters', () => {
+    expect(() => updateCoupleSchema.parse({ name: 'A'.repeat(121) })).toThrow();
   });
 });
 

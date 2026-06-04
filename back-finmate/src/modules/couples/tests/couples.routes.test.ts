@@ -52,14 +52,23 @@ describe('authentication', () => {
 
 describe('GET /couples', () => {
   it('returns 200 with couple data', async () => {
+    const now = new Date();
     vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue({
       couple: {
         id: 'couple-123',
-        name: 'Nuestro grupo',
-        status: 'active',
         createdBy: 'user-123',
+        name: 'Nuestro grupo',
+        status: 'active' as const,
+        createdAt: now,
+        updatedAt: now,
       },
-      member: { id: 'member-1', userId: 'user-123', role: 'owner' },
+      member: {
+        id: 'member-1',
+        coupleId: 'couple-123',
+        userId: 'user-123',
+        role: 'owner' as const,
+        joinedAt: now,
+      },
     });
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue([
       {
@@ -68,7 +77,7 @@ describe('GET /couples', () => {
         name: 'User',
         email: 'user@test.com',
         role: 'owner',
-        joinedAt: new Date(),
+        joinedAt: now,
       },
     ]);
 
@@ -85,7 +94,9 @@ describe('GET /couples', () => {
 
 describe('POST /couples', () => {
   it('returns 201 with created couple', async () => {
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findActiveCoupleByUserId>>,
+    );
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue([
       {
         id: 'member-1',
@@ -121,20 +132,43 @@ describe('POST /couples', () => {
 
 describe('POST /couples/:id/invite', () => {
   it('returns 201 with invitation', async () => {
+    const now = new Date();
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue({
       id: 'couple-123',
       createdBy: 'user-123',
-      status: 'active',
+      name: 'Nuestro grupo',
+      status: 'active' as const,
+      createdAt: now,
+      updatedAt: now,
     });
     vi.mocked(couplesRepository.findMemberByUserAndCouple)
-      .mockResolvedValueOnce({ role: 'owner' })
-      .mockResolvedValueOnce(null);
+      .mockResolvedValueOnce({
+        id: 'member-1',
+        coupleId: 'couple-123',
+        userId: 'user-123',
+        role: 'owner' as const,
+        joinedAt: now,
+      })
+      .mockResolvedValueOnce(
+        null as unknown as Awaited<ReturnType<typeof couplesRepository.findMemberByUserAndCouple>>,
+      );
     vi.mocked(couplesRepository.findUserByEmail).mockResolvedValue({
       id: 'invited-123',
+      name: 'Invited',
       email: 'invited@test.com',
+      passwordHash: 'hash',
+      status: 'active' as const,
+      emailVerifiedAt: null,
+      createdAt: now,
+      updatedAt: now,
+      deletedAt: null,
     });
-    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(null);
-    vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findActiveCoupleByUserId).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findActiveCoupleByUserId>>,
+    );
+    vi.mocked(couplesRepository.findPendingInvitation).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findPendingInvitation>>,
+    );
 
     const token = createToken();
     const res = await request(app)
@@ -151,9 +185,10 @@ describe('DELETE /couples/:id/leave', () => {
   it('returns 200 with message', async () => {
     vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue({
       id: 'member-1',
-      userId: 'user-123',
       coupleId: 'couple-123',
-      role: 'member',
+      userId: 'user-123',
+      role: 'member' as const,
+      joinedAt: new Date(),
     });
 
     const token = createToken();
@@ -168,10 +203,14 @@ describe('DELETE /couples/:id/leave', () => {
 
 describe('DELETE /couples/:id', () => {
   it('returns 200 when dissolved by owner', async () => {
+    const now = new Date();
     vi.mocked(couplesRepository.findCoupleById).mockResolvedValue({
       id: 'couple-123',
       createdBy: 'user-123',
-      status: 'active',
+      name: 'Nuestro grupo',
+      status: 'active' as const,
+      createdAt: now,
+      updatedAt: now,
     });
     vi.mocked(couplesRepository.findCoupleMembers).mockResolvedValue([]);
 

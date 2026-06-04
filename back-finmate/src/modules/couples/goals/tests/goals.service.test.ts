@@ -88,7 +88,9 @@ describe('list', () => {
   });
 
   it('throws 403 when user is not a member', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findMemberByUserAndCouple>>,
+    );
 
     await expect(goalsService.list('couple-123', 'other-user')).rejects.toMatchObject({
       statusCode: 403,
@@ -113,7 +115,9 @@ describe('create', () => {
   });
 
   it('throws 403 when user is not a member', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findMemberByUserAndCouple>>,
+    );
 
     await expect(
       goalsService.create({ title: 'Meta', targetAmount: '1000.00' }, 'couple-123', 'other-user'),
@@ -152,7 +156,9 @@ describe('update', () => {
   });
 
   it('throws 404 when goal not found', async () => {
-    vi.mocked(goalsRepository.findById).mockResolvedValue(null);
+    vi.mocked(goalsRepository.findById).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof goalsRepository.findById>>,
+    );
 
     await expect(
       goalsService.update('nonexistent', { title: 'Nope' }, 'couple-123', 'user-owner'),
@@ -220,7 +226,9 @@ describe('contribute', () => {
   });
 
   it('throws 403 when user is not a member', async () => {
-    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(null);
+    vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof couplesRepository.findMemberByUserAndCouple>>,
+    );
 
     await expect(
       goalsService.contribute('goal-123', { amount: '100.00' }, 'couple-123', 'other-user'),
@@ -229,7 +237,9 @@ describe('contribute', () => {
 
   it('throws 404 when goal not found', async () => {
     vi.mocked(couplesRepository.findMemberByUserAndCouple).mockResolvedValue(mockMember);
-    vi.mocked(goalsRepository.findById).mockResolvedValue(null);
+    vi.mocked(goalsRepository.findById).mockResolvedValue(
+      null as unknown as Awaited<ReturnType<typeof goalsRepository.findById>>,
+    );
 
     await expect(
       goalsService.contribute('nonexistent', { amount: '100.00' }, 'couple-123', 'user-owner'),

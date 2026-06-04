@@ -7,14 +7,14 @@ vi.mock('../couples.service.js');
 const mockCoupleResponse = {
   id: 'couple-123',
   name: 'Nuestro grupo',
-  status: 'active',
+  status: 'active' as const,
   members: [
     {
       id: 'member-1',
       userId: 'user-123',
       name: 'User',
       email: 'user@test.com',
-      role: 'owner',
+      role: 'owner' as const,
       joinedAt: '2026-06-01T12:00:00.000Z',
     },
   ],
