@@ -48,6 +48,16 @@ describe('createCategorySchema', () => {
       }),
     ).toThrow();
   });
+
+  it('strips unknown fields', () => {
+    const result = createCategorySchema.parse({
+      name: 'Test',
+      type: 'expense',
+      unknownField: 'should be stripped',
+    });
+    expect(result).toEqual({ name: 'Test', type: 'expense' });
+    expect('unknownField' in result).toBe(false);
+  });
 });
 
 describe('updateCategorySchema', () => {
@@ -64,6 +74,12 @@ describe('updateCategorySchema', () => {
   it('accepts empty object (no fields)', () => {
     const result = updateCategorySchema.parse({});
     expect(result).toEqual({});
+  });
+
+  it('rejects icon longer than 50 characters', () => {
+    expect(() =>
+      updateCategorySchema.parse({ icon: 'A'.repeat(51) }),
+    ).toThrow();
   });
 });
 

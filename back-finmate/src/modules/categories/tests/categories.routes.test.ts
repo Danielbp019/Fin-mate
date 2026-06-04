@@ -29,6 +29,10 @@ function createToken(): string {
   return jwt.sign({ sub: 'user-123' }, 'test-secret', { expiresIn: '1h' });
 }
 
+function createOtherUserToken(): string {
+  return jwt.sign({ sub: 'other-user' }, 'test-secret', { expiresIn: '1h' });
+}
+
 const mockCategory = {
   id: '550e8400-e29b-41d4-a716-446655440000',
   userId: 'user-123',
@@ -84,6 +88,17 @@ describe('GET /categories', () => {
     expect(categoriesRepository.findByUser).toHaveBeenCalledWith('user-123', 'income');
     expect(res.body).toBeInstanceOf(Array);
   });
+
+  it('returns 400 when type query param is invalid', async () => {
+    const token = createToken();
+
+    const res = await request(app)
+      .get('/categories?type=invalid')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(400);
+
+    expect(res.body.error).toBe('El tipo debe ser income o expense');
+  });
 });
 
 describe('GET /categories/:id', () => {
@@ -128,6 +143,20 @@ describe('POST /categories', () => {
 
     expect(res.body.name).toBe('Nueva categoría');
     expect(res.body.type).toBe('expense');
+  });
+
+  it('returns 201 with icon when provided', async () => {
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+
+    const token = createToken();
+
+    const res = await request(app)
+      .post('/categories')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Trabajo', type: 'income', icon: 'mdi-briefcase' })
+      .expect(201);
+
+    expect(res.body.icon).toBe('mdi-briefcase');
   });
 
   it('returns 409 when name already exists', async () => {
@@ -192,6 +221,52 @@ describe('PATCH /categories/:id', () => {
 
     expect(res.body.error).toBe('No puedes modificar una categoría del sistema');
   });
+
+  it('returns 404 when category not found', async () => {
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+
+    const token = createToken();
+
+    const res = await request(app)
+      .patch(`/categories/${mockCategory.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Nuevo' })
+      .expect(404);
+
+    expect(res.body.error).toBe('Categoría no encontrada');
+  });
+
+  it('returns 404 when category not owned', async () => {
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+
+    const token = createOtherUserToken();
+
+    const res = await request(app)
+      .patch(`/categories/${mockCategory.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Nuevo' })
+      .expect(404);
+
+    expect(res.body.error).toBe('Categoría no encontrada');
+  });
+
+  it('returns 409 when name conflicts', async () => {
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue({
+      ...mockCategory,
+      id: 'other-id',
+    });
+
+    const token = createToken();
+
+    const res = await request(app)
+      .patch(`/categories/${mockCategory.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Comida duplicada' })
+      .expect(409);
+
+    expect(res.body.error).toBe('Ya tienes una categoría con ese nombre');
+  });
 });
 
 describe('DELETE /categories/:id', () => {
@@ -219,5 +294,48 @@ describe('DELETE /categories/:id', () => {
       .expect(409);
 
     expect(res.body.error).toBe('No puedes eliminar una categoría que tiene movimientos asociados');
+  });
+
+  it('returns 404 when category not found', async () => {
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+
+    const token = createToken();
+
+    const res = await request(app)
+      .delete(`/categories/${mockCategory.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404);
+
+    expect(res.body.error).toBe('Categoría no encontrada');
+  });
+
+  it('returns 404 when category not owned', async () => {
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+
+    const token = createOtherUserToken();
+
+    const res = await request(app)
+      .delete(`/categories/${mockCategory.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404);
+
+    expect(res.body.error).toBe('Categoría no encontrada');
+  });
+
+  it('returns 403 when category is system', async () => {
+    vi.mocked(categoriesRepository.findById).mockResolvedValue({
+      ...mockCategory,
+      isSystem: true,
+      userId: null,
+    });
+
+    const token = createToken();
+
+    const res = await request(app)
+      .delete(`/categories/${mockCategory.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(403);
+
+    expect(res.body.error).toBe('No puedes eliminar una categoría del sistema');
   });
 });

@@ -79,6 +79,19 @@ describe('list', () => {
 
     expect(categoriesService.list).toHaveBeenCalledWith('user-123', 'income');
   });
+
+  it('calls next with error when service throws', async () => {
+    const req = createAuthReq();
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+    const error = new Error('Error inesperado');
+
+    vi.mocked(categoriesService.list).mockRejectedValue(error);
+
+    await categoriesController.list(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(error);
+  });
 });
 
 describe('getById', () => {
@@ -138,6 +151,19 @@ describe('create', () => {
     expect(categoriesService.create).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalledWith(expect.any(Error));
   });
+
+  it('calls next with error when service throws', async () => {
+    const req = createAuthReq({ body: { name: 'Duplicado', type: 'expense' } });
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+    const error = new Error('Ya tienes una categoría con ese nombre');
+
+    vi.mocked(categoriesService.create).mockRejectedValue(error);
+
+    await categoriesController.create(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(error);
+  });
 });
 
 describe('update', () => {
@@ -167,6 +193,36 @@ describe('update', () => {
       name: 'Comida actualizada',
     });
   });
+
+  it('calls next with error when body is invalid', async () => {
+    const req = createAuthReq({
+      params: { id: mockCategory.id },
+      body: { name: '', isActive: 'not-boolean' },
+    });
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+
+    await categoriesController.update(req, res, next);
+
+    expect(categoriesService.update).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+  });
+
+  it('calls next with error when service throws', async () => {
+    const req = createAuthReq({
+      params: { id: 'nonexistent' },
+      body: { name: 'Nuevo' },
+    });
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+    const error = new Error('Categoría no encontrada');
+
+    vi.mocked(categoriesService.update).mockRejectedValue(error);
+
+    await categoriesController.update(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(error);
+  });
 });
 
 describe('remove', () => {
@@ -182,5 +238,44 @@ describe('remove', () => {
     expect(categoriesService.remove).toHaveBeenCalledWith(mockCategory.id, 'user-123');
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalled();
+  });
+
+  it('calls next with error when service throws 403', async () => {
+    const req = createAuthReq({ params: { id: 'system-id' } });
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+    const error = new Error('No puedes eliminar una categoría del sistema');
+
+    vi.mocked(categoriesService.remove).mockRejectedValue(error);
+
+    await categoriesController.remove(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(error);
+  });
+
+  it('calls next with error when service throws 404', async () => {
+    const req = createAuthReq({ params: { id: 'nonexistent' } });
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+    const error = new Error('Categoría no encontrada');
+
+    vi.mocked(categoriesService.remove).mockRejectedValue(error);
+
+    await categoriesController.remove(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(error);
+  });
+
+  it('calls next with error when service throws 409', async () => {
+    const req = createAuthReq({ params: { id: mockCategory.id } });
+    const res = createRes();
+    const next = vi.fn() as NextFunction;
+    const error = new Error('No puedes eliminar una categoría que tiene movimientos asociados');
+
+    vi.mocked(categoriesService.remove).mockRejectedValue(error);
+
+    await categoriesController.remove(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(error);
   });
 });

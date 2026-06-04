@@ -109,6 +109,21 @@ describe('create', () => {
 
     expect(categoriesRepository.create).not.toHaveBeenCalled();
   });
+
+  it('creates category with icon when provided', async () => {
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.create).mockResolvedValue(undefined as never);
+
+    const result = await categoriesService.create(
+      { name: 'Trabajo', type: 'income', icon: 'mdi-briefcase' },
+      'user-123',
+    );
+
+    expect(categoriesRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({ icon: 'mdi-briefcase' }),
+    );
+    expect(result.icon).toBe('mdi-briefcase');
+  });
 });
 
 describe('update', () => {
@@ -168,6 +183,73 @@ describe('update', () => {
       statusCode: 409,
       message: 'Ya tienes una categoría con ese nombre',
     });
+  });
+
+  it('updates icon when provided', async () => {
+    vi.mocked(categoriesRepository.findById)
+      .mockResolvedValueOnce(mockCategory)
+      .mockResolvedValueOnce({ ...mockCategory, icon: 'new-icon' });
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+
+    const result = await categoriesService.update(
+      mockCategory.id,
+      { icon: 'new-icon' },
+      'user-123',
+    );
+
+    expect(categoriesRepository.update).toHaveBeenCalledWith(
+      mockCategory.id,
+      expect.objectContaining({ icon: 'new-icon' }),
+    );
+    expect(result.icon).toBe('new-icon');
+  });
+
+  it('sets icon to null when explicitly provided as null', async () => {
+    vi.mocked(categoriesRepository.findById)
+      .mockResolvedValueOnce(mockCategory)
+      .mockResolvedValueOnce({ ...mockCategory, icon: null });
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+
+    const result = await categoriesService.update(
+      mockCategory.id,
+      { icon: null },
+      'user-123',
+    );
+
+    expect(categoriesRepository.update).toHaveBeenCalledWith(
+      mockCategory.id,
+      expect.objectContaining({ icon: null }),
+    );
+    expect(result.icon).toBeNull();
+  });
+
+  it('updates isActive when provided', async () => {
+    vi.mocked(categoriesRepository.findById)
+      .mockResolvedValueOnce(mockCategory)
+      .mockResolvedValueOnce({ ...mockCategory, isActive: false });
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+
+    const result = await categoriesService.update(
+      mockCategory.id,
+      { isActive: false },
+      'user-123',
+    );
+
+    expect(categoriesRepository.update).toHaveBeenCalledWith(
+      mockCategory.id,
+      expect.objectContaining({ isActive: false }),
+    );
+    expect(result.isActive).toBe(false);
+  });
+
+  it('does not check duplicate name when name is not provided', async () => {
+    vi.mocked(categoriesRepository.findById)
+      .mockResolvedValueOnce(mockCategory)
+      .mockResolvedValueOnce(mockCategory);
+
+    await categoriesService.update(mockCategory.id, { icon: 'new-icon' }, 'user-123');
+
+    expect(categoriesRepository.findByNameAndUser).not.toHaveBeenCalled();
   });
 });
 
