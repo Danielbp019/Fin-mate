@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { env } from '../../config/env.js';
 import { AppError } from '../errors/AppError.js';
 
@@ -15,6 +15,10 @@ export async function authMiddleware(req: Request, _res: Response, next: NextFun
     req.userId = decoded.sub;
     next();
   } catch (error) {
-    next(error);
+    if (error instanceof TokenExpiredError) {
+      next(new AppError(401, 'Token de acceso expirado'));
+    } else {
+      next(error);
+    }
   }
 }

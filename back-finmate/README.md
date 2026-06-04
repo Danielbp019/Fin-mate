@@ -52,14 +52,25 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 ## Limpieza de Tokens
 
 Los refresh tokens se acumulan en la tabla `refresh_tokens` con cada login y rotación.
-Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automática al iniciar:
+Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automática:
 
 - **Archivo**: `src/shared/database/cleanup.ts`
-- **Cuándo**: Cada vez que arranca el servidor (`npm run dev` o `npm start`)
+- **Cuándo**: Al iniciar el servidor (`npm run dev` o `npm start`) y cada 6 horas automáticamente
 - **Qué elimina**:
   - Tokens cuya fecha de expiración ya pasó (`expires_at < NOW()`)
   - Tokens revocados con más de 7 días de antigüedad
 - **Comportamiento**: Envuelto en try/catch — si falla, no bloquea el inicio del servidor y solo muestra una advertencia en consola
+
+## Rotación de Tokens
+
+El sistema implementa **rotación de refresh tokens** por seguridad:
+
+- Cada vez que se llama a `POST /auth/refresh`, el refresh token anterior se revoca en base de datos y se emite uno nuevo en una nueva cookie HttpOnly
+- El access token (JWT de 15 minutos) se almacena solo en memoria (Pinia) — nunca se persiste en localStorage/sessionStorage por protección contra XSS
+- Al recargar la página, el access token en memoria se pierde. El router guard detecta que no hay token y llama a `/auth/refresh` para obtener uno nuevo usando la cookie HttpOnly
+- Esto significa que **cada recarga de página genera un nuevo refresh token** (el anterior se revoca). Es comportamiento esperado y deseado por seguridad
+- Los tokens revocados se conservan 7 días antes de ser eliminados automáticamente por la limpieza programada
+- Si un refresh token es robado y usado por un atacante, el token legítimo quedará revocado al rotarse, invalidando el uso malicioso
 
 ## Endpoints Activos
 
@@ -100,13 +111,13 @@ El envio de correos se maneja via `src/shared/email/` usando **Nodemailer**.
 
 Todas las rutas requieren `Authorization: Bearer <token>`.
 
-| Método | Ruta              | Body / Query                                                 | Respuesta                |
-| ------ | ----------------- | ------------------------------------------------------------ | ------------------------ |
-| GET    | `/categories`     | `?type=income\|expense`                                      | 200 `CategoryResponse[]` |
-| GET    | `/categories/:id` | —                                                            | 200 `CategoryResponse`   |
+| Método | Ruta              | Body / Query                                         | Respuesta                |
+| ------ | ----------------- | ---------------------------------------------------- | ------------------------ |
+| GET    | `/categories`     | `?type=income\|expense`                              | 200 `CategoryResponse[]` |
+| GET    | `/categories/:id` | —                                                    | 200 `CategoryResponse`   |
 | POST   | `/categories`     | `{ name, type, icon?, parentId?, sortOrder? }`       | 201 `CategoryResponse`   |
 | PATCH  | `/categories/:id` | `{ name?, icon?, parentId?, sortOrder?, isActive? }` | 200 `CategoryResponse`   |
-| DELETE | `/categories/:id` | —                                                            | 204 Sin contenido        |
+| DELETE | `/categories/:id` | —                                                    | 204 Sin contenido        |
 
 ### Movements
 
