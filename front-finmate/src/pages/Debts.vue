@@ -525,7 +525,7 @@ const deletingItem = ref<Debt | null>(null);
 const formError = ref('');
 
 const filterStatus = ref('');
-const filterPriority = ref('');
+const filterPriority = ref<string | null>(null);
 
 const form = ref<DebtForm>({
   title: '',

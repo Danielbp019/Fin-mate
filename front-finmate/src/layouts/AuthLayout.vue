@@ -14,12 +14,17 @@
       </template>
 
       <v-app-bar-title>
-        <div class="lp-logo">
-          <div class="lp-logo-icon">
-            <v-icon color="white" size="20">mdi-finance</v-icon>
+        <router-link
+          :to="{ name: 'Dashboard' }"
+          style="text-decoration: none; color: inherit; cursor: pointer;"
+        >
+          <div class="lp-logo">
+            <div class="lp-logo-icon">
+              <v-icon color="white" size="20">mdi-finance</v-icon>
+            </div>
+            FinMate
           </div>
-          FinMate
-        </div>
+        </router-link>
       </v-app-bar-title>
 
       <template #append>
@@ -53,6 +58,7 @@
           prepend-icon="mdi-view-dashboard"
           title="Dashboard"
           :to="{ name: 'Dashboard' }"
+          exact
         />
 
         <v-list-item

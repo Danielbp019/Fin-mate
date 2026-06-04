@@ -313,7 +313,7 @@ const deletingItem = ref<Movement | null>(null);
 const formError = ref('');
 
 const filterType = ref('');
-const filterCategoryId = ref('');
+const filterCategoryId = ref<string | null>(null);
 const filterFrom = ref('');
 const filterTo = ref('');
 
@@ -381,7 +381,7 @@ onMounted(() => {
 });
 
 watch(filterType, () => {
-  filterCategoryId.value = '';
+  filterCategoryId.value = null;
 });
 
 function applyFilters() {
