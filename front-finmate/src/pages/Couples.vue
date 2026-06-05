@@ -599,7 +599,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="confirmDeleteGoal" max-width="400" :value="!!confirmDeleteGoal">
+    <v-dialog v-model="showDeleteGoal" max-width="400">
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar meta</v-card-title>
         <v-divider />
@@ -665,6 +665,10 @@ const contributeError = ref('');
 const confirmDissolve = ref(false);
 const confirmLeave = ref(false);
 const confirmDeleteGoal = ref<Goal | null>(null);
+const showDeleteGoal = computed({
+  get: () => confirmDeleteGoal.value !== null,
+  set: (v) => { if (!v) confirmDeleteGoal.value = null; },
+});
 
 const isOwner = computed(() => {
   return (

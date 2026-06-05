@@ -52,7 +52,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-const props = defineProps<{ modelValue: string }>();
+const props = withDefaults(defineProps<{ modelValue?: string }>(), { modelValue: '' });
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
 const dialogOpen = ref(false);
