@@ -3,6 +3,9 @@ import { AppError } from '../../../shared/errors/AppError.js';
 import * as debtsRepository from '../debts.repository.js';
 import * as paymentsRepository from './payments.repository.js';
 import type { CreatePaymentBody, PaymentResponse } from './payments.types.js';
+import { dbToDinero, dinero, dineroToDb } from '../../../shared/money/money.js';
+import { subtract, isNegative, isZero } from 'dinero.js';
+import { COP } from 'dinero.js/currencies';
 
 function toResponse(
   row: NonNullable<Awaited<ReturnType<typeof paymentsRepository.findByDebt>>>[number],
@@ -59,15 +62,17 @@ export async function create(
     createdAt: now,
   };
 
-  const paymentAmount = Number(data.amount);
-  const currentAmount = Number(debt.currentAmount);
-  const newAmount = Math.max(0, currentAmount - paymentAmount);
-  const newStatus = newAmount <= 0 ? ('paid' as const) : ('pending' as const);
+  const paymentMoney = dbToDinero(data.amount);
+  const debtMoney = dbToDinero(debt.currentAmount);
+  const remaining = subtract(debtMoney, paymentMoney);
+  const paid = isNegative(remaining) || isZero(remaining);
+  const clamped = paid ? dinero({ amount: 0, currency: COP }) : remaining;
+  const newStatus = paid ? ('paid' as const) : ('pending' as const);
 
   await paymentsRepository.create(payment);
 
   await debtsRepository.update(debtId, {
-    currentAmount: newAmount.toFixed(4),
+    currentAmount: dineroToDb(clamped),
     status: newStatus,
     updatedAt: now,
   });

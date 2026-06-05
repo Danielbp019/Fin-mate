@@ -17,7 +17,7 @@ describe('createDebtSchema', () => {
     const result = createDebtSchema.parse({
       title: 'Prestamo personal',
       description: 'Prestamo del banco',
-      initialAmount: '10000.0000',
+      initialAmount: '10000.00',
       interestRate: '5.5',
       minimumPayment: '500.00',
       dueDay: 15,

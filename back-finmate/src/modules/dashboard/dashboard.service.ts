@@ -3,6 +3,10 @@ import * as debtsRepository from '../debts/debts.repository.js';
 import * as couplesRepository from '../couples/couples.repository.js';
 import * as goalsRepository from '../couples/goals/goals.repository.js';
 import type { DashboardSummary } from './dashboard.types.js';
+import { dbToDinero, toNumber } from '../../shared/money/money.js';
+import { add, subtract } from 'dinero.js';
+import { COP } from 'dinero.js/currencies';
+import { dinero } from 'dinero.js';
 
 function getMonthRange(date: Date) {
   const year = date.getFullYear();
@@ -28,10 +32,6 @@ function calcPercentage(current: number, previous: number): number | null {
     return current > 0 ? 100 : current === 0 ? 0 : null;
   }
   return Math.round(((current - previous) / previous) * 100);
-}
-
-function parseAmount(amount: string): number {
-  return Number.parseFloat(amount) || 0;
 }
 
 export async function getSummary(userId: string): Promise<DashboardSummary> {
@@ -63,32 +63,43 @@ export async function getSummary(userId: string): Promise<DashboardSummary> {
   if (activeCouple) {
     const goals = await goalsRepository.findActiveByCouple(activeCouple.couple.id);
     if (goals.length > 0) {
-      const totalTarget = goals.reduce((sum, g) => sum + parseAmount(g.targetAmount), 0);
-      const totalCurrent = goals.reduce((sum, g) => sum + parseAmount(g.currentAmount), 0);
-      const progress = totalTarget > 0 ? Math.round((totalCurrent / totalTarget) * 100) : 0;
+      const totalTarget = goals.reduce(
+        (sum, g) => add(sum, dbToDinero(g.targetAmount)),
+        dinero({ amount: 0, currency: COP }),
+      );
+      const totalCurrent = goals.reduce(
+        (sum, g) => add(sum, dbToDinero(g.currentAmount)),
+        dinero({ amount: 0, currency: COP }),
+      );
+      const targetNum = toNumber(totalTarget);
+      const currentNum = toNumber(totalCurrent);
+      const progress = targetNum > 0 ? Math.round((currentNum / targetNum) * 100) : 0;
       coupleGoals = { active: goals.length, totalProgress: progress };
     }
   }
 
-  const currentIncome = parseAmount(currentTotals.totalIncome);
-  const currentExpense = parseAmount(currentTotals.totalExpense);
-  const prevIncome = parseAmount(prevTotals.totalIncome);
-  const prevExpense = parseAmount(prevTotals.totalExpense);
+  const incomeMoney = dbToDinero(currentTotals.totalIncome);
+  const expenseMoney = dbToDinero(currentTotals.totalExpense);
+  const prevIncomeMoney = dbToDinero(prevTotals.totalIncome);
+  const prevExpenseMoney = dbToDinero(prevTotals.totalExpense);
+  const balanceMoney = subtract(incomeMoney, expenseMoney);
 
-  const monthlyBalanceWithCalc = monthlyBalance.map((m) => ({
-    ...m,
-    balance: (parseAmount(m.income) - parseAmount(m.expense)).toFixed(2),
-  }));
+  const monthlyBalanceWithCalc = monthlyBalance.map((m) => {
+    const income = dbToDinero(m.income);
+    const expense = dbToDinero(m.expense);
+    const bal = subtract(income, expense);
+    return { ...m, balance: toNumber(bal).toFixed(2) };
+  });
 
   return {
     currentMonth: {
       totalIncome: currentTotals.totalIncome,
       totalExpense: currentTotals.totalExpense,
-      balance: (currentIncome - currentExpense).toFixed(2),
+      balance: toNumber(balanceMoney).toFixed(2),
     },
     comparison: {
-      incomeChange: calcPercentage(currentIncome, prevIncome),
-      expenseChange: calcPercentage(currentExpense, prevExpense),
+      incomeChange: calcPercentage(toNumber(incomeMoney), toNumber(prevIncomeMoney)),
+      expenseChange: calcPercentage(toNumber(expenseMoney), toNumber(prevExpenseMoney)),
     },
     incomeByCategory,
     expenseByCategory,

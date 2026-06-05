@@ -26,14 +26,14 @@ describe('createMovementSchema', () => {
     const result = createMovementSchema.parse({
       categoryId: '550e8400-e29b-41d4-a716-446655440000',
       type: 'income',
-      amount: '2500.0000',
+      amount: '2500.00',
       description: 'Salario mensual',
       movementDate: '2026-06-01T12:00:00.000Z',
     });
     expect(result).toEqual({
       categoryId: '550e8400-e29b-41d4-a716-446655440000',
       type: 'income',
-      amount: '2500.0000',
+      amount: '2500.00',
       description: 'Salario mensual',
       movementDate: '2026-06-01T12:00:00.000Z',
     });
@@ -72,12 +72,12 @@ describe('createMovementSchema', () => {
     ).toThrow();
   });
 
-  it('rejects amount with more than 4 decimal places', () => {
+  it('rejects amount with more than 2 decimal places', () => {
     expect(() =>
       createMovementSchema.parse({
         categoryId: '550e8400-e29b-41d4-a716-446655440000',
         type: 'expense',
-        amount: '100.12345',
+        amount: '100.123',
         movementDate: '2026-06-01T12:00:00.000Z',
       }),
     ).toThrow();

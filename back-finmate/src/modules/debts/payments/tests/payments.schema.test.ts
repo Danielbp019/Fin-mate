@@ -15,12 +15,12 @@ describe('createPaymentSchema', () => {
 
   it('accepts valid data with all fields', () => {
     const result = createPaymentSchema.parse({
-      amount: '1000.0000',
+      amount: '1000.00',
       paymentDate: '2026-06-15T10:00:00.000Z',
       notes: 'Pago mensual',
     });
     expect(result).toEqual({
-      amount: '1000.0000',
+      amount: '1000.00',
       paymentDate: '2026-06-15T10:00:00.000Z',
       notes: 'Pago mensual',
     });
@@ -35,10 +35,10 @@ describe('createPaymentSchema', () => {
     ).toThrow();
   });
 
-  it('rejects amount with more than 4 decimal places', () => {
+  it('rejects amount with more than 2 decimal places', () => {
     expect(() =>
       createPaymentSchema.parse({
-        amount: '100.12345',
+        amount: '100.123',
         paymentDate: '2026-06-15T10:00:00.000Z',
       }),
     ).toThrow();

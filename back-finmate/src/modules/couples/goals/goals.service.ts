@@ -5,6 +5,8 @@ import * as couplesRepository from '../couples.repository.js';
 import { db } from '../../../shared/database/connection.js';
 import { movements, categories } from '../../../shared/database/schema.js';
 import { eq } from 'drizzle-orm';
+import { add, greaterThanOrEqual, isZero } from 'dinero.js';
+import { dbToDinero, dineroToDb, toNumber } from '../../../shared/money/money.js';
 import type {
   CreateGoalBody,
   UpdateGoalBody,
@@ -33,8 +35,8 @@ function toGoalResponse(
   goal: NonNullable<Awaited<ReturnType<typeof goalsRepository.findById>>>,
   contributions: ContributionResponse[],
 ): GoalResponse {
-  const target = Number(goal.targetAmount);
-  const current = Number(goal.currentAmount);
+  const target = toNumber(dbToDinero(goal.targetAmount));
+  const current = toNumber(dbToDinero(goal.currentAmount));
   const progressPercent = target > 0 ? Math.min(100, Math.round((current / target) * 100)) : 0;
 
   return {
@@ -173,10 +175,13 @@ export async function contribute(
     createdAt: now,
   };
 
-  const newCurrent = Number(goal.currentAmount) + Number(data.amount);
-  const newCurrentStr = newCurrent.toFixed(4);
+  const currentMoney = dbToDinero(goal.currentAmount);
+  const contributionMoney = dbToDinero(data.amount);
+  const newCurrentMoney = add(currentMoney, contributionMoney);
   const newStatus =
-    newCurrent >= Number(goal.targetAmount) ? ('completed' as const) : ('active' as const);
+    greaterThanOrEqual(newCurrentMoney, dbToDinero(goal.targetAmount))
+      ? ('completed' as const)
+      : ('active' as const);
 
   const categoryId = await findCategoryIdByName(CATEGORY_AHORRO);
 
@@ -196,7 +201,7 @@ export async function contribute(
   await goalsRepository.createContribution(contribution);
   await db.insert(movements).values(movement);
   await goalsRepository.update(goalId, {
-    currentAmount: newCurrentStr,
+    currentAmount: dineroToDb(newCurrentMoney),
     status: newStatus,
     updatedAt: now,
   });
@@ -217,8 +222,8 @@ export async function cancelActiveGoalsOnDissolve(coupleId: string): Promise<voi
   const activeGoals = await goalsRepository.findActiveByCouple(coupleId);
 
   for (const goal of activeGoals) {
-    const currentAmount = Number(goal.currentAmount);
-    if (currentAmount > 0) {
+    const currentMoney = dbToDinero(goal.currentAmount);
+    if (!isZero(currentMoney)) {
       const categoryId = await findCategoryIdByName(CATEGORY_DEVOLUCION);
       const now = new Date();
 

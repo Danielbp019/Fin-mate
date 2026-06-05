@@ -8,14 +8,14 @@ export const createDebtSchema = z.object({
   description: z.string().max(255, 'La descripcion no puede exceder 255 caracteres').optional(),
   initialAmount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales'),
+    .regex(/^\d+(\.\d{1,2})?$/, 'El monto debe ser un numero valido con hasta 2 decimales'),
   interestRate: z
     .string()
     .regex(/^\d+(\.\d{1,4})?$/, 'La tasa de interes debe ser un numero valido')
     .optional(),
   minimumPayment: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El pago minimo debe ser un numero valido')
+    .regex(/^\d+(\.\d{1,2})?$/, 'El pago minimo debe ser un numero valido con hasta 2 decimales')
     .optional(),
   dueDay: z
     .number()
@@ -40,11 +40,11 @@ export const updateDebtSchema = z.object({
   description: z.string().max(255, 'La descripcion no puede exceder 255 caracteres').optional(),
   initialAmount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
+    .regex(/^\d+(\.\d{1,2})?$/, 'El monto debe ser un numero valido con hasta 2 decimales')
     .optional(),
   currentAmount: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El monto debe ser un numero valido con hasta 4 decimales')
+    .regex(/^\d+(\.\d{1,2})?$/, 'El monto debe ser un numero valido con hasta 2 decimales')
     .optional(),
   interestRate: z
     .string()
@@ -52,7 +52,7 @@ export const updateDebtSchema = z.object({
     .optional(),
   minimumPayment: z
     .string()
-    .regex(/^\d+(\.\d{1,4})?$/, 'El pago minimo debe ser un numero valido')
+    .regex(/^\d+(\.\d{1,2})?$/, 'El pago minimo debe ser un numero valido con hasta 2 decimales')
     .optional(),
   dueDay: z
     .number()
