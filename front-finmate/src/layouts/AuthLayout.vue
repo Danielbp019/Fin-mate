@@ -50,7 +50,7 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer">
+    <v-navigation-drawer v-model="drawer" class="fm-drawer">
       <v-list>
         <v-list-item prepend-icon="mdi-shape" title="Categorías" :to="{ name: 'Categories' }" />
 

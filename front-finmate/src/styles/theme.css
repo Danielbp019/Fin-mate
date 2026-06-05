@@ -1612,3 +1612,9 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Drawer ── */
+.fm-drawer .v-list-item-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
