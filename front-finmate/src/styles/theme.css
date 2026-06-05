@@ -1400,6 +1400,10 @@ body {
 
 /* ── Form inputs ── */
 
+.fm-input {
+  --v-field-border-width: 2px;
+}
+
 .fm-input .v-field__outline__start,
 .fm-input .v-field__outline__end,
 .fm-input .v-field__outline__notch {
