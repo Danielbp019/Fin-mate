@@ -35,29 +35,10 @@
             variant="outlined"
           />
 
-          <v-text-field
-            v-model="filterFrom"
-            class="fm-input"
-            density="compact"
-            hide-details="auto"
-            placeholder="Desde"
-            rounded="lg"
-            style="min-width: 140px"
-            type="date"
-            variant="outlined"
-          />
-
-          <v-text-field
-            v-model="filterTo"
-            class="fm-input"
-            density="compact"
-            hide-details="auto"
-            placeholder="Hasta"
-            rounded="lg"
-            style="min-width: 140px"
-            type="date"
-            variant="outlined"
-          />
+          <span class="fm-label" style="margin-bottom: 0;">Desde:</span>
+          <DatePicker v-model="filterFrom" density="compact" placeholder="Desde" />
+          <span class="fm-label" style="margin-bottom: 0;">Hasta:</span>
+          <DatePicker v-model="filterTo" density="compact" placeholder="Hasta" />
 
           <v-btn rounded="lg" variant="tonal" @click="applyFilters">
             <v-icon>mdi-magnify</v-icon> Filtrar
@@ -219,16 +200,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Fecha</label>
-              <v-text-field
-                v-model="form.movementDate"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                required
-                rounded="lg"
-                type="date"
-                variant="outlined"
-              />
+              <DatePicker v-model="formDate" required />
             </div>
 
             <div class="fm-field-group">
@@ -297,6 +269,7 @@
 import type { AxiosError } from 'axios';
 import type { CreateMovementBody, Movement, UpdateMovementBody } from '@/types';
 import { computed, onMounted, ref, watch } from 'vue';
+import DatePicker from '@/components/DatePicker.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { useMovementsStore } from '@/stores/movements';
 import '@/styles/theme.css';
@@ -314,8 +287,10 @@ const formError = ref('');
 
 const filterType = ref('');
 const filterCategoryId = ref<string | null>(null);
-const filterFrom = ref('');
-const filterTo = ref('');
+const filterFrom = ref<Date | null>(null);
+const filterTo = ref<Date | null>(null);
+
+const formDate = ref(new Date());
 
 const form = ref<CreateMovementBody>({
   categoryId: '',
@@ -384,23 +359,32 @@ watch(filterType, () => {
   filterCategoryId.value = null;
 });
 
+watch(formDate, (d) => {
+  form.value.movementDate = d.toISOString().slice(0, 10);
+});
+
 function applyFilters() {
   const filters: Record<string, string> = {};
   if (filterType.value) filters.type = filterType.value;
   if (filterCategoryId.value) filters.categoryId = filterCategoryId.value;
-  if (filterFrom.value) filters.from = new Date(filterFrom.value).toISOString();
-  if (filterTo.value) filters.to = new Date(filterTo.value + 'T23:59:59').toISOString();
+  if (filterFrom.value) filters.from = filterFrom.value.toISOString();
+  if (filterTo.value) {
+    const endOfDay = new Date(filterTo.value);
+    endOfDay.setHours(23, 59, 59, 0);
+    filters.to = endOfDay.toISOString();
+  }
   store.setFilters(filters);
 }
 
 function openCreate() {
   editingId.value = null;
+  formDate.value = new Date();
   form.value = {
     categoryId: '',
     type: 'expense',
     amount: '',
     description: '',
-    movementDate: new Date().toISOString().slice(0, 10),
+    movementDate: formDate.value.toISOString().slice(0, 10),
   };
   formError.value = '';
   dialogOpen.value = true;
@@ -408,12 +392,13 @@ function openCreate() {
 
 function openEdit(mov: Movement) {
   editingId.value = mov.id;
+  formDate.value = new Date(mov.movementDate);
   form.value = {
     categoryId: mov.categoryId,
     type: mov.type,
     amount: mov.amount,
     description: mov.description ?? '',
-    movementDate: mov.movementDate.slice(0, 10),
+    movementDate: formDate.value.toISOString().slice(0, 10),
   };
   formError.value = '';
   dialogOpen.value = true;
@@ -445,7 +430,7 @@ async function handleSave() {
       categoryId: form.value.categoryId,
       type: form.value.type,
       amount: form.value.amount,
-      movementDate: new Date(form.value.movementDate + 'T12:00:00').toISOString(),
+      movementDate: formDate.value.toISOString(),
     };
     if (form.value.description) payload.description = form.value.description.trim();
 

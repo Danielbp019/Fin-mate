@@ -428,15 +428,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Fecha límite (opcional)</label>
-              <v-text-field
-                v-model="goalForm.deadline"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                rounded="lg"
-                type="date"
-                variant="outlined"
-              />
+              <DatePicker v-model="goalDeadline" />
             </div>
 
             <v-btn
@@ -515,16 +507,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Fecha</label>
-              <v-text-field
-                v-model="contributeForm.date"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                required
-                rounded="lg"
-                type="date"
-                variant="outlined"
-              />
+              <DatePicker v-model="contributeDate" required />
             </div>
 
             <div class="fm-field-group">
@@ -640,7 +623,8 @@
 
 <script lang="ts" setup>
 import type { Goal } from '@/types';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import DatePicker from '@/components/DatePicker.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useCouplesStore } from '@/stores/couples';
 import '@/styles/theme.css';
@@ -661,6 +645,17 @@ const goalDialog = ref(false);
 const editingGoal = ref<Goal | null>(null);
 const goalForm = ref({ title: '', targetAmount: '', deadline: '' });
 const goalFormError = ref('');
+
+const goalDeadline = ref<Date | null>(null);
+const contributeDate = ref(new Date());
+
+watch(goalDeadline, (d) => {
+  goalForm.value.deadline = d ? d.toISOString().slice(0, 10) : '';
+});
+
+watch(contributeDate, (d) => {
+  contributeForm.value.date = d.toISOString().slice(0, 10);
+});
 
 const contributeDialog = ref(false);
 const contributingGoal = ref<Goal | null>(null);
@@ -762,6 +757,7 @@ async function handleDissolve() {
 
 function openCreateGoal() {
   editingGoal.value = null;
+  goalDeadline.value = null;
   goalForm.value = { title: '', targetAmount: '', deadline: '' };
   goalFormError.value = '';
   goalDialog.value = true;
@@ -769,6 +765,7 @@ function openCreateGoal() {
 
 function openEditGoal(goal: Goal) {
   editingGoal.value = goal;
+  goalDeadline.value = goal.deadline ? new Date(goal.deadline) : null;
   goalForm.value = {
     title: goal.title,
     targetAmount: goal.targetAmount,
@@ -793,8 +790,8 @@ async function handleSaveGoal() {
       title: goalForm.value.title.trim(),
       targetAmount: goalForm.value.targetAmount,
     };
-    if (goalForm.value.deadline) {
-      payload.deadline = new Date(goalForm.value.deadline + 'T12:00:00').toISOString();
+    if (goalDeadline.value) {
+      payload.deadline = goalDeadline.value.toISOString();
     }
 
     await (editingGoal.value
@@ -818,9 +815,10 @@ async function handleDeleteGoal() {
 
 function openContribute(goal: Goal) {
   contributingGoal.value = goal;
+  contributeDate.value = new Date();
   contributeForm.value = {
     amount: '',
-    date: new Date().toISOString().slice(0, 10),
+    date: contributeDate.value.toISOString().slice(0, 10),
     notes: '',
   };
   contributeError.value = '';
@@ -840,7 +838,7 @@ async function handleContribute() {
   try {
     const payload: Record<string, unknown> = {
       amount: contributeForm.value.amount,
-      date: new Date(contributeForm.value.date + 'T12:00:00').toISOString(),
+      date: contributeDate.value.toISOString(),
     };
     if (contributeForm.value.notes) payload.notes = contributeForm.value.notes.trim();
 

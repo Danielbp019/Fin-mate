@@ -220,15 +220,7 @@
               </div>
               <div class="fm-field-group">
                 <label class="fm-label">Fecha de inicio (opcional)</label>
-                <v-text-field
-                  v-model="form.startDate"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  rounded="lg"
-                  type="date"
-                  variant="outlined"
-                />
+              <DatePicker v-model="debtStartDate" />
               </div>
             </div>
 
@@ -448,16 +440,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Fecha</label>
-              <v-text-field
-                v-model="payForm.paymentDate"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                required
-                rounded="lg"
-                type="date"
-                variant="outlined"
-              />
+              <DatePicker v-model="payDate" required />
             </div>
 
             <div class="fm-field-group">
@@ -498,7 +481,8 @@
 <script lang="ts" setup>
 import type { AxiosError } from 'axios';
 import type { CreateDebtBody, CreatePaymentBody, Debt, Payment, UpdateDebtBody } from '@/types';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import DatePicker from '@/components/DatePicker.vue';
 import { useDebtsStore } from '@/stores/debts';
 import '@/styles/theme.css';
 
@@ -526,6 +510,17 @@ const formError = ref('');
 
 const filterStatus = ref('');
 const filterPriority = ref<string | null>(null);
+
+const debtStartDate = ref<Date | null>(null);
+const payDate = ref(new Date());
+
+watch(debtStartDate, (d) => {
+  form.value.startDate = d ? d.toISOString().slice(0, 10) : '';
+});
+
+watch(payDate, (d) => {
+  payForm.value.paymentDate = d.toISOString().slice(0, 10);
+});
 
 const form = ref<DebtForm>({
   title: '',
@@ -631,6 +626,7 @@ function applyFilters() {
 
 function openCreate() {
   editingId.value = null;
+  debtStartDate.value = null;
   form.value = {
     title: '',
     initialAmount: '',
@@ -647,6 +643,7 @@ function openCreate() {
 
 function openEdit(debt: Debt) {
   editingId.value = debt.id;
+  debtStartDate.value = debt.startDate ? new Date(debt.startDate) : null;
   form.value = {
     title: debt.title,
     initialAmount: debt.initialAmount,
@@ -688,8 +685,7 @@ async function handleSave() {
     if (form.value.interestRate) payload.interestRate = form.value.interestRate;
     if (form.value.minimumPayment) payload.minimumPayment = form.value.minimumPayment;
     if (form.value.dueDay) payload.dueDay = Number(form.value.dueDay);
-    if (form.value.startDate)
-      payload.startDate = new Date(form.value.startDate + 'T12:00:00').toISOString();
+    if (debtStartDate.value) payload.startDate = debtStartDate.value.toISOString();
     if (form.value.description) payload.description = form.value.description.trim();
     if (editingId.value && form.value.status) payload.status = form.value.status;
 
@@ -742,9 +738,10 @@ async function openPayments(debt: Debt) {
 }
 
 function openPaymentForm() {
+  payDate.value = new Date();
   payForm.value = {
     amount: '',
-    paymentDate: new Date().toISOString().slice(0, 10),
+    paymentDate: payDate.value.toISOString().slice(0, 10),
     notes: '',
   };
   payFormError.value = '';
@@ -766,7 +763,7 @@ async function handlePaymentSave() {
   try {
     const payload: CreatePaymentBody = {
       amount: payForm.value.amount,
-      paymentDate: new Date(payForm.value.paymentDate + 'T12:00:00').toISOString(),
+      paymentDate: payDate.value.toISOString(),
     };
     if (payForm.value.notes) payload.notes = payForm.value.notes.trim();
 
