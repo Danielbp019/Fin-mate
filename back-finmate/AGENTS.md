@@ -18,6 +18,7 @@ Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod, JWT (Access + Refresh
 - Validar toda entrada externa
 - No uses nunca iconos en textos informativos de consola
 - La aplicación debe seguir la lógica financiera en movimientos de dinero y operaciones
+- Se usa dinero.js para operaciones para garantizar un manejo correcto de valores de dinero
 
 ### Variables de Entorno
 
