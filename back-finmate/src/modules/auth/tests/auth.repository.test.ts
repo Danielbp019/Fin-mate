@@ -26,7 +26,7 @@ describe('authRepository', () => {
         where: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue([mockUser]),
       };
-      mockDb.select.mockReturnValue(selectChain);
+      mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findUserByEmail('test@test.com');
       expect(result).toEqual(mockUser);
@@ -38,7 +38,7 @@ describe('authRepository', () => {
         where: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue([]),
       };
-      mockDb.select.mockReturnValue(selectChain);
+      mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findUserByEmail('no@existe.com');
       expect(result).toBeNull();
@@ -49,7 +49,7 @@ describe('authRepository', () => {
     it('debe insertar y retornar el id', async () => {
       mockDb.insert.mockReturnValue({
         values: vi.fn().mockResolvedValue(undefined),
-      });
+      } as any);
 
       const id = await authRepository.createRefreshToken({
         userId: 'user-1',
@@ -70,7 +70,7 @@ describe('authRepository', () => {
         where: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue([mockToken]),
       };
-      mockDb.select.mockReturnValue(selectChain);
+      mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findRefreshTokenById('token-1');
       expect(result).toEqual(mockToken);
@@ -82,7 +82,7 @@ describe('authRepository', () => {
         where: vi.fn().mockReturnThis(),
         limit: vi.fn().mockResolvedValue([]),
       };
-      mockDb.select.mockReturnValue(selectChain);
+      mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await authRepository.findRefreshTokenById('no-existe');
       expect(result).toBeNull();
@@ -95,7 +95,7 @@ describe('authRepository', () => {
         set: vi.fn().mockReturnThis(),
         where: vi.fn().mockResolvedValue(undefined),
       };
-      mockDb.update.mockReturnValue(updateChain);
+      mockDb.update.mockReturnValue(updateChain as any);
 
       await authRepository.revokeRefreshToken('token-1');
       expect(mockDb.update).toHaveBeenCalledTimes(1);
@@ -108,7 +108,7 @@ describe('authRepository', () => {
         set: vi.fn().mockReturnThis(),
         where: vi.fn().mockResolvedValue(undefined),
       };
-      mockDb.update.mockReturnValue(updateChain);
+      mockDb.update.mockReturnValue(updateChain as any);
 
       await authRepository.revokeAllUserRefreshTokens('user-1');
       expect(mockDb.update).toHaveBeenCalledTimes(1);

@@ -36,13 +36,14 @@ function createOtherUserToken(): string {
 const mockCategory = {
   id: '550e8400-e29b-41d4-a716-446655440000',
   userId: 'user-123',
-  type: 'expense',
+  type: 'expense' as const,
   name: 'Comida',
   icon: 'food',
   isActive: true,
   isSystem: false,
-  createdAt: '2024-01-01T00:00:00.000Z',
-  updatedAt: '2024-01-01T00:00:00.000Z',
+  createdAt: new Date('2024-01-01'),
+  updatedAt: new Date('2024-01-01'),
+  deletedAt: null,
 };
 
 let app: Awaited<typeof appPromise>;
@@ -62,7 +63,7 @@ describe('authentication', () => {
 
 describe('GET /categories', () => {
   it('returns 200 with categories list', async () => {
-    vi.mocked(categoriesRepository.findByUser).mockResolvedValue([mockCategory]);
+    vi.mocked(categoriesRepository.findByUser).mockResolvedValue([mockCategory] as any);
 
     const token = createToken();
 
@@ -76,7 +77,7 @@ describe('GET /categories', () => {
   });
 
   it('filters by type query param', async () => {
-    vi.mocked(categoriesRepository.findByUser).mockResolvedValue([mockCategory]);
+    vi.mocked(categoriesRepository.findByUser).mockResolvedValue([mockCategory] as any);
 
     const token = createToken();
 
@@ -103,7 +104,8 @@ describe('GET /categories', () => {
 
 describe('GET /categories/:id', () => {
   it('returns 200 with category', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory as any);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -116,7 +118,7 @@ describe('GET /categories/:id', () => {
   });
 
   it('returns 404 when not found', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -131,7 +133,7 @@ describe('GET /categories/:id', () => {
 
 describe('POST /categories', () => {
   it('returns 201 with created category', async () => {
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -146,7 +148,7 @@ describe('POST /categories', () => {
   });
 
   it('returns 201 with icon when provided', async () => {
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -160,7 +162,7 @@ describe('POST /categories', () => {
   });
 
   it('returns 409 when name already exists', async () => {
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(mockCategory as any);
 
     const token = createToken();
 
@@ -189,9 +191,9 @@ describe('POST /categories', () => {
 describe('PATCH /categories/:id', () => {
   it('returns 200 with updated category', async () => {
     vi.mocked(categoriesRepository.findById)
-      .mockResolvedValueOnce(mockCategory)
-      .mockResolvedValueOnce({ ...mockCategory, name: 'Actualizada' });
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+      .mockResolvedValueOnce(mockCategory as any)
+      .mockResolvedValueOnce({ ...mockCategory, name: 'Actualizada' } as any);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -209,7 +211,7 @@ describe('PATCH /categories/:id', () => {
       ...mockCategory,
       isSystem: true,
       userId: null,
-    });
+    } as any);
 
     const token = createToken();
 
@@ -223,7 +225,7 @@ describe('PATCH /categories/:id', () => {
   });
 
   it('returns 404 when category not found', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -237,7 +239,7 @@ describe('PATCH /categories/:id', () => {
   });
 
   it('returns 404 when category not owned', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory as any);
 
     const token = createOtherUserToken();
 
@@ -251,11 +253,11 @@ describe('PATCH /categories/:id', () => {
   });
 
   it('returns 409 when name conflicts', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory as any);
     vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue({
       ...mockCategory,
       id: 'other-id',
-    });
+    } as any);
 
     const token = createToken();
 
@@ -271,7 +273,7 @@ describe('PATCH /categories/:id', () => {
 
 describe('DELETE /categories/:id', () => {
   it('returns 204 when deleted successfully', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory as any);
     vi.mocked(categoriesRepository.countMovementsByCategory).mockResolvedValue(0);
 
     const token = createToken();
@@ -283,7 +285,7 @@ describe('DELETE /categories/:id', () => {
   });
 
   it('returns 409 when category has movements', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory as any);
     vi.mocked(categoriesRepository.countMovementsByCategory).mockResolvedValue(5);
 
     const token = createToken();
@@ -297,7 +299,7 @@ describe('DELETE /categories/:id', () => {
   });
 
   it('returns 404 when category not found', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null as any);
 
     const token = createToken();
 
@@ -310,7 +312,7 @@ describe('DELETE /categories/:id', () => {
   });
 
   it('returns 404 when category not owned', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(mockCategory as any);
 
     const token = createOtherUserToken();
 
@@ -327,7 +329,7 @@ describe('DELETE /categories/:id', () => {
       ...mockCategory,
       isSystem: true,
       userId: null,
-    });
+    } as any);
 
     const token = createToken();
 

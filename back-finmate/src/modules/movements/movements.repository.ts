@@ -1,4 +1,4 @@
-import { and, eq, isNull, gte, lte, sql, count, sum, desc } from 'drizzle-orm';
+import { and, eq, isNull, gte, lte, sql, count, desc } from 'drizzle-orm';
 import { db } from '../../shared/database/connection.js';
 import { movements, categories } from '../../shared/database/schema.js';
 import type { MovementListFilters } from './movements.types.js';
@@ -161,6 +161,7 @@ export async function getRecentWithCategory(userId: string, limitRows = 5) {
 
   return rows.map((r) => ({
     ...r,
-    movementDate: r.movementDate instanceof Date ? r.movementDate.toISOString() : String(r.movementDate),
+    movementDate:
+      r.movementDate instanceof Date ? r.movementDate.toISOString() : String(r.movementDate),
   }));
 }

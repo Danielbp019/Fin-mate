@@ -56,7 +56,9 @@ describe('authService.login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(authRepository.findUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(
+      mockRefreshTokenRecord.id as any,
+    );
   });
 
   it('debe retornar accessToken y refreshToken con credenciales válidas', async () => {
@@ -122,7 +124,9 @@ describe('authService.register', () => {
     vi.clearAllMocks();
     vi.mocked(authRepository.findUserByEmail).mockResolvedValue(null);
     vi.mocked(authRepository.createUser).mockResolvedValue(undefined);
-    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(
+      mockRefreshTokenRecord.id as any,
+    );
   });
 
   it('debe registrar y retornar tokens', async () => {
@@ -155,7 +159,9 @@ describe('authService.refresh', () => {
     vi.clearAllMocks();
     vi.mocked(authRepository.findRefreshTokenById).mockResolvedValue(mockRefreshTokenRecord);
     vi.mocked(authRepository.revokeRefreshToken).mockResolvedValue(undefined);
-    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(mockRefreshTokenRecord.id);
+    vi.mocked(authRepository.createRefreshToken).mockResolvedValue(
+      mockRefreshTokenRecord.id as any,
+    );
     vi.mocked(authRepository.findUserById).mockResolvedValue(mockUser);
   });
 

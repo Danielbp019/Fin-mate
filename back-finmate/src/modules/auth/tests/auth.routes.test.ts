@@ -51,7 +51,7 @@ function createMockServiceResponse() {
 describe('POST /auth/login', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.login).mockResolvedValue(createMockServiceResponse());
+    vi.mocked(authService.login).mockResolvedValue(createMockServiceResponse() as any);
   });
 
   it('debe retornar 200 con accessToken y user', async () => {
@@ -101,7 +101,7 @@ describe('POST /auth/login', () => {
 describe('POST /auth/register', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.register).mockResolvedValue(createMockServiceResponse());
+    vi.mocked(authService.register).mockResolvedValue(createMockServiceResponse() as any);
   });
 
   it('debe retornar 201 con accessToken y user', async () => {
@@ -126,7 +126,7 @@ describe('POST /auth/register', () => {
 describe('POST /auth/refresh', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(authService.refresh).mockResolvedValue(createMockServiceResponse());
+    vi.mocked(authService.refresh).mockResolvedValue(createMockServiceResponse() as any);
   });
 
   it('debe retornar 200 con nuevo accessToken', async () => {

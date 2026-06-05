@@ -201,7 +201,9 @@ describe('join', () => {
       deletedAt: null,
     });
     vi.mocked(couplesRepository.findInvitationByCoupleAndEmail).mockResolvedValue(
-      null as unknown as Awaited<ReturnType<typeof couplesRepository.findInvitationByCoupleAndEmail>>,
+      null as unknown as Awaited<
+        ReturnType<typeof couplesRepository.findInvitationByCoupleAndEmail>
+      >,
     );
 
     await expect(couplesService.join('couple-123', 'user-123')).rejects.toMatchObject({

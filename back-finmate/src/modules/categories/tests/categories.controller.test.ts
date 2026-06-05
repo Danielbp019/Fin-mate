@@ -14,6 +14,7 @@ const mockCategory = {
   isSystem: false,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
+  deletedAt: null,
 };
 
 function createAuthReq(overrides: Record<string, unknown> = {}): Request {
@@ -47,7 +48,7 @@ describe('list', () => {
     const res = createRes();
     const next = vi.fn() as NextFunction;
 
-    vi.mocked(categoriesService.list).mockResolvedValue([mockCategory]);
+    vi.mocked(categoriesService.list).mockResolvedValue([mockCategory as any]);
 
     await categoriesController.list(req, res, next);
 
@@ -100,7 +101,7 @@ describe('getById', () => {
     const res = createRes();
     const next = vi.fn() as NextFunction;
 
-    vi.mocked(categoriesService.getById).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesService.getById).mockResolvedValue(mockCategory as any);
 
     await categoriesController.getById(req, res, next);
 
@@ -129,7 +130,7 @@ describe('create', () => {
     const res = createRes();
     const next = vi.fn() as NextFunction;
 
-    vi.mocked(categoriesService.create).mockResolvedValue(mockCategory);
+    vi.mocked(categoriesService.create).mockResolvedValue(mockCategory as any);
 
     await categoriesController.create(req, res, next);
 
@@ -178,7 +179,7 @@ describe('update', () => {
     vi.mocked(categoriesService.update).mockResolvedValue({
       ...mockCategory,
       name: 'Comida actualizada',
-    });
+    } as any);
 
     await categoriesController.update(req, res, next);
 

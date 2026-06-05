@@ -14,7 +14,7 @@ const mockDb = vi.mocked(db);
 const mockCategory = {
   id: '550e8400-e29b-41d4-a716-446655440000',
   userId: 'user-123',
-  type: 'expense',
+  type: 'expense' as const,
   name: 'Comida',
   icon: 'food',
   isActive: true,
@@ -63,7 +63,7 @@ describe('categoriesRepository', () => {
 
   describe('findById', () => {
     it('retorna categoría cuando existe', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]));
+      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]) as any);
 
       const result = await categoriesRepository.findById('some-id');
 
@@ -72,7 +72,7 @@ describe('categoriesRepository', () => {
     });
 
     it('retorna null cuando no existe', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([]));
+      mockDb.select.mockReturnValue(mockSelectChain([]) as any);
 
       const result = await categoriesRepository.findById('nonexistent');
 
@@ -82,7 +82,7 @@ describe('categoriesRepository', () => {
 
   describe('findByNameAndUser', () => {
     it('retorna categoría cuando existe', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]));
+      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]) as any);
 
       const result = await categoriesRepository.findByNameAndUser('Comida', 'user-123');
 
@@ -90,7 +90,7 @@ describe('categoriesRepository', () => {
     });
 
     it('retorna null cuando no existe', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([]));
+      mockDb.select.mockReturnValue(mockSelectChain([]) as any);
 
       const result = await categoriesRepository.findByNameAndUser('Inexistente', 'user-123');
 
@@ -98,7 +98,7 @@ describe('categoriesRepository', () => {
     });
 
     it('excluye un ID cuando se proporciona excludeId', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]));
+      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]) as any);
 
       const result = await categoriesRepository.findByNameAndUser('Comida', 'user-123', 'other-id');
 
@@ -108,7 +108,7 @@ describe('categoriesRepository', () => {
 
   describe('findByUser', () => {
     it('retorna categorías del usuario y del sistema', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]));
+      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]) as any);
 
       const result = await categoriesRepository.findByUser('user-123');
 
@@ -116,7 +116,7 @@ describe('categoriesRepository', () => {
     });
 
     it('filtra por tipo cuando se proporciona', async () => {
-      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]));
+      mockDb.select.mockReturnValue(mockSelectChain([mockCategory]) as any);
 
       const result = await categoriesRepository.findByUser('user-123', 'expense');
 
@@ -126,7 +126,7 @@ describe('categoriesRepository', () => {
 
   describe('create', () => {
     it('inserta una categoría en la base de datos', async () => {
-      mockDb.insert.mockReturnValue(mockInsertChain());
+      mockDb.insert.mockReturnValue(mockInsertChain() as any);
 
       await categoriesRepository.create(mockCategory);
 
@@ -136,7 +136,7 @@ describe('categoriesRepository', () => {
 
   describe('update', () => {
     it('actualiza los campos de una categoría', async () => {
-      mockDb.update.mockReturnValue(mockUpdateChain());
+      mockDb.update.mockReturnValue(mockUpdateChain() as any);
 
       await categoriesRepository.update('some-id', { name: 'Nuevo nombre', icon: null });
 
@@ -147,7 +147,7 @@ describe('categoriesRepository', () => {
   describe('softDelete', () => {
     it('marca como inactivo y setea deletedAt', async () => {
       const now = new Date();
-      mockDb.update.mockReturnValue(mockUpdateChain());
+      mockDb.update.mockReturnValue(mockUpdateChain() as any);
 
       await categoriesRepository.softDelete('some-id', now);
 
@@ -162,7 +162,7 @@ describe('categoriesRepository', () => {
         where: vi.fn().mockResolvedValue([{ count: 5 }]),
       };
       selectChain.from.mockReturnValue(selectChain);
-      mockDb.select.mockReturnValue(selectChain);
+      mockDb.select.mockReturnValue(selectChain as any);
 
       const result = await categoriesRepository.countMovementsByCategory('some-id');
 

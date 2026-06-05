@@ -63,7 +63,7 @@ describe('getById', () => {
   });
 
   it('throws 404 when not found', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null as any);
 
     await expect(categoriesService.getById('nonexistent', 'user-123')).rejects.toMatchObject({
       statusCode: 404,
@@ -83,7 +83,7 @@ describe('getById', () => {
 
 describe('create', () => {
   it('creates category when name is available', async () => {
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
     vi.mocked(categoriesRepository.create).mockResolvedValue(undefined as never);
 
     const result = await categoriesService.create({ name: 'Comida', type: 'expense' }, 'user-123');
@@ -111,7 +111,7 @@ describe('create', () => {
   });
 
   it('creates category with icon when provided', async () => {
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
     vi.mocked(categoriesRepository.create).mockResolvedValue(undefined as never);
 
     const result = await categoriesService.create(
@@ -131,7 +131,7 @@ describe('update', () => {
     vi.mocked(categoriesRepository.findById)
       .mockResolvedValueOnce(mockCategory)
       .mockResolvedValueOnce({ ...mockCategory, name: 'Comida actualizada' });
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const result = await categoriesService.update(
       mockCategory.id,
@@ -144,7 +144,7 @@ describe('update', () => {
   });
 
   it('throws 404 when category not found', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null as any);
 
     await expect(
       categoriesService.update('nonexistent', { name: 'Nuevo' }, 'user-123'),
@@ -189,7 +189,7 @@ describe('update', () => {
     vi.mocked(categoriesRepository.findById)
       .mockResolvedValueOnce(mockCategory)
       .mockResolvedValueOnce({ ...mockCategory, icon: 'new-icon' });
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const result = await categoriesService.update(
       mockCategory.id,
@@ -208,11 +208,11 @@ describe('update', () => {
     vi.mocked(categoriesRepository.findById)
       .mockResolvedValueOnce(mockCategory)
       .mockResolvedValueOnce({ ...mockCategory, icon: null });
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
     const result = await categoriesService.update(
       mockCategory.id,
-      { icon: null },
+      { icon: null as any },
       'user-123',
     );
 
@@ -227,13 +227,9 @@ describe('update', () => {
     vi.mocked(categoriesRepository.findById)
       .mockResolvedValueOnce(mockCategory)
       .mockResolvedValueOnce({ ...mockCategory, isActive: false });
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
 
-    const result = await categoriesService.update(
-      mockCategory.id,
-      { isActive: false },
-      'user-123',
-    );
+    const result = await categoriesService.update(mockCategory.id, { isActive: false }, 'user-123');
 
     expect(categoriesRepository.update).toHaveBeenCalledWith(
       mockCategory.id,
@@ -264,7 +260,7 @@ describe('remove', () => {
   });
 
   it('throws 404 when not found', async () => {
-    vi.mocked(categoriesRepository.findById).mockResolvedValue(null);
+    vi.mocked(categoriesRepository.findById).mockResolvedValue(null as any);
 
     await expect(categoriesService.remove('nonexistent', 'user-123')).rejects.toMatchObject({
       statusCode: 404,

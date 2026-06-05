@@ -10,13 +10,16 @@ try {
   console.warn(`No se pudieron limpiar tokens expirados: ${message}`);
 }
 
-setInterval(async () => {
-  try {
-    await cleanupExpiredTokens();
-  } catch {
-    // Silenciar errores de limpieza programada
-  }
-}, 6 * 60 * 60 * 1000);
+setInterval(
+  async () => {
+    try {
+      await cleanupExpiredTokens();
+    } catch {
+      // Silenciar errores de limpieza programada
+    }
+  },
+  6 * 60 * 60 * 1000,
+);
 
 app.listen(env.port, () => {
   console.log(`Servidor corriendo en http://localhost:${env.port}`);

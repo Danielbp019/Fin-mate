@@ -50,13 +50,7 @@ export async function getActiveSummary(userId: string) {
       totalRemaining: sql<string>`COALESCE(SUM(${debts.currentAmount}), 0)`,
     })
     .from(debts)
-    .where(
-      and(
-        eq(debts.userId, userId),
-        eq(debts.status, 'pending'),
-        isNull(debts.deletedAt),
-      ),
-    );
+    .where(and(eq(debts.userId, userId), eq(debts.status, 'pending'), isNull(debts.deletedAt)));
 
   const row = result[0];
   if (!row || row.count === 0) return null;

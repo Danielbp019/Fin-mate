@@ -77,9 +77,7 @@ describe('updateCategorySchema', () => {
   });
 
   it('rejects icon longer than 50 characters', () => {
-    expect(() =>
-      updateCategorySchema.parse({ icon: 'A'.repeat(51) }),
-    ).toThrow();
+    expect(() => updateCategorySchema.parse({ icon: 'A'.repeat(51) })).toThrow();
   });
 });
 

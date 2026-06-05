@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { createCoupleSchema, updateCoupleSchema, inviteSchema, coupleParamsSchema } from '../couples.schema.js';
+import {
+  createCoupleSchema,
+  updateCoupleSchema,
+  inviteSchema,
+  coupleParamsSchema,
+} from '../couples.schema.js';
 
 describe('createCoupleSchema', () => {
   it('rejects empty body', () => {

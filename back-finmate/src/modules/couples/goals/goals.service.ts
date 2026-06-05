@@ -178,10 +178,9 @@ export async function contribute(
   const currentMoney = dbToDinero(goal.currentAmount);
   const contributionMoney = dbToDinero(data.amount);
   const newCurrentMoney = add(currentMoney, contributionMoney);
-  const newStatus =
-    greaterThanOrEqual(newCurrentMoney, dbToDinero(goal.targetAmount))
-      ? ('completed' as const)
-      : ('active' as const);
+  const newStatus = greaterThanOrEqual(newCurrentMoney, dbToDinero(goal.targetAmount))
+    ? ('completed' as const)
+    : ('active' as const);
 
   const categoryId = await findCategoryIdByName(CATEGORY_AHORRO);
 

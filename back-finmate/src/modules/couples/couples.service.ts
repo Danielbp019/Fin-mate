@@ -6,13 +6,20 @@ import { sendEmail } from '../../shared/email/email.service.js';
 import { coupleInvitationEmail } from '../../shared/email/email.templates.js';
 import * as couplesRepository from './couples.repository.js';
 import { cancelActiveGoalsOnDissolve } from './goals/goals.service.js';
-import type { CoupleResponse, CoupleMemberResponse } from './couples.types.js';
+import type { CoupleResponse } from './couples.types.js';
 
 const INVITATION_EXPIRY_DAYS = 7;
 
 function buildCoupleResponse(
   couple: NonNullable<Awaited<ReturnType<typeof couplesRepository.findCoupleById>>>,
-  members: { id: string; userId: string; name: string; email: string; role: 'owner' | 'member'; joinedAt: Date }[],
+  members: {
+    id: string;
+    userId: string;
+    name: string;
+    email: string;
+    role: 'owner' | 'member';
+    joinedAt: Date;
+  }[],
 ): CoupleResponse {
   return {
     id: couple.id,
@@ -39,7 +46,11 @@ export async function getMyCouple(userId: string): Promise<CoupleResponse> {
   return buildCoupleResponse(active.couple, members);
 }
 
-export async function update(coupleId: string, data: { name: string }, userId: string): Promise<CoupleResponse> {
+export async function update(
+  coupleId: string,
+  data: { name: string },
+  userId: string,
+): Promise<CoupleResponse> {
   const couple = await couplesRepository.findCoupleById(coupleId);
   if (!couple) {
     throw new AppError(404, 'Grupo no encontrado');
