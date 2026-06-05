@@ -14,6 +14,14 @@ import 'vuetify/styles';
 export default createVuetify({
   theme: {
     defaultTheme: 'light',
+    themes: {
+      light: {
+        colors: {
+          background: '#f8faf8',
+          surface: '#f8faf8',
+        },
+      },
+    },
   },
   defaults: {
     VLabel: { style: 'font-size: 14px; font-weight: 500;' },
