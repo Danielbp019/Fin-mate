@@ -1,6 +1,6 @@
 # Fin Mate - Finanzas Personales (Frontend)
 
-Aplicación web para administración de finanzas personales, ingresos y gastos, con modo de finanzas de pareja y consejos para administrar deudas.
+Aplicación web para administración de finanzas personales: control de ingresos y gastos, gestión de deudas, y modo pareja con metas compartidas.
 
 ## Stack Tecnológico
 
@@ -13,9 +13,10 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, Vitest, ESLint, Zod
 
 ## Instalación
 
-1. Clonar el repositorio
-2. `npm install`
-3. Iniciar servidor de desarrollo: `npm run dev`
+```bash
+npm install
+npm run dev
+```
 
 ## Variables de Entorno
 
@@ -23,19 +24,19 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, Vitest, ESLint, Zod
 | ------------------- | -------------------- | ----------------------- |
 | `VITE_API_BASE_URL` | URL base del backend | `http://localhost:3000` |
 
-## Comandos Útiles
+## Comandos
 
-| Comando                 | Descripción                                  |
-| ----------------------- | -------------------------------------------- |
-| `npm run dev`           | Inicia servidor de desarrollo con hot-reload |
-| `npm run build`         | Compila para producción                      |
-| `npm run preview`       | Previsualiza build de producción             |
-| `npm run lint`          | Ejecuta ESLint                               |
-| `npm run lint:fix`      | Corrige errores de ESLint automáticamente    |
-| `npm run type-check`    | Verifica tipos de TypeScript                 |
-| `npm run test`          | Ejecuta tests en modo watch                  |
-| `npm run test:run`      | Ejecuta tests una sola vez                   |
-| `npm run test:coverage` | Ejecuta tests con reporte de cobertura       |
+| Comando                 | Descripción                           |
+| ----------------------- | ------------------------------------- |
+| `npm run dev`           | Servidor de desarrollo con hot-reload |
+| `npm run build`         | Compilación producción                |
+| `npm run preview`       | Previsualizar build                   |
+| `npm run lint`          | Ejecutar ESLint                       |
+| `npm run lint:fix`      | Corregir errores ESLint               |
+| `npm run type-check`    | Verificar tipos TypeScript            |
+| `npm run test`          | Tests en modo watch                   |
+| `npm run test:run`      | Tests una sola vez                    |
+| `npm run test:coverage` | Tests con cobertura                   |
 
 ## Estructura del Proyecto
 
@@ -44,52 +45,27 @@ src/
   main.ts               Punto de entrada
   App.vue               Componente raíz
   pages/                Vistas (Login, Register, Dashboard, Profile, Categories, Movements, Debts)
-  layouts/              Layouts compartidos (AuthLayout)
-  stores/               Stores de Pinia (auth, categories, movements, debts)
-  services/             Servicios (api.ts - Axios + interceptors)
-  types/                Interfaces TypeScript compartidas
-  plugins/              Configuración de plugins (Vuetify, Router, Pinia)
-  router/               Configuración de rutas (Vue Router + auth guard)
-  styles/               Estilos globales y tema
+  layouts/              Layouts compartidos
+  stores/               Stores de Pinia
+  services/             Servicios (Axios + interceptors)
+  types/                Interfaces TypeScript
+  plugins/              Configuración de plugins
+  router/               Rutas + auth guard
+  styles/               Estilos globales (theme.css)
   components/           Componentes reutilizables
   tests/                Tests unitarios (Vitest)
-    auth.test.ts        Store de autenticación
-    categories.test.ts  Store de categorías
-    movements.test.ts   Store de movimientos
-    debts.test.ts       Store de deudas
-    couples.test.ts     Store de parejas + metas
-    dashboard.test.ts   Store de dashboard
-    api-interceptor.test.ts  Interceptores de Axios
-    router-guard.test.ts     Guard de rutas
-    components/         Tests de componentes (DatePicker, IconPicker)
-    pages/              Tests de páginas (Login, Register)
-    setup.ts            Configuración global de tests
-    mocks/              Mocks reutilizables
-public/                 Archivos públicos estáticos
+public/                 Archivos estáticos
 ```
 
 ## Autenticación
 
-- **Access Token**: JWT de 15 minutos, almacenado solo en memoria (Pinia). Se envía en header `Authorization: Bearer`.
-- **Refresh Token**: JWT de 30 días, almacenado en cookie HttpOnly. Se renueva automáticamente.
-- **Login/Register**: El backend envía el refresh token como cookie HttpOnly y retorna el access token.
-- **Refresh automático**: El interceptor de Axios detecta errores 401 e intenta refrescar el token automáticamente.
-- **Logout**: Revoca el refresh token en el backend y limpia el estado en memoria.
-- **Persistencia**: No se utiliza localStorage para almacenar tokens.
-
-## Reglas del Proyecto
-
-- Los textos que se muestren al usuario deben estar en idioma español
-- Usar el MCP context7 para consultar documentación de librerías
-- Cuando se creen end points nuevos actualizar el archivo readme.md
-- Evitar complejidad enterprise innecesaria
-- Aplicar principios SOLID siempre que sea razonable
-- No uses nunca iconos en textos informativos de consola
-- Cada modulo nuevo va en una categoria nueva en el drawer
-- Todas las paginas que se abran a partir del drawer deben solo ser vistas por usuarios autenticados
-- El proyecto usa un solo css styles/theme.css
-- Los tests se escriben en `src/tests/` con el mismo nombre del módulo que prueban
-- Los tests de stores y servicios son prioritarios; componentes y páginas son secundarios
+- **Access Token**: JWT de 15 min, almacenado en memoria (Pinia), enviado vía `Authorization: Bearer`
+- **Refresh Token**: JWT de 30 días en cookie HttpOnly, renovación automática
+- **Login/Register**: El backend setea la cookie HttpOnly y retorna el access token
+- **Interceptor**: Detecta errores 401 e intenta refresh automático
+- **Logout**: Revoca el refresh token y limpia el estado en memoria
+- **Persistencia**: No se usa localStorage para tokens
+- **Rutas protegidas**: Todas las rutas salvo login, register, landing y recuperación de cuenta
 
 ## Módulos
 
@@ -100,50 +76,13 @@ public/                 Archivos públicos estáticos
 | Movements (CRUD + filtros + paginación)          | ✅     |
 | Debts + Payments                                 | ✅     |
 | Couples + Goals                                  | ✅     |
-| Dashboard (summary + gráficos + datos en vivo)   | ✅     |
-
-## Validaciones
-
-Todas las entradas deben validarse usando Zod.
-
-## Seguridad
-
-- Validar toda entrada externa.
-- No exponer errores internos en producción.
-- Todas las rutas, salvo login, register, landing page y las de recuperación de cuenta, deben estar protegidas para que no puedan verse si el usuario no está autenticado.
-
-### Auth
-
-- Cerrar sesi&oacute;n en todos los dispositivos (`logout-all`)
-- Pantalla de recuperaci&oacute;n de contrase&ntilde;a (`forgot-password`, `reset-password`)
-- Verificaci&oacute;n de email (`verify-email`)
-
-### Dashboard
-
-- Resumen del mes actual: ingresos, gastos y balance con comparaci&oacute;n vs mes anterior
-- Gr&aacute;fico de evoluci&oacute;n mensual (Chart.js Line) — &uacute;ltimos 12 meses
-- Distribuci&oacute;n de ingresos y gastos por categor&iacute;a (Chart.js Doughnut)
-- Balance por mes (Chart.js Bar) — &uacute;ltimos 12 meses
-- &Uacute;ltimos 5 movimientos con categor&iacute;a y monto
-- Resumen de deudas activas (cantidad + total pendiente)
-- Progreso de metas de pareja (si hay grupo activo)
-- Todos los datos se obtienen de `GET /dashboard/summary`
-
-### Modo Pareja
-
-- Pantalla para crear o unirse a un grupo de pareja
-- Invitar a la pareja por email
-- Metas de pareja: crear, editar, eliminar metas compartidas
-- Contribuir a metas de pareja
-- Abandonar o disolver el grupo
+| Dashboard (resumen + gráficos)                   | ✅     |
 
 ## Pendientes
 
-Funcionalidades planificadas para futuras iteraciones:
-
-- bug en el dashboard las graficas se extienden de forma infinica hacia abajo de la pagina
-- pareja no tienen el css adecuado, la letra aparece no adaptarse al cambio de claro/oscuro del tema porque no esta usando el css principal del proyecto
-- deudas el buscador deberia ser instantaneo y no por pulsacion, movimientos es igual.
-- movimientos falta la columna si es ingreso o gasto, solo estan los iconos que lo representan
-- si se hace auto el filtro por fechas de movimientos podria conservar su uso manual
-- todos los input de seleccionar deberian tener orden alfabetico descendente
+- Bug en dashboard: gráficas se extienden infinitamente hacia abajo
+- Pareja: falta adaptación de texto al tema claro/oscuro (no usa `theme.css`)
+- Buscadores en deudas y movimientos deberían ser instantáneos
+- Movimientos: falta columna ingreso/gasto explícita
+- Filtro de fechas en movimientos podría conservar uso manual
+- Selects deben ordenarse alfabéticamente descendente
