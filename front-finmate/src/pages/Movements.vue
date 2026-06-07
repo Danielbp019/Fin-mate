@@ -171,7 +171,7 @@
                 required
                 rounded="lg"
                 variant="outlined"
-                @update:model-value="form.categoryId = ''"
+                @update:model-value="form.categoryId = null"
               />
             </div>
 
@@ -313,7 +313,7 @@ const filterTo = ref<Date | null>(null);
 const formDate = ref(new Date());
 
 const form = ref<CreateMovementBody>({
-  categoryId: '',
+  categoryId: null,
   type: 'expense',
   amount: '',
   description: '',
@@ -413,7 +413,7 @@ function openCreate() {
   editingId.value = null;
   formDate.value = new Date();
   form.value = {
-    categoryId: '',
+    categoryId: null,
     type: 'expense',
     amount: '',
     description: '',

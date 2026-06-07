@@ -35,7 +35,7 @@ export interface Movement {
 }
 
 export interface CreateMovementBody {
-  categoryId: string;
+  categoryId: string | null;
   type: 'income' | 'expense';
   amount: string;
   description?: string;
