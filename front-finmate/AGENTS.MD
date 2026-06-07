@@ -46,6 +46,8 @@ src/
   router/                  Vue Router + auth guard
   styles/                  theme.css (único archivo de estilos)
   components/              Componentes reutilizables
+  utils/                   format.ts — capitalizeFirst
+  directives/              capitalizeFirst.ts — v-capitalize-first
   tests/                   Vitest
     auth.test.ts, categories.test.ts, movements.test.ts, debts.test.ts
     couples.test.ts, dashboard.test.ts, api-interceptor.test.ts, router-guard.test.ts
@@ -81,6 +83,8 @@ src/
 ## Validaciones
 
 Todas las entradas con **Zod**.
+
+- **Capitalización**: Todo texto ingresado por el usuario (`name`, `title`, `description`, `notes`) se transforma con `capitalizeFirst` vía Zod `.transform()` + directiva `v-capitalize-first` para feedback en tiempo real
 
 ## Seguridad
 
@@ -119,9 +123,7 @@ Todas las entradas con **Zod**.
 
 ## Pendientes / Bugs
 
-- **Dashboard**: gráficas se extienden infinitamente hacia abajo
 - **Pareja**: texto no usa `theme.css`, no se adapta a claro/oscuro
 - **Buscadores**: deudas y movimientos deben ser instantáneos (no por botón)
 - **Movimientos**: falta columna explícita ingreso/gasto
 - **Filtro fechas**: si se automatiza, conservar opción manual
-- **Selects**: orden alfabético descendente

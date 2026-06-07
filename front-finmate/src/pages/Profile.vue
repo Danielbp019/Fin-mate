@@ -41,6 +41,7 @@
 
             <v-text-field
               v-model="name"
+              v-capitalize-first
               class="fm-input"
               density="comfortable"
               hide-details="auto"

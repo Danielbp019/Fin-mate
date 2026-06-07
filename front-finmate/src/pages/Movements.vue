@@ -222,6 +222,7 @@
 
               <v-textarea
                 v-model="form.description"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"

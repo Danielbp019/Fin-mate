@@ -53,6 +53,8 @@ src/
   router/               Rutas + auth guard
   styles/               Estilos globales (theme.css)
   components/           Componentes reutilizables
+  utils/                Utilitarios (format.ts — capitalizeFirst)
+  directives/           Directivas Vue (capitalizeFirst.ts)
   tests/                Tests unitarios (Vitest)
 public/                 Archivos estáticos
 ```
@@ -77,3 +79,29 @@ public/                 Archivos estáticos
 | Debts + Payments                                 | ✅     |
 | Couples + Goals                                  | ✅     |
 | Dashboard (resumen + gráficos)                   | ✅     |
+
+## Capitalización Automática de Texto
+
+Toda entrada de texto del usuario (nombre, título, descripción, notas) se capitaliza automáticamente para mantener consistencia en los datos. Se implementa en dos capas:
+
+### `src/utils/format.ts` — `capitalizeFirst`
+
+Función utilitaria que convierte la primera letra en mayúscula:
+
+```ts
+capitalizeFirst('hola mundo'); // → 'Hola mundo'
+capitalizeFirst(''); // → ''
+```
+
+Se aplica como `.transform(capitalizeFirst)` en los schemas de Zod. Esto asegura que al guardar cualquier formulario el texto quede capitalizado, incluso si el usuario escribe en minúsculas.
+
+### `src/directives/capitalizeFirst.ts` — `v-capitalize-first`
+
+Directiva Vue que capitaliza en **tiempo real mientras el usuario escribe**:
+
+1. Al montarse, busca el `<input>` / `<textarea>` nativo dentro del componente Vuetify
+2. Escucha el evento `input` y capitaliza la primera letra al instante si está en minúscula
+3. Dispara un nuevo `input` para que Vue/Vuetify actualice el `v-model`
+4. Preserva la posición del cursor para no interrumpir la escritura
+
+**Flujo completo:** Zod garantiza la capitalización en la capa de datos; `v-capitalize-first` da feedback visual inmediato en la capa de UX. Ambas son complementarias.

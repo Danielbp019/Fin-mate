@@ -112,6 +112,7 @@
 
               <v-text-field
                 v-model="form.name"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"

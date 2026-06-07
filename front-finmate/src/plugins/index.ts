@@ -10,9 +10,11 @@ import { createPinia } from 'pinia';
 import router from '../router';
 // Plugins
 import vuetify from './vuetify';
+import { vCapitalizeFirst } from '@/directives/capitalizeFirst';
 
 export function registerPlugins(app: App) {
   app.use(vuetify);
   app.use(createPinia());
   app.use(router);
+  app.directive('capitalize-first', vCapitalizeFirst);
 }

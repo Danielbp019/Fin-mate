@@ -38,6 +38,7 @@
 
                 <v-text-field
                   v-model="createForm.name"
+                  v-capitalize-first
                   class="fm-input"
                   density="comfortable"
                   hide-details="auto"
@@ -376,6 +377,7 @@
 
               <v-text-field
                 v-model="editNameForm.name"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"
@@ -431,6 +433,7 @@
 
               <v-text-field
                 v-model="goalForm.title"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"
@@ -552,6 +555,7 @@
 
               <v-textarea
                 v-model="contributeForm.notes"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"

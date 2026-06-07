@@ -133,6 +133,7 @@
 
               <v-text-field
                 v-model="form.title"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"
@@ -257,6 +258,7 @@
 
               <v-textarea
                 v-model="form.description"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"
@@ -481,6 +483,7 @@
 
               <v-textarea
                 v-model="payForm.notes"
+                v-capitalize-first
                 class="fm-input"
                 density="comfortable"
                 hide-details="auto"

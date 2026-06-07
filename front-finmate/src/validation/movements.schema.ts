@@ -1,10 +1,11 @@
+import { capitalizeFirst } from '@/utils/format';
 import { z } from 'zod';
 
 export const createMovementSchema = z.object({
   categoryId: z.string().min(1, 'Selecciona una categoría'),
   type: z.enum(['income', 'expense']),
   amount: z.string().refine((v) => Number(v) > 0, 'Ingresa un monto válido'),
-  description: z.string().max(255).trim().optional(),
+  description: z.string().max(255).trim().transform((v) => (v ? capitalizeFirst(v) : v)).optional(),
   movementDate: z.string().min(1, 'Selecciona una fecha'),
 });
 

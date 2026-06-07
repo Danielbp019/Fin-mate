@@ -1,8 +1,9 @@
+import { capitalizeFirst } from '@/utils/format';
 import { z } from 'zod';
 
 export const registerSchema = z
   .object({
-    name: z.string().min(1, 'El nombre es obligatorio').trim(),
+    name: z.string().min(1, 'El nombre es obligatorio').trim().transform(capitalizeFirst),
     email: z.string().email('Correo inválido').trim().toLowerCase(),
     password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
     confirmPassword: z.string(),
