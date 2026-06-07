@@ -181,11 +181,13 @@
               <v-select
                 v-model="form.categoryId"
                 class="fm-input"
+                clearable
                 density="comfortable"
                 hide-details="auto"
                 item-title="name"
                 item-value="id"
                 :items="availableCategories"
+                placeholder="Selecciona una categoría"
                 required
                 rounded="lg"
                 variant="outlined"
@@ -333,16 +335,22 @@ const headers = [
 ];
 
 const categoryOptions = computed(() => {
-  const cats = catStore.categories.filter((c) => c.isActive);
-  return cats.map((c) => ({
-    title: c.name,
-    value: c.id,
-  }));
+  return catStore.categories
+    .filter((c) => c.isActive)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((c) => ({
+      title: c.name,
+      value: c.id,
+    }));
 });
 
 const availableCategories = computed(() => {
-  if (!form.value.type) return catStore.expenseCategories;
-  return form.value.type === 'income' ? catStore.incomeCategories : catStore.expenseCategories;
+  const cats = !form.value.type
+    ? catStore.expenseCategories
+    : form.value.type === 'income'
+      ? catStore.incomeCategories
+      : catStore.expenseCategories;
+  return [...cats].sort((a, b) => a.name.localeCompare(b.name));
 });
 
 const totalPages = computed(() =>

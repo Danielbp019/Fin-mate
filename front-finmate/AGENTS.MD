@@ -59,7 +59,7 @@ src/
 1. **Idioma**: Todos los textos visibles al usuario en español.
 2. **Documentación**: Usar MCP `context7` para consultar docs de librerías.
 3. **README**: Si se crean nuevos endpoints, actualizar `README.md`.
-4. **Complejidad**: Evitar complejidad enterprise innecesaria.
+4. **Complejidad**: Evitar complejidad innecesaria.
 5. **SOLID**: Aplicar principios SOLID cuando sea razonable.
 6. **Consola**: No usar emojis en textos de consola.
 7. **Módulos**: Cada módulo nuevo va en una categoría nueva en el drawer.

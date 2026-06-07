@@ -77,12 +77,3 @@ public/                 Archivos estáticos
 | Debts + Payments                                 | ✅     |
 | Couples + Goals                                  | ✅     |
 | Dashboard (resumen + gráficos)                   | ✅     |
-
-## Pendientes
-
-- Bug en dashboard: gráficas se extienden infinitamente hacia abajo
-- Pareja: falta adaptación de texto al tema claro/oscuro (no usa `theme.css`)
-- Buscadores en deudas y movimientos deberían ser instantáneos
-- Movimientos: falta columna ingreso/gasto explícita
-- Filtro de fechas en movimientos podría conservar uso manual
-- Selects deben ordenarse alfabéticamente descendente
