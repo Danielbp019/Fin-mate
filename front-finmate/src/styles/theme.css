@@ -1201,11 +1201,23 @@ body {
 /* Chart components */
 .chart-wrapper {
   position: relative;
-  min-height: 200px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-area {
+  position: relative;
+  flex: 1;
+  min-height: 0;
 }
 
 .chart-card {
-  height: 300px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .chart-title {
@@ -1255,6 +1267,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding: 0 4px;
 }
 
 .legend-item {

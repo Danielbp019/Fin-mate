@@ -10,7 +10,9 @@
       <p>{{ emptyText }}</p>
     </div>
 
-    <Line v-else :data="chartData" :options="chartOptions" />
+    <div v-else class="chart-area">
+      <Line :data="chartData" :options="chartOptions" />
+    </div>
   </div>
 </template>
 

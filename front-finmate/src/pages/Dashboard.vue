@@ -58,56 +58,54 @@
       </v-col>
 
       <v-col cols="12" lg="4">
-        <v-row>
-          <v-col cols="12" lg="12" sm="6">
-            <div class="stat-card chart-card">
-              <DoughnutChart
-                :colors="categoryColors"
-                :data="incomeCategoryData"
-                empty-text="Sin ingresos este mes"
-                :labels="incomeCategoryLabels"
-                :loading="loading"
-                :no-data="
-                  !loading && (!summary?.incomeByCategory || summary.incomeByCategory.length === 0)
-                "
-                title="Ingresos por categoría"
-              />
-            </div>
-          </v-col>
+        <div class="stat-card chart-card">
+          <BarChart
+            :background-colors="balanceColors"
+            :data="balanceData"
+            empty-text="No hay datos suficientes"
+            :labels="balanceLabels"
+            :loading="loading"
+            :no-data="
+              !loading && (!summary?.monthlyBalance || summary.monthlyBalance.length === 0)
+            "
+            title="Balance por mes"
+          />
+        </div>
+      </v-col>
+    </v-row>
 
-          <v-col cols="12" lg="12" sm="6">
-            <div class="stat-card chart-card">
-              <DoughnutChart
-                :colors="categoryColors"
-                :data="expenseCategoryData"
-                empty-text="Sin gastos este mes"
-                :labels="expenseCategoryLabels"
-                :loading="loading"
-                :no-data="
-                  !loading &&
-                  (!summary?.expenseByCategory || summary.expenseByCategory.length === 0)
-                "
-                title="Gastos por categoría"
-              />
-            </div>
-          </v-col>
+    <v-row>
+      <v-col cols="12" md="6">
+        <div class="stat-card chart-card">
+          <DoughnutChart
+            :colors="categoryColors"
+            :data="incomeCategoryData"
+            empty-text="Sin ingresos este mes"
+            :labels="incomeCategoryLabels"
+            :loading="loading"
+            :no-data="
+              !loading && (!summary?.incomeByCategory || summary.incomeByCategory.length === 0)
+            "
+            title="Ingresos por categoría"
+          />
+        </div>
+      </v-col>
 
-          <v-col cols="12">
-            <div class="stat-card chart-card">
-              <BarChart
-                :background-colors="balanceColors"
-                :data="balanceData"
-                empty-text="No hay datos suficientes"
-                :labels="balanceLabels"
-                :loading="loading"
-                :no-data="
-                  !loading && (!summary?.monthlyBalance || summary.monthlyBalance.length === 0)
-                "
-                title="Balance por mes"
-              />
-            </div>
-          </v-col>
-        </v-row>
+      <v-col cols="12" md="6">
+        <div class="stat-card chart-card">
+          <DoughnutChart
+            :colors="categoryColors"
+            :data="expenseCategoryData"
+            empty-text="Sin gastos este mes"
+            :labels="expenseCategoryLabels"
+            :loading="loading"
+            :no-data="
+              !loading &&
+              (!summary?.expenseByCategory || summary.expenseByCategory.length === 0)
+            "
+            title="Gastos por categoría"
+          />
+        </div>
       </v-col>
     </v-row>
 
