@@ -1,16 +1,20 @@
 <template>
   <div class="chart-wrapper">
     <h3 class="chart-title">{{ title }}</h3>
+
     <div v-if="loading" class="chart-loading">
       <v-progress-circular color="primary" indeterminate size="32" />
     </div>
+
     <div v-else-if="noData" class="chart-empty">
       <p>{{ emptyText }}</p>
     </div>
+
     <div v-else class="doughnut-layout">
       <div class="doughnut-canvas">
         <Doughnut :data="chartData" :options="chartOptions" />
       </div>
+
       <div class="doughnut-legend">
         <div v-for="(item, i) in legendItems" :key="i" class="legend-item">
           <span class="legend-dot" :style="{ background: item.color }" />

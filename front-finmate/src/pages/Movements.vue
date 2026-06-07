@@ -8,6 +8,7 @@
         <h1>Movimientos</h1>
         <p>Registra y administra tus ingresos y gastos</p>
       </div>
+
       <v-btn class="fm-btn-submit" color="#0F6E56" prepend-icon="mdi-plus" @click="openCreate">
         Nuevo movimiento
       </v-btn>
@@ -35,9 +36,9 @@
             variant="outlined"
           />
 
-          <span class="fm-label" style="margin-bottom: 0;">Desde:</span>
+          <span class="fm-label" style="margin-bottom: 0">Desde:</span>
           <DatePicker v-model="filterFrom" density="compact" placeholder="Desde" />
-          <span class="fm-label" style="margin-bottom: 0;">Hasta:</span>
+          <span class="fm-label" style="margin-bottom: 0">Hasta:</span>
           <DatePicker v-model="filterTo" density="compact" placeholder="Hasta" />
 
           <v-btn rounded="lg" variant="tonal" @click="applyFilters">
@@ -72,14 +73,17 @@
         <template #item.movementDate="{ item }">
           {{ formatDate(item.movementDate) }}
         </template>
+
         <template #item.type="{ item }">
           <v-icon :color="item.type === 'income' ? 'green' : 'orange'">
             {{ item.type === 'income' ? 'mdi-trending-up' : 'mdi-trending-down' }}
           </v-icon>
         </template>
+
         <template #item.categoryId="{ item }">
           {{ getCategoryName(item.categoryId) }}
         </template>
+
         <template #item.amount="{ item }">
           <span
             :class="item.type === 'income' ? 'green--text' : 'orange--text'"
@@ -88,10 +92,12 @@
             {{ formatAmount(item) }}
           </span>
         </template>
+
         <template #item.actions="{ item }">
           <v-btn icon size="small" title="Editar" variant="text" @click="openEdit(item)">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
+
           <v-btn
             color="error"
             icon
@@ -115,10 +121,12 @@
         >
           <v-icon>mdi-chevron-left</v-icon> Anterior
         </v-btn>
+
         <span class="text-caption" style="color: rgba(var(--v-theme-on-surface), 0.6)">
           Página {{ store.pagination.page }} de {{ totalPages }} ({{ store.pagination.total }}
           registros)
         </span>
+
         <v-btn
           :disabled="store.pagination.page >= totalPages"
           variant="text"
@@ -134,7 +142,9 @@
         <v-card-title class="text-h5 font-weight-bold pa-4">
           {{ editingId ? 'Editar movimiento' : 'Nuevo movimiento' }}
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="formError"
@@ -152,6 +162,7 @@
           <v-form @submit.prevent="handleSave">
             <div class="fm-field-group">
               <label class="fm-label">Tipo</label>
+
               <v-select
                 v-model="form.type"
                 class="fm-input"
@@ -167,6 +178,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Categoría</label>
+
               <v-select
                 v-model="form.categoryId"
                 class="fm-input"
@@ -183,6 +195,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Monto</label>
+
               <v-text-field
                 v-model="form.amount"
                 class="fm-input"
@@ -205,6 +218,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Descripción (opcional)</label>
+
               <v-textarea
                 v-model="form.description"
                 class="fm-input"
@@ -240,16 +254,20 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar movimiento</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <p>¿Estás seguro de eliminar este movimiento?</p>
+
           <p class="mt-2 text-caption">
             {{ getCategoryName(deletingItem?.categoryId ?? '') }} —
             {{ formatAmount(deletingItem) }}
           </p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="deleteDialogOpen = false">Cancelar</v-btn>
+
           <v-btn
             color="error"
             :loading="deleting"
@@ -266,12 +284,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { AxiosError } from 'axios';
 import type { CreateMovementBody, Movement, UpdateMovementBody } from '@/types';
+import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { useMovementsStore } from '@/stores/movements';
+import { createMovementSchema, updateMovementSchema } from '@/validation';
 import '@/styles/theme.css';
 
 const catStore = useCategoriesStore();
@@ -410,29 +429,22 @@ function confirmDelete(mov: Movement) {
 }
 
 async function handleSave() {
-  if (!form.value.categoryId) {
-    formError.value = 'Selecciona una categoría';
+  const schema = editingId.value ? updateMovementSchema : createMovementSchema;
+  const result = schema.safeParse({
+    categoryId: form.value.categoryId,
+    type: form.value.type,
+    amount: form.value.amount,
+    movementDate: formDate.value.toISOString(),
+    description: form.value.description?.trim() || undefined,
+  });
+  if (!result.success) {
+    formError.value = result.error.issues[0].message;
     return;
   }
-  if (!form.value.amount || Number(form.value.amount) <= 0) {
-    formError.value = 'Ingresa un monto válido';
-    return;
-  }
-  if (!form.value.movementDate) {
-    formError.value = 'Selecciona una fecha';
-    return;
-  }
-
   saving.value = true;
   formError.value = '';
   try {
-    const payload: CreateMovementBody = {
-      categoryId: form.value.categoryId,
-      type: form.value.type,
-      amount: form.value.amount,
-      movementDate: formDate.value.toISOString(),
-    };
-    if (form.value.description) payload.description = form.value.description.trim();
+    const payload = result.data as CreateMovementBody;
 
     await (editingId.value
       ? store.updateMovement(editingId.value, payload as UpdateMovementBody)

@@ -19,6 +19,7 @@
             <em>libertad</em><br />
             financiera.
           </h2>
+
           <p class="fm-panel-sub">
             Crea tu cuenta gratis y toma el control de cada peso desde el primer día.
           </p>
@@ -30,24 +31,31 @@
             <div class="fm-feature-icon">
               <v-icon color="white" size="16">mdi-check</v-icon>
             </div>
+
             <span>Control de ingresos y gastos</span>
           </div>
+
           <div class="fm-feature-item">
             <div class="fm-feature-icon">
               <v-icon color="white" size="16">mdi-check</v-icon>
             </div>
+
             <span>Estrategias para eliminar deudas</span>
           </div>
+
           <div class="fm-feature-item">
             <div class="fm-feature-icon">
               <v-icon color="white" size="16">mdi-check</v-icon>
             </div>
+
             <span>Modo pareja sincronizado</span>
           </div>
+
           <div class="fm-feature-item">
             <div class="fm-feature-icon">
               <v-icon color="white" size="16">mdi-check</v-icon>
             </div>
+
             <span>Completamente gratuito</span>
           </div>
         </div>
@@ -59,24 +67,30 @@
               <span class="fm-deco-dot" />
               Modo pareja activo
             </div>
+
             <span class="fm-deco-badge">👫 Sincronizado</span>
           </div>
+
           <div class="fm-deco-pair">
             <div class="fm-deco-avatar" style="background: rgba(186, 117, 23, 0.4)">A</div>
+
             <div
               class="fm-deco-avatar"
               style="background: rgba(24, 95, 165, 0.4); margin-left: -8px"
             >
               M
             </div>
+
             <div class="fm-deco-pair-text">
               <span class="fm-deco-pair-name">Ana & Miguel</span>
               <span class="fm-deco-pair-sub">Meta compartida: $5,000</span>
             </div>
           </div>
+
           <div class="fm-deco-bar-track">
             <div class="fm-deco-bar-fill" style="width: 74%" />
           </div>
+
           <div class="fm-deco-bar-labels">
             <span>74% completado</span>
             <span class="gold">$3,700 ahorrados</span>
@@ -108,6 +122,7 @@
         <v-form class="fm-form" @submit.prevent="handleRegister">
           <div class="fm-field-group">
             <label class="fm-label">Nombre completo</label>
+
             <v-text-field
               v-model="name"
               class="fm-input"
@@ -123,6 +138,7 @@
 
           <div class="fm-field-group">
             <label class="fm-label">Correo electrónico</label>
+
             <v-text-field
               v-model="email"
               class="fm-input"
@@ -140,6 +156,7 @@
           <div class="fm-field-row">
             <div class="fm-field-group">
               <label class="fm-label">Contraseña</label>
+
               <v-text-field
                 v-model="password"
                 class="fm-input"
@@ -156,6 +173,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Confirmar contraseña</label>
+
               <v-text-field
                 v-model="confirmPassword"
                 class="fm-input"
@@ -165,7 +183,6 @@
                 prepend-inner-icon="mdi-lock-check-outline"
                 required
                 rounded="lg"
-                :rules="[confirmMatch]"
                 type="password"
                 variant="outlined"
               />
@@ -210,6 +227,7 @@ import type { AxiosError } from 'axios';
 import { ref } from 'vue';
 import LegalModal from '@/components/LegalModal.vue';
 import { useAuthStore } from '@/stores/auth';
+import { registerSchema } from '@/validation';
 import '@/styles/theme.css';
 
 const auth = useAuthStore();
@@ -222,19 +240,21 @@ const error = ref('');
 const showPrivacy = ref(false);
 const showTerms = ref(false);
 
-function confirmMatch(v: string) {
-  return v === password.value || 'Las contraseñas no coinciden';
-}
-
 async function handleRegister() {
-  if (password.value !== confirmPassword.value) {
-    error.value = 'Las contraseñas no coinciden';
+  const result = registerSchema.safeParse({
+    name: name.value,
+    email: email.value,
+    password: password.value,
+    confirmPassword: confirmPassword.value,
+  });
+  if (!result.success) {
+    error.value = result.error.issues[0].message;
     return;
   }
   loading.value = true;
   error.value = '';
   try {
-    await auth.register(name.value, email.value, password.value);
+    await auth.register(result.data.name, result.data.email, result.data.password);
   } catch (error_) {
     const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message;
     error.value = msg || 'Error al registrarse';

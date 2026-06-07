@@ -17,6 +17,7 @@
           :loading="loading"
         />
       </v-col>
+
       <v-col cols="12" md="4">
         <SummaryCard
           :amount="summary?.currentMonth.totalExpense ?? '0'"
@@ -28,6 +29,7 @@
           :loading="loading"
         />
       </v-col>
+
       <v-col cols="12" md="4">
         <SummaryCard
           :amount="summary?.currentMonth.balance ?? '0'"
@@ -54,6 +56,7 @@
           />
         </div>
       </v-col>
+
       <v-col cols="12" lg="4">
         <v-row>
           <v-col cols="12" lg="12" sm="6">
@@ -71,6 +74,7 @@
               />
             </div>
           </v-col>
+
           <v-col cols="12" lg="12" sm="6">
             <div class="stat-card">
               <DoughnutChart
@@ -87,6 +91,7 @@
               />
             </div>
           </v-col>
+
           <v-col cols="12">
             <div class="stat-card">
               <BarChart
@@ -110,15 +115,18 @@
       <v-col cols="12" md="6">
         <div class="stat-card">
           <h3 class="content-card-title">Últimos movimientos</h3>
+
           <div v-if="loading" class="chart-loading">
             <v-progress-circular color="primary" indeterminate size="32" />
           </div>
+
           <div
             v-else-if="!summary?.recentMovements || summary.recentMovements.length === 0"
             class="chart-empty"
           >
             <p>Aún no hay movimientos registrados.</p>
           </div>
+
           <div v-else>
             <div v-for="m in summary!.recentMovements" :key="m.id" class="movement-item">
               <div
@@ -129,10 +137,12 @@
                   {{ m.type === 'income' ? 'mdi-plus' : 'mdi-minus' }}
                 </v-icon>
               </div>
+
               <div class="movement-info">
                 <div class="movement-category">{{ m.categoryName }}</div>
                 <div class="movement-desc">{{ m.description || 'Sin descripción' }}</div>
               </div>
+
               <div class="movement-amount" :class="m.type">
                 {{ formatAmount(m.amount) }}
               </div>
@@ -140,22 +150,28 @@
           </div>
         </div>
       </v-col>
+
       <v-col cols="12" md="6">
         <div class="stat-card">
           <h3 class="content-card-title">Deudas activas</h3>
+
           <div v-if="loading" class="chart-loading">
             <v-progress-circular color="primary" indeterminate size="32" />
           </div>
+
           <div v-else-if="!summary?.activeDebts" class="chart-empty">
             <p>No tienes deudas registradas.</p>
           </div>
+
           <div v-else>
             <div class="stat-row">
               <span class="stat-row-label">Deudas activas</span>
               <span class="stat-row-value">{{ summary!.activeDebts!.count }}</span>
             </div>
+
             <div class="stat-row">
               <span class="stat-row-label">Total pendiente</span>
+
               <span class="stat-row-value">{{
                 formatAmount(summary!.activeDebts!.totalRemaining)
               }}</span>
@@ -165,15 +181,18 @@
 
         <div v-if="summary?.coupleGoals" class="stat-card" style="margin-top: 16px">
           <h3 class="content-card-title">Metas de pareja</h3>
+
           <div class="stat-row">
             <span class="stat-row-label">Metas activas</span>
             <span class="stat-row-value">{{ summary.coupleGoals.active }}</span>
           </div>
+
           <div class="progress-section">
             <div class="progress-header">
               <span class="left">Progreso general</span>
               <span class="right">{{ summary.coupleGoals.totalProgress }}%</span>
             </div>
+
             <v-progress-linear
               color="green"
               height="8"

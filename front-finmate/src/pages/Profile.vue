@@ -38,6 +38,7 @@
         <v-form @submit.prevent="handleUpdateName">
           <div class="fm-field-group">
             <label class="fm-label">Nombre</label>
+
             <v-text-field
               v-model="name"
               class="fm-input"
@@ -98,6 +99,7 @@
         <v-form @submit.prevent="handleChangePassword">
           <div class="fm-field-group">
             <label class="fm-label">Contrase&ntilde;a actual</label>
+
             <v-text-field
               v-model="currentPassword"
               class="fm-input"
@@ -114,11 +116,11 @@
 
           <div class="fm-field-group">
             <label class="fm-label">Nueva contrase&ntilde;a</label>
+
             <v-text-field
               v-model="newPassword"
               class="fm-input"
               density="comfortable"
-              :error-messages="newPasswordErrors"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -131,11 +133,11 @@
 
           <div class="fm-field-group">
             <label class="fm-label">Confirmar nueva contrase&ntilde;a</label>
+
             <v-text-field
               v-model="confirmPassword"
               class="fm-input"
               density="comfortable"
-              :error-messages="confirmPasswordErrors"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -166,9 +168,10 @@
 
 <script lang="ts" setup>
 import type { AxiosError } from 'axios';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import api from '@/services/api';
 import { useAuthStore } from '@/stores/auth';
+import { changePasswordSchema, updateProfileSchema } from '@/validation';
 import '@/styles/theme.css';
 
 const auth = useAuthStore();
@@ -187,23 +190,6 @@ const passwordLoading = ref(false);
 const passwordError = ref('');
 const passwordSuccess = ref('');
 
-function validatePassword(pw: string): string | null {
-  if (pw.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
-  return null;
-}
-
-const confirmPasswordErrors = computed(() => {
-  if (!confirmPassword.value) return [];
-  if (confirmPassword.value !== newPassword.value) return ['Las contraseñas no coinciden'];
-  return [];
-});
-
-const newPasswordErrors = computed(() => {
-  if (!newPassword.value) return [];
-  const err = validatePassword(newPassword.value);
-  return err ? [err] : [];
-});
-
 onMounted(() => {
   if (auth.user) {
     name.value = auth.user.name;
@@ -211,11 +197,16 @@ onMounted(() => {
 });
 
 async function handleUpdateName() {
+  const result = updateProfileSchema.safeParse({ name: name.value });
+  if (!result.success) {
+    nameError.value = result.error.issues[0].message;
+    return;
+  }
   nameLoading.value = true;
   nameError.value = '';
   nameSuccess.value = '';
   try {
-    await auth.updateProfile(name.value);
+    await auth.updateProfile(result.data.name);
     nameSuccess.value = 'Nombre actualizado correctamente';
   } catch (error_) {
     const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message;
@@ -226,27 +217,22 @@ async function handleUpdateName() {
 }
 
 async function handleChangePassword() {
+  const result = changePasswordSchema.safeParse({
+    currentPassword: currentPassword.value,
+    newPassword: newPassword.value,
+    confirmPassword: confirmPassword.value,
+  });
+  if (!result.success) {
+    passwordError.value = result.error.issues[0].message;
+    return;
+  }
   passwordLoading.value = true;
   passwordError.value = '';
   passwordSuccess.value = '';
-
-  const pwErr = validatePassword(newPassword.value);
-  if (pwErr) {
-    passwordError.value = pwErr;
-    passwordLoading.value = false;
-    return;
-  }
-
-  if (newPassword.value !== confirmPassword.value) {
-    passwordError.value = 'Las contraseñas no coinciden';
-    passwordLoading.value = false;
-    return;
-  }
-
   try {
     const res = await api.post('/auth/change-password', {
-      currentPassword: currentPassword.value,
-      newPassword: newPassword.value,
+      currentPassword: result.data.currentPassword,
+      newPassword: result.data.newPassword,
     });
     passwordSuccess.value = res.data.message as string;
     currentPassword.value = '';

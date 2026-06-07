@@ -27,6 +27,7 @@
         <v-card>
           <v-card-text class="pa-4">
             <h2 class="text-h6 font-weight-bold mb-1">Crear grupo</h2>
+
             <p class="text-caption mb-4">
               Crea un grupo de finanzas compartidas e invita a tu pareja
             </p>
@@ -34,6 +35,7 @@
             <v-form @submit.prevent="handleCreate">
               <div class="fm-field-group">
                 <label class="fm-label">Nombre del grupo</label>
+
                 <v-text-field
                   v-model="createForm.name"
                   class="fm-input"
@@ -66,10 +68,12 @@
         <v-card>
           <v-card-text class="pa-4">
             <h2 class="text-h6 font-weight-bold mb-1">¿Te invitaron?</h2>
+
             <p class="text-caption mb-2">
               Si tu pareja ya creó un grupo y te envió una invitación por correo, recibirás un
               enlace para unirte automáticamente.
             </p>
+
             <p class="text-caption">
               Si tienes un enlace de invitación, ábrelo desde este navegador para unirte.
             </p>
@@ -86,10 +90,12 @@
         <div>
           <div style="display: flex; align-items: center; gap: 12px">
             <h1>{{ store.couple.name }}</h1>
+
             <v-btn icon size="small" title="Editar nombre" variant="text" @click="openEditName">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </div>
+
           <p>Grupo de finanzas compartidas</p>
         </div>
       </div>
@@ -113,6 +119,7 @@
             <span class="summary-card-label">{{
               member.role === 'owner' ? 'Propietario' : 'Miembro'
             }}</span>
+
             <div
               class="summary-card-icon sc-icon-green"
               style="
@@ -127,9 +134,11 @@
               {{ member.name.charAt(0).toUpperCase() }}
             </div>
           </div>
+
           <div class="summary-card-value" style="font-size: 18px">
             {{ member.name }}
           </div>
+
           <div class="summary-card-change" style="font-size: 13px; color: rgba(0, 0, 0, 0.5)">
             {{ member.email }}
           </div>
@@ -142,6 +151,7 @@
         >
           <v-card-text class="pa-4">
             <h3 class="text-subtitle-2 font-weight-bold mb-2">Invitar a mi pareja</h3>
+
             <v-form @submit.prevent="handleInvite">
               <div style="display: flex; gap: 8px">
                 <v-text-field
@@ -154,6 +164,7 @@
                   type="email"
                   variant="outlined"
                 />
+
                 <v-btn
                   class="fm-btn-submit"
                   :disabled="!inviteEmail.trim()"
@@ -169,6 +180,7 @@
                 </v-btn>
               </div>
             </v-form>
+
             <p v-if="inviteSuccess" class="mt-2 text-caption" style="color: #0f6e56">
               Invitación enviada correctamente
             </p>
@@ -187,6 +199,7 @@
         >
           <v-icon>mdi-heart-broken</v-icon> Disolver grupo
         </v-btn>
+
         <v-btn
           v-else
           color="error"
@@ -211,6 +224,7 @@
           <h2 class="text-h5 font-weight-bold">Metas compartidas</h2>
           <p class="text-caption">Ahorren juntos para lo que más importa</p>
         </div>
+
         <v-btn
           class="fm-btn-submit"
           color="#0F6E56"
@@ -236,6 +250,7 @@
             <div style="display: flex; justify-content: space-between; align-items: start">
               <div>
                 <h3 class="font-weight-bold" style="font-size: 16px">{{ goal.title }}</h3>
+
                 <v-chip
                   v-if="goal.status !== 'active'"
                   class="mt-1"
@@ -246,6 +261,7 @@
                   {{ goal.status === 'completed' ? 'Completada' : 'Cancelada' }}
                 </v-chip>
               </div>
+
               <div v-if="goal.status === 'active'" style="display: flex; gap: 4px">
                 <v-btn
                   icon
@@ -256,6 +272,7 @@
                 >
                   <v-icon>mdi-hand-coin</v-icon>
                 </v-btn>
+
                 <v-btn
                   v-if="isOwner"
                   icon
@@ -266,6 +283,7 @@
                 >
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
+
                 <v-btn
                   v-if="isOwner"
                   icon
@@ -293,18 +311,21 @@
                     Number(goal.currentAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 })
                   }}
                 </span>
+
                 <span style="color: rgba(0, 0, 0, 0.5)">
                   ${{
                     Number(goal.targetAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 })
                   }}
                 </span>
               </div>
+
               <v-progress-linear
                 :color="goal.status === 'completed' ? 'green' : '#0F6E56'"
                 height="8"
                 :model-value="goalProgress(goal)"
                 rounded
               />
+
               <div
                 style="
                   display: flex;
@@ -314,6 +335,7 @@
                 "
               >
                 <span style="color: rgba(0, 0, 0, 0.5)">{{ Math.round(goalProgress(goal)) }}%</span>
+
                 <span v-if="goal.deadline" style="color: rgba(0, 0, 0, 0.5)">
                   Meta: {{ formatDate(goal.deadline) }}
                 </span>
@@ -328,6 +350,7 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Editar nombre del grupo</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="editNameError"
@@ -345,6 +368,7 @@
           <v-form @submit.prevent="handleEditName">
             <div class="fm-field-group">
               <label class="fm-label">Nombre</label>
+
               <v-text-field
                 v-model="editNameForm.name"
                 class="fm-input"
@@ -379,7 +403,9 @@
         <v-card-title class="text-h5 font-weight-bold pa-4">
           {{ editingGoal ? 'Editar meta' : 'Nueva meta' }}
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="goalFormError"
@@ -397,6 +423,7 @@
           <v-form @submit.prevent="handleSaveGoal">
             <div class="fm-field-group">
               <label class="fm-label">Título</label>
+
               <v-text-field
                 v-model="goalForm.title"
                 class="fm-input"
@@ -411,6 +438,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Monto objetivo</label>
+
               <v-text-field
                 v-model="goalForm.targetAmount"
                 class="fm-input"
@@ -454,7 +482,9 @@
         <v-card-title class="text-h5 font-weight-bold pa-4">
           Contribuir · {{ contributingGoal?.title }}
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="contributeError"
@@ -472,6 +502,7 @@
           <div class="mb-4 pa-3" style="background: rgba(15, 110, 86, 0.05); border-radius: 12px">
             <div style="display: flex; justify-content: space-between; font-size: 13px">
               <span>Progreso actual</span>
+
               <span style="font-weight: 500">
                 ${{
                   Number(contributingGoal?.currentAmount ?? 0).toLocaleString('es-MX', {
@@ -490,6 +521,7 @@
           <v-form @submit.prevent="handleContribute">
             <div class="fm-field-group">
               <label class="fm-label">Monto a contribuir</label>
+
               <v-text-field
                 v-model="contributeForm.amount"
                 class="fm-input"
@@ -512,6 +544,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Notas (opcional)</label>
+
               <v-textarea
                 v-model="contributeForm.notes"
                 class="fm-input"
@@ -547,19 +580,23 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Disolver grupo</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <p>
             ¿Estás seguro de disolver el grupo <strong>{{ store.couple?.name }}</strong
             >?
           </p>
+
           <p class="mt-2 text-caption">
             Las metas activas se cancelarán y los registros financieros se desvincularán. Esta
             acción no se puede deshacer.
           </p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="confirmDissolve = false">Cancelar</v-btn>
+
           <v-btn
             color="error"
             :loading="store.saving"
@@ -577,15 +614,18 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Abandonar grupo</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <p>
             ¿Estás seguro de abandonar el grupo <strong>{{ store.couple?.name }}</strong
             >?
           </p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="confirmLeave = false">Cancelar</v-btn>
+
           <v-btn
             color="error"
             :loading="store.saving"
@@ -603,15 +643,18 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar meta</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <p>
             ¿Estás seguro de eliminar la meta <strong>{{ confirmDeleteGoal?.title }}</strong
             >?
           </p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="confirmDeleteGoal = null">Cancelar</v-btn>
+
           <v-btn color="error" rounded="lg" variant="tonal" @click="handleDeleteGoal">
             Eliminar
           </v-btn>
@@ -627,6 +670,14 @@ import { computed, onMounted, ref, watch } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useCouplesStore } from '@/stores/couples';
+import {
+  contributeSchema,
+  createCoupleSchema,
+  createGoalSchema,
+  inviteSchema,
+  updateCoupleSchema,
+  updateGoalSchema,
+} from '@/validation';
 import '@/styles/theme.css';
 
 const store = useCouplesStore();
@@ -667,7 +718,9 @@ const confirmLeave = ref(false);
 const confirmDeleteGoal = ref<Goal | null>(null);
 const showDeleteGoal = computed({
   get: () => confirmDeleteGoal.value !== null,
-  set: (v) => { if (!v) confirmDeleteGoal.value = null; },
+  set: (v) => {
+    if (!v) confirmDeleteGoal.value = null;
+  },
 });
 
 const isOwner = computed(() => {
@@ -695,12 +748,13 @@ onMounted(async () => {
 });
 
 async function handleCreate() {
-  if (!createForm.value.name.trim()) {
-    store.error = 'El nombre del grupo es obligatorio';
+  const result = createCoupleSchema.safeParse(createForm.value);
+  if (!result.success) {
+    store.error = result.error.issues[0].message;
     return;
   }
   try {
-    await store.createCouple({ name: createForm.value.name.trim() });
+    await store.createCouple({ name: result.data.name.trim() });
     await store.fetchGoals();
   } catch {
     // error handled in store
@@ -708,11 +762,15 @@ async function handleCreate() {
 }
 
 async function handleInvite() {
-  if (!inviteEmail.value.trim()) return;
+  const result = inviteSchema.safeParse({ email: inviteEmail.value });
+  if (!result.success) {
+    store.error = result.error.issues[0].message;
+    return;
+  }
   inviting.value = true;
   inviteSuccess.value = false;
   try {
-    await store.invitePartner(inviteEmail.value.trim());
+    await store.invitePartner(result.data.email.trim());
     inviteEmail.value = '';
     inviteSuccess.value = true;
   } catch {
@@ -729,12 +787,13 @@ function openEditName() {
 }
 
 async function handleEditName() {
-  if (!editNameForm.value.name.trim()) {
-    editNameError.value = 'El nombre es obligatorio';
+  const result = updateCoupleSchema.safeParse(editNameForm.value);
+  if (!result.success) {
+    editNameError.value = result.error.issues[0].message;
     return;
   }
   try {
-    await store.updateCouple({ name: editNameForm.value.name.trim() });
+    await store.updateCouple({ name: result.data.name.trim() });
     editNameDialog.value = false;
   } catch {
     editNameError.value = store.error;
@@ -780,23 +839,18 @@ function openEditGoal(goal: Goal) {
 }
 
 async function handleSaveGoal() {
-  if (!goalForm.value.title.trim()) {
-    goalFormError.value = 'El título es obligatorio';
+  const schema = editingGoal.value ? updateGoalSchema : createGoalSchema;
+  const result = schema.safeParse({
+    title: goalForm.value.title,
+    targetAmount: goalForm.value.targetAmount,
+    deadline: goalDeadline.value ? goalDeadline.value.toISOString() : undefined,
+  });
+  if (!result.success) {
+    goalFormError.value = result.error.issues[0].message;
     return;
   }
-  if (!goalForm.value.targetAmount || Number(goalForm.value.targetAmount) <= 0) {
-    goalFormError.value = 'Ingresa un monto objetivo válido';
-    return;
-  }
-
   try {
-    const payload: Record<string, unknown> = {
-      title: goalForm.value.title.trim(),
-      targetAmount: goalForm.value.targetAmount,
-    };
-    if (goalDeadline.value) {
-      payload.deadline = goalDeadline.value.toISOString();
-    }
+    const payload = result.data;
 
     await (editingGoal.value
       ? store.updateGoal(editingGoal.value.id, payload)
@@ -830,21 +884,17 @@ function openContribute(goal: Goal) {
 }
 
 async function handleContribute() {
-  if (!contributeForm.value.amount || Number(contributeForm.value.amount) <= 0) {
-    contributeError.value = 'Ingresa un monto válido';
+  const result = contributeSchema.safeParse({
+    amount: contributeForm.value.amount,
+    date: contributeDate.value.toISOString(),
+    notes: contributeForm.value.notes?.trim() || undefined,
+  });
+  if (!result.success) {
+    contributeError.value = result.error.issues[0].message;
     return;
   }
-  if (!contributeForm.value.date) {
-    contributeError.value = 'Selecciona una fecha';
-    return;
-  }
-
   try {
-    const payload: Record<string, unknown> = {
-      amount: contributeForm.value.amount,
-      date: contributeDate.value.toISOString(),
-    };
-    if (contributeForm.value.notes) payload.notes = contributeForm.value.notes.trim();
+    const payload = result.data;
 
     if (contributingGoal.value) {
       await store.contributeToGoal(

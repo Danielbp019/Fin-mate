@@ -20,11 +20,11 @@ Olvídate de las hojas de cálculo y los apuntes manuales. FinMate automatiza el
 
 ## Stack
 
-| Capa | Tecnologías |
-|------|-------------|
-| Frontend | Vue 3, Vite, TypeScript, Vuetify, Pinia, Chart.js |
-| Backend | Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod |
-| Auth | JWT (Access + Refresh con cookie HttpOnly) |
+| Capa     | Tecnologías                                               |
+| -------- | --------------------------------------------------------- |
+| Frontend | Vue 3, Vite, TypeScript, Vuetify, Pinia, Chart.js, Zod    |
+| Backend  | Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod |
+| Auth     | JWT (Access + Refresh con cookie HttpOnly)                |
 
 ---
 

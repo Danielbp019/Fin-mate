@@ -5,25 +5,25 @@
         <v-icon v-if="modelValue" size="24">{{ modelValue }}</v-icon>
         <span v-else class="text-body-2 text-disabled">Ninguno</span>
       </div>
-      <v-icon size="20" class="fm-trigger-arrow">mdi-chevron-down</v-icon>
+
+      <v-icon class="fm-trigger-arrow" size="20">mdi-chevron-down</v-icon>
     </div>
 
     <v-dialog v-model="dialogOpen" max-width="540">
       <v-card rounded="xl">
-        <v-card-title class="text-h6 font-weight-bold pa-4 pb-2">
-          Seleccionar icono
-        </v-card-title>
+        <v-card-title class="text-h6 font-weight-bold pa-4 pb-2"> Seleccionar icono </v-card-title>
+
         <v-card-text class="pa-4 pt-2">
           <v-text-field
             v-model="search"
             class="fm-input mb-3"
+            clearable
             density="compact"
             hide-details
             placeholder="Buscar icono..."
             prepend-inner-icon="mdi-magnify"
             rounded="lg"
             variant="outlined"
-            clearable
           />
 
           <div class="fm-picker-grid">
@@ -37,11 +37,14 @@
             </div>
           </div>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-btn v-if="modelValue" color="error" rounded="lg" variant="tonal" @click="clearIcon">
             Quitar icono
           </v-btn>
+
           <v-spacer />
+
           <v-btn rounded="lg" variant="text" @click="dialogOpen = false">Cancelar</v-btn>
         </v-card-actions>
       </v-card>
@@ -52,7 +55,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-const props = withDefaults(defineProps<{ modelValue?: string }>(), { modelValue: '' });
+withDefaults(defineProps<{ modelValue?: string }>(), { modelValue: '' });
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
 const dialogOpen = ref(false);
@@ -137,4 +140,3 @@ function clearIcon() {
   dialogOpen.value = false;
 }
 </script>
-

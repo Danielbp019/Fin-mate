@@ -16,6 +16,7 @@
         @click:clear="emit('update:modelValue', null)"
       />
     </template>
+
     <v-locale-provider locale="es">
       <v-date-picker v-model="innerValue" @update:model-value="menu = false" />
     </v-locale-provider>
@@ -25,16 +26,19 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-const props = withDefaults(defineProps<{
-  modelValue: Date | null;
-  placeholder?: string;
-  density?: 'default' | 'comfortable' | 'compact';
-  required?: boolean;
-}>(), {
-  placeholder: '',
-  density: 'comfortable',
-  required: false,
-});
+const props = withDefaults(
+  defineProps<{
+    modelValue: Date | null;
+    placeholder?: string;
+    density?: 'default' | 'comfortable' | 'compact';
+    required?: boolean;
+  }>(),
+  {
+    placeholder: '',
+    density: 'comfortable',
+    required: false,
+  },
+);
 
 const emit = defineEmits<{
   'update:modelValue': [value: Date | null];

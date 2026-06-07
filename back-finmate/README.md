@@ -38,16 +38,16 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 
 ## Comandos Útiles
 
-| Comando               | Descripción                                                              |
-| --------------------- | ------------------------------------------------------------------------ |
-| `npm run dev`         | Inicia servidor con hot-reload + limpieza automática de tokens expirados |
-| `npm run build`       | Compila TypeScript a JS                                                  |
-| `npm run start`       | Ejecuta compilado en producción                                          |
-| `npm run db:generate` | Genera migraciones desde el schema                                       |
-| `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB                                  |
+| Comando               | Descripción                                                                                                                 |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`         | Inicia servidor con hot-reload + limpieza automática de tokens expirados                                                    |
+| `npm run build`       | Compila TypeScript a JS                                                                                                     |
+| `npm run start`       | Ejecuta compilado en producción                                                                                             |
+| `npm run db:generate` | Genera migraciones desde el schema                                                                                          |
+| `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB                                                                                     |
 | `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 10 categorias, 16 movimientos, 4 deudas, 6 pagos, 1 pareja, 2 metas, 4 contribuciones) |
-| `npm test`            | Ejecuta todos los tests (vitest run)                                     |
-| `npm run test:watch`  | Ejecuta tests en modo watch (vitest)                                     |
+| `npm test`            | Ejecuta todos los tests (vitest run)                                                                                        |
+| `npm run test:watch`  | Ejecuta tests en modo watch (vitest)                                                                                        |
 
 ## Limpieza de Tokens
 

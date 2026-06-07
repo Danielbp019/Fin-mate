@@ -15,8 +15,8 @@
 
       <v-app-bar-title>
         <router-link
+          style="text-decoration: none; color: inherit; cursor: pointer"
           :to="{ name: 'Dashboard' }"
-          style="text-decoration: none; color: inherit; cursor: pointer;"
         >
           <div class="lp-logo">
             <div class="lp-logo-icon">
@@ -55,10 +55,10 @@
         <v-list-item prepend-icon="mdi-shape" title="Categorías" :to="{ name: 'Categories' }" />
 
         <v-list-item
+          exact
           prepend-icon="mdi-view-dashboard"
           title="Dashboard"
           :to="{ name: 'Dashboard' }"
-          exact
         />
 
         <v-list-item
@@ -106,7 +106,7 @@ onMounted(() => {
 
 function toggleTheme() {
   const next = theme.global.name.value === 'light' ? 'dark' : 'light';
-    theme.change(next);
+  theme.change(next);
   localStorage.setItem('theme', next);
 }
 </script>

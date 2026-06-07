@@ -8,6 +8,7 @@
         <h1>Deudas</h1>
         <p>Administra tus deudas y registra tus pagos</p>
       </div>
+
       <v-btn class="fm-btn-submit" color="#0F6E56" prepend-icon="mdi-plus" @click="openCreate">
         Nueva deuda
       </v-btn>
@@ -70,24 +71,30 @@
             {{ priorityLabel(item.priority) }}
           </v-chip>
         </template>
+
         <template #item.status="{ item }">
           <v-chip :color="statusColor(item.status)" size="small" variant="tonal">
             {{ statusLabel(item.status) }}
           </v-chip>
         </template>
+
         <template #item.initialAmount="{ item }">
           ${{ Number(item.initialAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
         </template>
+
         <template #item.currentAmount="{ item }">
           ${{ Number(item.currentAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
         </template>
+
         <template #item.actions="{ item }">
           <v-btn icon size="small" title="Editar" variant="text" @click="openEdit(item)">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
+
           <v-btn icon size="small" title="Ver pagos" variant="text" @click="openPayments(item)">
             <v-icon>mdi-currency-usd</v-icon>
           </v-btn>
+
           <v-btn
             color="error"
             icon
@@ -107,7 +114,9 @@
         <v-card-title class="text-h5 font-weight-bold pa-4">
           {{ editingId ? 'Editar deuda' : 'Nueva deuda' }}
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="formError"
@@ -125,6 +134,7 @@
           <v-form @submit.prevent="handleSave">
             <div class="fm-field-group">
               <label class="fm-label">Título</label>
+
               <v-text-field
                 v-model="form.title"
                 class="fm-input"
@@ -140,6 +150,7 @@
             <div class="fm-field-row">
               <div class="fm-field-group">
                 <label class="fm-label">Monto inicial</label>
+
                 <v-text-field
                   v-model="form.initialAmount"
                   class="fm-input"
@@ -154,8 +165,10 @@
                   variant="outlined"
                 />
               </div>
+
               <div class="fm-field-group">
                 <label class="fm-label">Prioridad</label>
+
                 <v-select
                   v-model="form.priority"
                   class="fm-input"
@@ -172,6 +185,7 @@
             <div class="fm-field-row">
               <div class="fm-field-group">
                 <label class="fm-label">Tasa de interés (opcional)</label>
+
                 <v-text-field
                   v-model="form.interestRate"
                   class="fm-input"
@@ -185,8 +199,10 @@
                   variant="outlined"
                 />
               </div>
+
               <div class="fm-field-group">
                 <label class="fm-label">Pago mínimo (opcional)</label>
+
                 <v-text-field
                   v-model="form.minimumPayment"
                   class="fm-input"
@@ -205,6 +221,7 @@
             <div class="fm-field-row">
               <div class="fm-field-group">
                 <label class="fm-label">Día de vencimiento (opcional)</label>
+
                 <v-text-field
                   v-model="form.dueDay"
                   class="fm-input"
@@ -218,14 +235,16 @@
                   variant="outlined"
                 />
               </div>
+
               <div class="fm-field-group">
                 <label class="fm-label">Fecha de inicio (opcional)</label>
-              <DatePicker v-model="debtStartDate" />
+                <DatePicker v-model="debtStartDate" />
               </div>
             </div>
 
             <div v-if="editingId" class="fm-field-group">
               <label class="fm-label">Estado</label>
+
               <v-select
                 v-model="form.status"
                 class="fm-input"
@@ -239,6 +258,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Descripción (opcional)</label>
+
               <v-textarea
                 v-model="form.description"
                 class="fm-input"
@@ -274,16 +294,20 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar deuda</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <p>
             ¿Estás seguro de eliminar la deuda <strong>{{ deletingItem?.title }}</strong
             >?
           </p>
+
           <p class="mt-2 text-caption">Esta acción no elimina los pagos registrados.</p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="deleteDialogOpen = false">Cancelar</v-btn>
+
           <v-btn
             color="error"
             :loading="deleting"
@@ -302,7 +326,9 @@
         <v-card-title class="text-h5 font-weight-bold pa-4">
           Pagos · {{ selectedDebt?.title }}
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="pa-4">
           <div
             v-if="selectedDebt"
@@ -312,6 +338,7 @@
             <div style="display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap">
               <div>
                 <span class="text-caption">Monto inicial</span>
+
                 <p class="text-h6 font-weight-bold mt-0 mb-0">
                   ${{
                     Number(selectedDebt.initialAmount).toLocaleString('es-MX', {
@@ -320,8 +347,10 @@
                   }}
                 </p>
               </div>
+
               <div>
                 <span class="text-caption">Monto actual</span>
+
                 <p class="text-h6 font-weight-bold mt-0 mb-0">
                   ${{
                     Number(selectedDebt.currentAmount).toLocaleString('es-MX', {
@@ -330,11 +359,13 @@
                   }}
                 </p>
               </div>
+
               <div>
                 <span class="text-caption">Progreso</span>
                 <p class="text-h6 font-weight-bold mt-0 mb-0">{{ progressPercent }}%</p>
               </div>
             </div>
+
             <v-progress-linear
               class="mt-2"
               color="#0F6E56"
@@ -361,6 +392,7 @@
             <span class="text-subtitle-2 font-weight-bold"
               >{{ payments.length }} pago(s) registrados</span
             >
+
             <v-btn
               class="fm-btn-submit"
               color="#0F6E56"
@@ -383,9 +415,11 @@
             <template #item.amount="{ item }">
               -${{ Number(item.amount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
             </template>
+
             <template #item.paymentDate="{ item }">
               {{ formatDate(item.paymentDate) }}
             </template>
+
             <template #item.notes="{ item }">
               {{ item.notes ?? '-' }}
             </template>
@@ -395,6 +429,7 @@
             Aún no hay pagos registrados para esta deuda.
           </p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="paymentsDialogOpen = false">Cerrar</v-btn>
@@ -406,6 +441,7 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Registrar pago</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="payFormError"
@@ -423,6 +459,7 @@
           <v-form @submit.prevent="handlePaymentSave">
             <div class="fm-field-group">
               <label class="fm-label">Monto</label>
+
               <v-text-field
                 v-model="payForm.amount"
                 class="fm-input"
@@ -445,6 +482,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Notas (opcional)</label>
+
               <v-textarea
                 v-model="payForm.notes"
                 class="fm-input"
@@ -479,11 +517,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { AxiosError } from 'axios';
 import type { CreateDebtBody, CreatePaymentBody, Debt, Payment, UpdateDebtBody } from '@/types';
+import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 import { useDebtsStore } from '@/stores/debts';
+import { createDebtSchema, createPaymentSchema, updateDebtSchema } from '@/validation';
 import '@/styles/theme.css';
 
 interface DebtForm {
@@ -665,29 +704,39 @@ function confirmDelete(debt: Debt) {
 }
 
 async function handleSave() {
-  if (!form.value.title.trim()) {
-    formError.value = 'El título es requerido';
+  const schema = editingId.value ? updateDebtSchema : createDebtSchema;
+  const result = schema.safeParse(
+    editingId.value
+      ? {
+          title: form.value.title,
+          initialAmount: form.value.initialAmount,
+          priority: form.value.priority,
+          interestRate: form.value.interestRate,
+          minimumPayment: form.value.minimumPayment,
+          dueDay: form.value.dueDay ? Number(form.value.dueDay) : undefined,
+          startDate: debtStartDate.value ? debtStartDate.value.toISOString() : undefined,
+          description: form.value.description,
+          status: form.value.status,
+        }
+      : {
+          title: form.value.title,
+          initialAmount: form.value.initialAmount,
+          priority: form.value.priority,
+          interestRate: form.value.interestRate,
+          minimumPayment: form.value.minimumPayment,
+          dueDay: form.value.dueDay ? Number(form.value.dueDay) : undefined,
+          startDate: debtStartDate.value ? debtStartDate.value.toISOString() : undefined,
+          description: form.value.description,
+        },
+  );
+  if (!result.success) {
+    formError.value = result.error.issues[0].message;
     return;
   }
-  if (!form.value.initialAmount || Number(form.value.initialAmount) <= 0) {
-    formError.value = 'Ingresa un monto inicial válido';
-    return;
-  }
-
   saving.value = true;
   formError.value = '';
   try {
-    const payload: Record<string, unknown> = {
-      title: form.value.title.trim(),
-      initialAmount: form.value.initialAmount,
-      priority: form.value.priority,
-    };
-    if (form.value.interestRate) payload.interestRate = form.value.interestRate;
-    if (form.value.minimumPayment) payload.minimumPayment = form.value.minimumPayment;
-    if (form.value.dueDay) payload.dueDay = Number(form.value.dueDay);
-    if (debtStartDate.value) payload.startDate = debtStartDate.value.toISOString();
-    if (form.value.description) payload.description = form.value.description.trim();
-    if (editingId.value && form.value.status) payload.status = form.value.status;
+    const payload = result.data as Record<string, unknown>;
 
     await (editingId.value
       ? store.updateDebt(editingId.value, payload as unknown as UpdateDebtBody)
@@ -749,23 +798,19 @@ function openPaymentForm() {
 }
 
 async function handlePaymentSave() {
-  if (!payForm.value.amount || Number(payForm.value.amount) <= 0) {
-    payFormError.value = 'Ingresa un monto válido';
+  const result = createPaymentSchema.safeParse({
+    amount: payForm.value.amount,
+    paymentDate: payDate.value.toISOString(),
+    notes: payForm.value.notes?.trim() || undefined,
+  });
+  if (!result.success) {
+    payFormError.value = result.error.issues[0].message;
     return;
   }
-  if (!payForm.value.paymentDate) {
-    payFormError.value = 'Selecciona una fecha';
-    return;
-  }
-
   paySaving.value = true;
   payFormError.value = '';
   try {
-    const payload: CreatePaymentBody = {
-      amount: payForm.value.amount,
-      paymentDate: payDate.value.toISOString(),
-    };
-    if (payForm.value.notes) payload.notes = payForm.value.notes.trim();
+    const payload = result.data as CreatePaymentBody;
 
     if (selectedDebt.value) {
       await store.createPayment(selectedDebt.value.id, payload);

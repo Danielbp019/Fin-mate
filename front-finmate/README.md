@@ -4,7 +4,7 @@ Aplicación web para administración de finanzas personales, ingresos y gastos, 
 
 ## Stack Tecnológico
 
-Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, ESLint, Zod
+Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, Vitest, ESLint, Zod
 
 ## Requisitos
 
@@ -25,14 +25,17 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, ESLint, Zod
 
 ## Comandos Útiles
 
-| Comando              | Descripción                                  |
-| -------------------- | -------------------------------------------- |
-| `npm run dev`        | Inicia servidor de desarrollo con hot-reload |
-| `npm run build`      | Compila para producción                      |
-| `npm run preview`    | Previsualiza build de producción             |
-| `npm run lint`       | Ejecuta ESLint                               |
-| `npm run lint:fix`   | Corrige errores de ESLint automáticamente    |
-| `npm run type-check` | Verifica tipos de TypeScript                 |
+| Comando                 | Descripción                                  |
+| ----------------------- | -------------------------------------------- |
+| `npm run dev`           | Inicia servidor de desarrollo con hot-reload |
+| `npm run build`         | Compila para producción                      |
+| `npm run preview`       | Previsualiza build de producción             |
+| `npm run lint`          | Ejecuta ESLint                               |
+| `npm run lint:fix`      | Corrige errores de ESLint automáticamente    |
+| `npm run type-check`    | Verifica tipos de TypeScript                 |
+| `npm run test`          | Ejecuta tests en modo watch                  |
+| `npm run test:run`      | Ejecuta tests una sola vez                   |
+| `npm run test:coverage` | Ejecuta tests con reporte de cobertura       |
 
 ## Estructura del Proyecto
 
@@ -49,6 +52,19 @@ src/
   router/               Configuración de rutas (Vue Router + auth guard)
   styles/               Estilos globales y tema
   components/           Componentes reutilizables
+  tests/                Tests unitarios (Vitest)
+    auth.test.ts        Store de autenticación
+    categories.test.ts  Store de categorías
+    movements.test.ts   Store de movimientos
+    debts.test.ts       Store de deudas
+    couples.test.ts     Store de parejas + metas
+    dashboard.test.ts   Store de dashboard
+    api-interceptor.test.ts  Interceptores de Axios
+    router-guard.test.ts     Guard de rutas
+    components/         Tests de componentes (DatePicker, IconPicker)
+    pages/              Tests de páginas (Login, Register)
+    setup.ts            Configuración global de tests
+    mocks/              Mocks reutilizables
 public/                 Archivos públicos estáticos
 ```
 
@@ -72,6 +88,8 @@ public/                 Archivos públicos estáticos
 - Cada modulo nuevo va en una categoria nueva en el drawer
 - Todas las paginas que se abran a partir del drawer deben solo ser vistas por usuarios autenticados
 - El proyecto usa un solo css styles/theme.css
+- Los tests se escriben en `src/tests/` con el mismo nombre del módulo que prueban
+- Los tests de stores y servicios son prioritarios; componentes y páginas son secundarios
 
 ## Módulos
 

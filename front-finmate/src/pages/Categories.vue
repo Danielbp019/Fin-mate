@@ -8,6 +8,7 @@
         <h1>Categorías</h1>
         <p>Administra tus categorías de ingresos y gastos</p>
       </div>
+
       <v-btn class="fm-btn-submit" color="#0F6E56" prepend-icon="mdi-plus" @click="openCreate">
         Nueva categoría
       </v-btn>
@@ -45,14 +46,17 @@
           <v-icon v-if="item.icon" size="24">{{ item.icon }}</v-icon>
           <span v-else class="text-caption text-disabled">&mdash;</span>
         </template>
+
         <template #item.type="{ item }">
           <v-chip :color="item.type === 'income' ? 'green' : 'orange'" size="small">
             {{ item.type === 'income' ? 'Ingreso' : 'Gasto' }}
           </v-chip>
         </template>
+
         <template #item.isSystem="{ item }">
           <v-chip v-if="item.isSystem" color="blue" size="small" variant="tonal"> Sistema </v-chip>
         </template>
+
         <template #item.actions="{ item }">
           <v-btn
             :disabled="item.isSystem"
@@ -64,6 +68,7 @@
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
+
           <v-btn
             color="error"
             :disabled="item.isSystem"
@@ -84,7 +89,9 @@
         <v-card-title class="text-h5 font-weight-bold pa-4">
           {{ editingId ? 'Editar categoría' : 'Nueva categoría' }}
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="pa-4">
           <v-alert
             v-if="formError"
@@ -102,6 +109,7 @@
           <v-form @submit.prevent="handleSave">
             <div class="fm-field-group">
               <label class="fm-label">Nombre</label>
+
               <v-text-field
                 v-model="form.name"
                 class="fm-input"
@@ -116,6 +124,7 @@
 
             <div class="fm-field-group">
               <label class="fm-label">Tipo</label>
+
               <v-select
                 v-model="form.type"
                 class="fm-input"
@@ -155,18 +164,22 @@
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar categoría</v-card-title>
         <v-divider />
+
         <v-card-text class="pa-4">
           <p>
             ¿Estás seguro de eliminar la categoría <strong>{{ deletingItem?.name }}</strong
             >?
           </p>
+
           <p v-if="deletingItem?.isSystem" class="mt-2 text-caption text-red">
             Las categorías del sistema no pueden eliminarse.
           </p>
         </v-card-text>
+
         <v-card-actions class="pa-4 pt-0">
           <v-spacer />
           <v-btn rounded="lg" variant="text" @click="deleteDialogOpen = false">Cancelar</v-btn>
+
           <v-btn
             color="error"
             :loading="deleting"
@@ -183,11 +196,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { AxiosError } from 'axios';
 import type { Category, CreateCategoryBody, UpdateCategoryBody } from '@/types';
+import type { AxiosError } from 'axios';
 import { computed, onMounted, ref } from 'vue';
-import { useCategoriesStore } from '@/stores/categories';
 import IconPicker from '@/components/IconPicker.vue';
+import { useCategoriesStore } from '@/stores/categories';
+import { createCategorySchema, updateCategorySchema } from '@/validation';
 import '@/styles/theme.css';
 
 const store = useCategoriesStore();
@@ -252,18 +266,16 @@ function confirmDelete(cat: Category) {
 }
 
 async function handleSave() {
-  if (!form.value.name.trim()) {
-    formError.value = 'El nombre es requerido';
+  const schema = editingId.value ? updateCategorySchema : createCategorySchema;
+  const result = schema.safeParse(editingId.value ? { ...form.value, isActive: true } : form.value);
+  if (!result.success) {
+    formError.value = result.error.issues[0].message;
     return;
   }
   saving.value = true;
   formError.value = '';
   try {
-    const payload: CreateCategoryBody = {
-      name: form.value.name.trim(),
-      type: form.value.type,
-    };
-    if (form.value.icon) payload.icon = form.value.icon;
+    const payload = result.data as CreateCategoryBody;
 
     await (editingId.value
       ? store.updateCategory(editingId.value, payload as UpdateCategoryBody)

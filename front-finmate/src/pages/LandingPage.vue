@@ -14,9 +14,11 @@
         </div>
         FinMate
       </div>
+
       <div class="lp-nav-actions">
         <button class="btn-ghost">¿Cómo funciona?</button>
         <button class="btn-ghost" @click="router.push({ name: 'Login' })">Iniciar sesión</button>
+
         <button class="btn-primary" @click="router.push({ name: 'Register' })">
           Empezar gratis
         </button>
@@ -55,6 +57,7 @@
             </svg>
             Comenzar gratis
           </button>
+
           <button class="btn-outline" @click="router.push({ name: 'Login' })">
             Iniciar sesión
           </button>
@@ -75,6 +78,7 @@
                 width: 60%;
               "
             />
+
             <div style="height: 24px; background: #e8f0e8; border-radius: 4px; width: 80%" />
           </div>
 
@@ -93,6 +97,7 @@
               <span>Gastos vs presupuesto</span>
               <span style="color: var(--green-deep); font-weight: 500">68%</span>
             </div>
+
             <div class="hc-bar-track">
               <div class="hc-bar-fill" style="width: 68%" />
             </div>
@@ -104,8 +109,10 @@
                 <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
                   Ingresos
                 </div>
+
                 <div class="hc-stat-num">$7,200</div>
               </div>
+
               <div class="hc-mini-pill pill-green">↑ 12%</div>
             </div>
 
@@ -114,8 +121,10 @@
                 <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
                   Gastos
                 </div>
+
                 <div class="hc-stat-num">$2,380</div>
               </div>
+
               <div class="hc-mini-pill pill-gold">→ estable</div>
             </div>
 
@@ -124,16 +133,20 @@
                 <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
                   Deuda activa
                 </div>
+
                 <div class="hc-stat-num">$1,450</div>
               </div>
+
               <div class="hc-mini-pill pill-blue">En plan</div>
             </div>
           </div>
 
           <div class="fb fb2">
             <div class="fb-icon fi-gold">💰</div>
+
             <div>
               <div style="font-size: 11px; color: var(--ink-soft)">Ahorro del mes</div>
+
               <div
                 style="
                   font-size: 13px;
@@ -149,8 +162,10 @@
 
           <div class="fb fb1">
             <div class="fb-icon fi-blue">👫</div>
+
             <div>
               <div style="font-size: 11px; color: var(--ink-soft)">Modo pareja</div>
+
               <div style="font-size: 12px; font-weight: 500; color: var(--blue-deep)">
                 Sincronizado
               </div>
@@ -166,10 +181,12 @@
         <div class="stat-num">94%</div>
         <div class="stat-desc">de usuarios redujo gastos en 3 meses</div>
       </div>
+
       <div class="stat-item">
         <div class="stat-num stat-gold">$1.2M</div>
         <div class="stat-desc">en deudas gestionadas este año</div>
       </div>
+
       <div class="stat-item">
         <div class="stat-num stat-blue">2,400+</div>
         <div class="stat-desc">personas tomando control de su dinero</div>
@@ -194,7 +211,9 @@
               />
             </svg>
           </div>
+
           <div class="feat-name">Control de ingresos y gastos</div>
+
           <div class="feat-desc">
             Registra cada movimiento y visualiza a dónde va tu dinero con claridad absoluta.
           </div>
@@ -212,7 +231,9 @@
               />
             </svg>
           </div>
+
           <div class="feat-name">Modo pareja</div>
+
           <div class="feat-desc">
             Sincroniza las finanzas con tu pareja, define responsabilidades y alcancen metas juntos.
           </div>
@@ -230,7 +251,9 @@
               />
             </svg>
           </div>
+
           <div class="feat-name">Gestión de deudas</div>
+
           <div class="feat-desc">
             Estrategias probadas como bola de nieve o avalancha para liquidar deudas más rápido.
           </div>
@@ -244,8 +267,10 @@
         <h2>¿Listo para tomar el control?</h2>
         <p>Empieza hoy, es completamente gratuito.</p>
       </div>
+
       <div class="strip-right">
         <button class="btn-ghost-white">Ver demo</button>
+
         <button class="btn-white" @click="router.push({ name: 'Register' })">
           Crear cuenta gratis
         </button>
@@ -258,11 +283,13 @@
         FinMate — una aplicación de
         <img alt="firma" class="footer-signature" :src="firmaNegra" />
       </div>
+
       <div class="footer-right">
         <div class="footer-links">
           <button type="button" @click="showPrivacy = true">Privacidad</button>
           <button type="button" @click="showTerms = true">Términos</button>
         </div>
+
         <div style="font-size: 13px; color: var(--ink-soft); opacity: 0.6">© 2026 FinMate</div>
       </div>
     </footer>
