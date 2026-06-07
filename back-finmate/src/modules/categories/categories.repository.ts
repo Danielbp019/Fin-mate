@@ -49,7 +49,7 @@ export async function findByUser(userId: string, type?: string) {
     .select()
     .from(categories)
     .where(and(...conditions))
-    .orderBy(sql`${categories.isSystem} DESC`, categories.name);
+    .orderBy(sql`${categories.isSystem} DESC`, sql`${categories.name} DESC`);
 }
 
 export async function create(data: {

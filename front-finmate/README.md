@@ -112,10 +112,6 @@ Todas las entradas deben validarse usando Zod.
 - No exponer errores internos en producción.
 - Todas las rutas, salvo login, register, landing page y las de recuperación de cuenta, deben estar protegidas para que no puedan verse si el usuario no está autenticado.
 
-## Pendientes
-
-Funcionalidades planificadas para futuras iteraciones:
-
 ### Auth
 
 - Cerrar sesi&oacute;n en todos los dispositivos (`logout-all`)
@@ -140,3 +136,14 @@ Funcionalidades planificadas para futuras iteraciones:
 - Metas de pareja: crear, editar, eliminar metas compartidas
 - Contribuir a metas de pareja
 - Abandonar o disolver el grupo
+
+## Pendientes
+
+Funcionalidades planificadas para futuras iteraciones:
+
+- bug en el dashboard las graficas se extienden de forma infinica hacia abajo de la pagina
+- pareja no tienen el css adecuado, la letra aparece no adaptarse al cambio de claro/oscuro del tema porque no esta usando el css principal del proyecto
+- deudas el buscador deberia ser instantaneo y no por pulsacion, movimientos es igual.
+- movimientos falta la columna si es ingreso o gasto, solo estan los iconos que lo representan
+- si se hace auto el filtro por fechas de movimientos podria conservar su uso manual
+- todos los input de seleccionar deberian tener orden alfabetico descendente

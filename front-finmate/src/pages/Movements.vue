@@ -40,10 +40,6 @@
           <DatePicker v-model="filterFrom" density="compact" placeholder="Desde" />
           <span class="fm-label" style="margin-bottom: 0">Hasta:</span>
           <DatePicker v-model="filterTo" density="compact" placeholder="Hasta" />
-
-          <v-btn rounded="lg" variant="tonal" @click="applyFilters">
-            <v-icon>mdi-magnify</v-icon> Filtrar
-          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -75,9 +71,12 @@
         </template>
 
         <template #item.type="{ item }">
-          <v-icon :color="item.type === 'income' ? 'green' : 'orange'">
-            {{ item.type === 'income' ? 'mdi-trending-up' : 'mdi-trending-down' }}
-          </v-icon>
+          <div class="d-flex align-center ga-1">
+            <v-icon :color="item.type === 'income' ? 'green' : 'orange'">
+              {{ item.type === 'income' ? 'mdi-trending-up' : 'mdi-trending-down' }}
+            </v-icon>
+            <span>{{ item.type === 'income' ? 'Ingreso' : 'Gasto' }}</span>
+          </div>
         </template>
 
         <template #item.categoryId="{ item }">
@@ -326,7 +325,7 @@ const typeOptions = [
 
 const headers = [
   { title: 'Fecha', key: 'movementDate', sortable: false },
-  { title: '', key: 'type', sortable: false, width: '40px' },
+  { title: 'Tipo', key: 'type', sortable: false },
   { title: 'Categoría', key: 'categoryId', sortable: false },
   { title: 'Monto', key: 'amount', sortable: false },
   { title: 'Descripción', key: 'description', sortable: false },
@@ -380,6 +379,13 @@ watch(filterType, () => {
 
 watch(formDate, (d) => {
   form.value.movementDate = d.toISOString().slice(0, 10);
+});
+
+let filterTimeout: ReturnType<typeof setTimeout>;
+
+watch([filterType, filterCategoryId, filterFrom, filterTo], () => {
+  if (filterTimeout) clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(() => applyFilters(), 300);
 });
 
 function applyFilters() {

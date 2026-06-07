@@ -36,10 +36,6 @@
             style="min-width: 140px"
             variant="outlined"
           />
-
-          <v-btn rounded="lg" variant="tonal" @click="applyFilters">
-            <v-icon>mdi-magnify</v-icon> Filtrar
-          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -559,6 +555,13 @@ watch(debtStartDate, (d) => {
 
 watch(payDate, (d) => {
   payForm.value.paymentDate = d.toISOString().slice(0, 10);
+});
+
+let filterTimeout: ReturnType<typeof setTimeout>;
+
+watch([filterStatus, filterPriority], () => {
+  if (filterTimeout) clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(() => applyFilters(), 300);
 });
 
 const form = ref<DebtForm>({

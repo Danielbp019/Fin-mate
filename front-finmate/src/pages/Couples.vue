@@ -139,7 +139,10 @@
             {{ member.name }}
           </div>
 
-          <div class="summary-card-change" style="font-size: 13px; color: rgba(0, 0, 0, 0.5)">
+          <div
+            class="summary-card-change"
+            style="font-size: 13px; color: rgba(var(--v-theme-on-surface), 0.6)"
+          >
             {{ member.email }}
           </div>
         </v-card>
@@ -238,7 +241,7 @@
       <div
         v-if="store.goals.length === 0"
         class="text-center pa-8"
-        style="color: rgba(0, 0, 0, 0.4)"
+        style="color: rgba(var(--v-theme-on-surface), 0.5)"
       >
         <v-icon size="48" style="opacity: 0.4">mdi-flag-outline</v-icon>
         <p class="mt-2">Aún no hay metas. ¡Crea la primera!</p>
@@ -312,7 +315,7 @@
                   }}
                 </span>
 
-                <span style="color: rgba(0, 0, 0, 0.5)">
+                <span style="color: rgba(var(--v-theme-on-surface), 0.6)">
                   ${{
                     Number(goal.targetAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 })
                   }}
@@ -334,9 +337,11 @@
                   margin-top: 4px;
                 "
               >
-                <span style="color: rgba(0, 0, 0, 0.5)">{{ Math.round(goalProgress(goal)) }}%</span>
+                <span style="color: rgba(var(--v-theme-on-surface), 0.6)"
+                  >{{ Math.round(goalProgress(goal)) }}%</span
+                >
 
-                <span v-if="goal.deadline" style="color: rgba(0, 0, 0, 0.5)">
+                <span v-if="goal.deadline" style="color: rgba(var(--v-theme-on-surface), 0.6)">
                   Meta: {{ formatDate(goal.deadline) }}
                 </span>
               </div>

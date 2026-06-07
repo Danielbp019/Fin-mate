@@ -45,7 +45,7 @@
 
     <v-row>
       <v-col cols="12" lg="8">
-        <div class="stat-card" style="min-height: 340px">
+        <div class="stat-card chart-card">
           <LineChart
             :datasets="evolutionDatasets"
             empty-text="No hay suficientes datos para mostrar la evolución mensual"
@@ -60,7 +60,7 @@
       <v-col cols="12" lg="4">
         <v-row>
           <v-col cols="12" lg="12" sm="6">
-            <div class="stat-card">
+            <div class="stat-card chart-card">
               <DoughnutChart
                 :colors="categoryColors"
                 :data="incomeCategoryData"
@@ -76,7 +76,7 @@
           </v-col>
 
           <v-col cols="12" lg="12" sm="6">
-            <div class="stat-card">
+            <div class="stat-card chart-card">
               <DoughnutChart
                 :colors="categoryColors"
                 :data="expenseCategoryData"
@@ -93,7 +93,7 @@
           </v-col>
 
           <v-col cols="12">
-            <div class="stat-card">
+            <div class="stat-card chart-card">
               <BarChart
                 :background-colors="balanceColors"
                 :data="balanceData"
