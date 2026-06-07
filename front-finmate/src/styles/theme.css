@@ -1214,6 +1214,7 @@ body {
 }
 
 .chart-card {
+  height: 100%;
   min-height: 300px;
   display: flex;
   flex-direction: column;
