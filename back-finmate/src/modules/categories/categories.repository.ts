@@ -36,7 +36,7 @@ export async function findByUser(userId: string, type?: string) {
   const conditions: ReturnType<typeof eq>[] = [
     or(
       eq(categories.isSystem, true),
-      and(eq(categories.userId, userId), eq(categories.isActive, true)),
+      eq(categories.userId, userId),
     ) as unknown as ReturnType<typeof eq>,
     isNull(categories.deletedAt),
   ];
@@ -58,7 +58,6 @@ export async function create(data: {
   type: 'income' | 'expense';
   name: string;
   icon?: string | null;
-  isActive: boolean;
   isSystem: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -71,7 +70,6 @@ export async function update(
   data: Partial<{
     name: string;
     icon: string | null;
-    isActive: boolean;
     updatedAt: Date;
   }>,
 ) {
@@ -82,7 +80,6 @@ export async function softDelete(id: string, updatedAt: Date) {
   await db
     .update(categories)
     .set({
-      isActive: false,
       deletedAt: updatedAt,
       updatedAt,
     })

@@ -7,7 +7,6 @@ export interface CreateCategoryBody {
 export interface UpdateCategoryBody {
   name?: string;
   icon?: string;
-  isActive?: boolean;
 }
 
 export interface CategoryResponse {
@@ -16,7 +15,6 @@ export interface CategoryResponse {
   type: 'income' | 'expense';
   name: string;
   icon: string | null;
-  isActive: boolean;
   isSystem: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -376,7 +376,6 @@ const headers = [
 
 const categoryOptions = computed(() => {
   return catStore.categories
-    .filter((c) => c.isActive)
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((c) => ({
       title: c.name,

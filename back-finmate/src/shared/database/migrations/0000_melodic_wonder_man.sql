@@ -4,7 +4,6 @@ CREATE TABLE `categories` (
 	`type` enum('income','expense') NOT NULL COMMENT 'Tipo de categoría: ingreso o gasto',
 	`name` varchar(100) NOT NULL COMMENT 'Nombre de la categoría',
 	`icon` varchar(50) COMMENT 'Icono representativo (Material Icons)',
-	`is_active` boolean NOT NULL DEFAULT true COMMENT 'Indica si la categoría está activa',
 	`is_system` boolean NOT NULL DEFAULT false COMMENT 'Indica si es categoría del sistema (no editable por el usuario)',
 	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de creación del registro',
 	`updated_at` datetime(3) NOT NULL COMMENT 'Fecha de última actualización',

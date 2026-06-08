@@ -66,11 +66,6 @@ describe('updateCategorySchema', () => {
     expect(result).toEqual({ name: 'Nuevo nombre' });
   });
 
-  it('accepts isActive boolean', () => {
-    const result = updateCategorySchema.parse({ isActive: false });
-    expect(result).toEqual({ isActive: false });
-  });
-
   it('accepts empty object (no fields)', () => {
     const result = updateCategorySchema.parse({});
     expect(result).toEqual({});

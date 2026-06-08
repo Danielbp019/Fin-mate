@@ -7,6 +7,4 @@ export const createCategorySchema = z.object({
   icon: z.string().optional(),
 });
 
-export const updateCategorySchema = createCategorySchema.partial().extend({
-  isActive: z.boolean().optional(),
-});
+export const updateCategorySchema = createCategorySchema.partial();

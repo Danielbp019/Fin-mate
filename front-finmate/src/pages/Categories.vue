@@ -276,7 +276,7 @@ function confirmDelete(cat: Category) {
 
 async function handleSave() {
   const schema = editingId.value ? updateCategorySchema : createCategorySchema;
-  const result = schema.safeParse(editingId.value ? { ...form.value, isActive: true } : form.value);
+  const result = schema.safeParse(form.value);
   if (!result.success) {
     formError.value = result.error.issues[0].message;
     return;

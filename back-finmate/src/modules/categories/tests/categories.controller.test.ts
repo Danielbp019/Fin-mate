@@ -10,7 +10,6 @@ const mockCategory = {
   type: 'expense' as const,
   name: 'Comida',
   icon: 'food',
-  isActive: true,
   isSystem: false,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
@@ -198,7 +197,7 @@ describe('update', () => {
   it('calls next with error when body is invalid', async () => {
     const req = createAuthReq({
       params: { id: mockCategory.id },
-      body: { name: '', isActive: 'not-boolean' },
+      body: { name: '' },
     });
     const res = createRes();
     const next = vi.fn() as NextFunction;

@@ -9,7 +9,6 @@ const mockCategory = {
   type: 'expense' as const,
   name: 'Comida',
   icon: 'food',
-  isActive: true,
   isSystem: false,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
@@ -93,7 +92,6 @@ describe('create', () => {
     expect(result.name).toBe('Comida');
     expect(result.type).toBe('expense');
     expect(result.userId).toBe('user-123');
-    expect(result.isActive).toBe(true);
     expect(result.isSystem).toBe(false);
   });
 
@@ -221,21 +219,6 @@ describe('update', () => {
       expect.objectContaining({ icon: null }),
     );
     expect(result.icon).toBeNull();
-  });
-
-  it('updates isActive when provided', async () => {
-    vi.mocked(categoriesRepository.findById)
-      .mockResolvedValueOnce(mockCategory)
-      .mockResolvedValueOnce({ ...mockCategory, isActive: false });
-    vi.mocked(categoriesRepository.findByNameAndUser).mockResolvedValue(null as any);
-
-    const result = await categoriesService.update(mockCategory.id, { isActive: false }, 'user-123');
-
-    expect(categoriesRepository.update).toHaveBeenCalledWith(
-      mockCategory.id,
-      expect.objectContaining({ isActive: false }),
-    );
-    expect(result.isActive).toBe(false);
   });
 
   it('does not check duplicate name when name is not provided', async () => {

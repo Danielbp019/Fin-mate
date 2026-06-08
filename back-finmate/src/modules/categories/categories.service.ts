@@ -33,7 +33,6 @@ export async function create(data: CreateCategoryBody, userId: string) {
     type: data.type,
     name: data.name,
     icon: data.icon ?? null,
-    isActive: true,
     isSystem: false,
     createdAt: now,
     updatedAt: now,
@@ -69,7 +68,6 @@ export async function update(id: string, data: UpdateCategoryBody, userId: strin
   const updateData: Record<string, unknown> = { updatedAt: now };
   if (data.name !== undefined) updateData.name = data.name;
   if (data.icon !== undefined) updateData.icon = data.icon ?? null;
-  if (data.isActive !== undefined) updateData.isActive = data.isActive;
 
   await categoriesRepository.update(
     id,

@@ -9,10 +9,10 @@ export const useCategoriesStore = defineStore('categories', () => {
   const error = ref('');
 
   const incomeCategories = computed(() =>
-    categories.value.filter((c) => c.type === 'income' && c.isActive),
+    categories.value.filter((c) => c.type === 'income'),
   );
   const expenseCategories = computed(() =>
-    categories.value.filter((c) => c.type === 'expense' && c.isActive),
+    categories.value.filter((c) => c.type === 'expense'),
   );
 
   function getCategoryById(id: string) {

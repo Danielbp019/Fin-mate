@@ -17,7 +17,6 @@ const mockCategory = {
   type: 'expense' as const,
   name: 'Comida',
   icon: 'food',
-  isActive: true,
   isSystem: false,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
@@ -145,7 +144,7 @@ describe('categoriesRepository', () => {
   });
 
   describe('softDelete', () => {
-    it('marca como inactivo y setea deletedAt', async () => {
+    it('marca como eliminado seteando deletedAt', async () => {
       const now = new Date();
       mockDb.update.mockReturnValue(mockUpdateChain() as any);
 

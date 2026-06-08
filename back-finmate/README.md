@@ -111,13 +111,13 @@ El envio de correos se maneja via `src/shared/email/` usando **Nodemailer**.
 
 Todas las rutas requieren `Authorization: Bearer <token>`.
 
-| Método | Ruta              | Body / Query                                         | Respuesta                |
-| ------ | ----------------- | ---------------------------------------------------- | ------------------------ |
-| GET    | `/categories`     | `?type=income\|expense`                              | 200 `CategoryResponse[]` |
-| GET    | `/categories/:id` | —                                                    | 200 `CategoryResponse`   |
-| POST   | `/categories`     | `{ name, type, icon?, parentId?, sortOrder? }`       | 201 `CategoryResponse`   |
-| PATCH  | `/categories/:id` | `{ name?, icon?, parentId?, sortOrder?, isActive? }` | 200 `CategoryResponse`   |
-| DELETE | `/categories/:id` | —                                                    | 204 Sin contenido        |
+| Método | Ruta              | Body / Query                                   | Respuesta                |
+| ------ | ----------------- | ---------------------------------------------- | ------------------------ |
+| GET    | `/categories`     | `?type=income\|expense`                        | 200 `CategoryResponse[]` |
+| GET    | `/categories/:id` | —                                              | 200 `CategoryResponse`   |
+| POST   | `/categories`     | `{ name, type, icon?, parentId?, sortOrder? }` | 201 `CategoryResponse`   |
+| PATCH  | `/categories/:id` | `{ name?, icon?, parentId?, sortOrder? }`      | 200 `CategoryResponse`   |
+| DELETE | `/categories/:id` | —                                              | 204 Sin contenido        |
 
 ### Movements
 

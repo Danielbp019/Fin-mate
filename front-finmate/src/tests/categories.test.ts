@@ -21,7 +21,6 @@ const mockCategories: Category[] = [
     type: 'income',
     name: 'Salario',
     icon: 'mdi-cash',
-    isActive: true,
     isSystem: true,
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
@@ -32,7 +31,6 @@ const mockCategories: Category[] = [
     type: 'expense',
     name: 'Comida',
     icon: 'mdi-food',
-    isActive: true,
     isSystem: true,
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
@@ -43,7 +41,6 @@ const mockCategories: Category[] = [
     type: 'expense',
     name: 'Inactiva',
     icon: null,
-    isActive: false,
     isSystem: true,
     createdAt: '2024-01-01',
     updatedAt: '2024-01-01',
@@ -99,7 +96,7 @@ describe('useCategoriesStore', () => {
     expect(store.loading).toBe(false);
   });
 
-  it('incomeCategories returns only active income categories', () => {
+  it('incomeCategories returns income categories', () => {
     const store = useCategoriesStore();
     store.categories = mockCategories;
 
@@ -107,12 +104,11 @@ describe('useCategoriesStore', () => {
     expect(store.incomeCategories[0].name).toBe('Salario');
   });
 
-  it('expenseCategories returns only active expense categories', () => {
+  it('expenseCategories returns expense categories', () => {
     const store = useCategoriesStore();
     store.categories = mockCategories;
 
-    expect(store.expenseCategories).toHaveLength(1);
-    expect(store.expenseCategories[0].name).toBe('Comida');
+    expect(store.expenseCategories).toHaveLength(2);
   });
 
   it('getCategoryById finds by id', () => {
@@ -137,9 +133,8 @@ describe('useCategoriesStore', () => {
       userId: 'u1',
       type: 'income',
       name: 'Freelance',
-      icon: null,
-      isActive: true,
-      isSystem: false,
+    icon: null,
+    isSystem: false,
       createdAt: '2024-02-01',
       updatedAt: '2024-02-01',
     };

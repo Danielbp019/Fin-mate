@@ -18,7 +18,6 @@ export const updateCategorySchema = z.object({
     .max(100, 'El nombre no puede exceder 100 caracteres')
     .optional(),
   icon: z.string().max(50, 'El icono no puede exceder 50 caracteres').optional(),
-  isActive: z.boolean().optional(),
 });
 
 export const categoryParamsSchema = z.object({

@@ -4,7 +4,6 @@ export interface Category {
   type: 'income' | 'expense';
   name: string;
   icon: string | null;
-  isActive: boolean;
   isSystem: boolean;
   createdAt: string;
   updatedAt: string;
@@ -19,7 +18,6 @@ export interface CreateCategoryBody {
 export interface UpdateCategoryBody {
   name?: string;
   icon?: string;
-  isActive?: boolean;
 }
 
 export interface Movement {

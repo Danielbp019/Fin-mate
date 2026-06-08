@@ -39,7 +39,6 @@ const mockCategory = {
   type: 'expense' as const,
   name: 'Comida',
   icon: 'food',
-  isActive: true,
   isSystem: false,
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-01'),
