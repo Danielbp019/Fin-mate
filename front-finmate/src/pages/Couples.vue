@@ -92,9 +92,13 @@
           <div style="display: flex; align-items: center; gap: 12px">
             <h1>{{ store.couple.name }}</h1>
 
-            <v-btn icon size="small" title="Editar nombre" variant="text" @click="openEditName">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
+            <v-tooltip location="top" text="Editar nombre del grupo">
+              <template #activator="{ props }">
+                <v-btn v-bind="props" icon size="small" variant="text" @click="openEditName">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+            </v-tooltip>
           </div>
 
           <p>Grupo de finanzas compartidas</p>
@@ -267,48 +271,37 @@
               </div>
 
               <div style="display: flex; gap: 4px">
-                <v-btn
-                  v-if="goal.status === 'active'"
-                  icon
-                  size="x-small"
-                  title="Contribuir"
-                  variant="text"
-                  @click="openContribute(goal)"
-                >
-                  <v-icon>mdi-hand-coin</v-icon>
-                </v-btn>
+                <v-tooltip location="top" v-if="goal.status === 'active'" text="Aportar a esta meta">
+                  <template #activator="{ props }">
+                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="openContribute(goal)">
+                      <v-icon>mdi-hand-coin</v-icon>
+                    </v-btn>
+                  </template>
+                </v-tooltip>
 
-                <v-btn
-                  icon
-                  size="x-small"
-                  title="Ver resumen"
-                  variant="text"
-                  @click="openSummary(goal)"
-                >
-                  <v-icon>mdi-chart-bar</v-icon>
-                </v-btn>
+                <v-tooltip location="top" text="Ver resumen de aportes">
+                  <template #activator="{ props }">
+                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="openSummary(goal)">
+                      <v-icon>mdi-chart-bar</v-icon>
+                    </v-btn>
+                  </template>
+                </v-tooltip>
 
-                <v-btn
-                  v-if="isOwner && goal.status === 'active'"
-                  icon
-                  size="x-small"
-                  title="Editar"
-                  variant="text"
-                  @click="openEditGoal(goal)"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+                <v-tooltip location="top" v-if="isOwner && goal.status === 'active'" text="Editar meta">
+                  <template #activator="{ props }">
+                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="openEditGoal(goal)">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                  </template>
+                </v-tooltip>
 
-                <v-btn
-                  v-if="isOwner && goal.status === 'active'"
-                  icon
-                  size="x-small"
-                  title="Eliminar"
-                  variant="text"
-                  @click="confirmDeleteGoal = goal"
-                >
-                  <v-icon color="error">mdi-delete</v-icon>
-                </v-btn>
+                <v-tooltip location="top" v-if="isOwner && goal.status === 'active'" text="Eliminar meta">
+                  <template #activator="{ props }">
+                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="confirmDeleteGoal = goal">
+                      <v-icon color="error">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                </v-tooltip>
               </div>
             </div>
 

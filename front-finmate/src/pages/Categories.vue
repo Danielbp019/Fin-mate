@@ -58,28 +58,36 @@
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn
-            :disabled="item.isSystem"
-            icon
-            size="small"
-            :title="item.isSystem ? 'No se puede editar' : 'Editar'"
-            variant="text"
-            @click="openEdit(item)"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
+          <v-tooltip location="top" :text="item.isSystem ? 'No se puede editar' : 'Editar categoría'">
+            <template #activator="{ props }">
+              <v-btn
+                v-bind="props"
+                :disabled="item.isSystem"
+                icon
+                size="small"
+                variant="text"
+                @click="openEdit(item)"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
 
-          <v-btn
-            color="error"
-            :disabled="item.isSystem"
-            icon
-            size="small"
-            :title="item.isSystem ? 'No se puede eliminar' : 'Eliminar'"
-            variant="text"
-            @click="confirmDelete(item)"
-          >
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
+          <v-tooltip location="top" :text="item.isSystem ? 'No se puede eliminar' : 'Eliminar categoría'">
+            <template #activator="{ props }">
+              <v-btn
+                v-bind="props"
+                color="error"
+                :disabled="item.isSystem"
+                icon
+                size="small"
+                variant="text"
+                @click="confirmDelete(item)"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
         </template>
       </v-data-table>
     </v-card>

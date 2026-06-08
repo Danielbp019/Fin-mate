@@ -114,46 +114,64 @@
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn icon size="small" title="Editar" variant="text" @click="openEdit(item)">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
+          <v-tooltip location="top" text="Editar movimiento">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
 
-          <v-btn
-            color="error"
-            icon
-            size="small"
-            title="Eliminar"
-            variant="text"
-            @click="confirmDelete(item)"
-          >
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
+          <v-tooltip location="top" text="Eliminar movimiento">
+            <template #activator="{ props }">
+              <v-btn
+                v-bind="props"
+                color="error"
+                icon
+                size="small"
+                variant="text"
+                @click="confirmDelete(item)"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
         </template>
       </v-data-table>
 
       <v-divider v-if="store.pagination.total > 0" />
 
       <div v-if="store.pagination.total > 0" class="d-flex align-center justify-center pa-4 ga-2">
-        <v-btn
-          :disabled="store.pagination.page <= 1"
-          variant="text"
-          @click="store.setPage(store.pagination.page - 1)"
-        >
-          <v-icon>mdi-chevron-left</v-icon> Anterior
-        </v-btn>
+        <v-tooltip location="top" text="Página anterior">
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              :disabled="store.pagination.page <= 1"
+              variant="text"
+              @click="store.setPage(store.pagination.page - 1)"
+            >
+              <v-icon>mdi-chevron-left</v-icon> Anterior
+            </v-btn>
+          </template>
+        </v-tooltip>
 
         <span class="text-caption" style="color: rgba(var(--v-theme-on-surface), 0.6)">
           Página {{ store.pagination.page }} de {{ totalPages }} ({{ store.pagination.total }}
           registros)
         </span>
 
-        <v-btn
-          :disabled="store.pagination.page >= totalPages"
-          variant="text"
-          @click="store.setPage(store.pagination.page + 1)"
-        >
-          Siguiente <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
+        <v-tooltip location="top" text="Página siguiente">
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              :disabled="store.pagination.page >= totalPages"
+              variant="text"
+              @click="store.setPage(store.pagination.page + 1)"
+            >
+              Siguiente <v-icon>mdi-chevron-right</v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
       </div>
     </v-card>
 

@@ -83,24 +83,36 @@
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn icon size="small" title="Editar" variant="text" @click="openEdit(item)">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
+          <v-tooltip location="top" text="Editar deuda">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
 
-          <v-btn icon size="small" title="Ver pagos" variant="text" @click="openPayments(item)">
-            <v-icon>mdi-currency-usd</v-icon>
-          </v-btn>
+          <v-tooltip location="top" text="Ver pagos">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" icon size="small" variant="text" @click="openPayments(item)">
+                <v-icon>mdi-currency-usd</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
 
-          <v-btn
-            color="error"
-            icon
-            size="small"
-            title="Eliminar"
-            variant="text"
-            @click="confirmDelete(item)"
-          >
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
+          <v-tooltip location="top" text="Eliminar deuda">
+            <template #activator="{ props }">
+              <v-btn
+                v-bind="props"
+                color="error"
+                icon
+                size="small"
+                variant="text"
+                @click="confirmDelete(item)"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
         </template>
       </v-data-table>
     </v-card>
