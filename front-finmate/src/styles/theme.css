@@ -34,12 +34,16 @@ body {
   box-sizing: border-box;
 }
 
-.lp-root,
-.lp-root *,
-.fm-auth-root,
-.fm-auth-root * {
-  margin: 0;
-  padding: 0;
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
 }
 
 .sr-only {
@@ -61,6 +65,12 @@ body {
   background: var(--surface);
   min-height: 600px;
   overflow: hidden;
+}
+
+.lp-root,
+.lp-root * {
+  margin: 0;
+  padding: 0;
 }
 
 /* NAV */
@@ -183,18 +193,6 @@ body {
   background: var(--green-mid);
   border-radius: 50%;
   animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.8);
-  }
 }
 
 .lp-headline {
@@ -470,6 +468,17 @@ body {
   }
 }
 
+/* Fi icon colors */
+.fi-green {
+  background: var(--green-light);
+}
+.fi-blue {
+  background: #e6f1fb;
+}
+.fi-gold {
+  background: #faeeda;
+}
+
 /* FEATURES */
 .lp-features {
   padding: 56px 40px;
@@ -530,16 +539,6 @@ body {
   justify-content: center;
   margin-bottom: 14px;
   font-size: 20px;
-}
-
-.fi-green {
-  background: var(--green-light);
-}
-.fi-blue {
-  background: #e6f1fb;
-}
-.fi-gold {
-  background: #faeeda;
 }
 
 .feat-name {
@@ -721,6 +720,12 @@ body {
   min-height: 100vh;
   font-family: 'DM Sans', sans-serif;
   background: var(--surface);
+}
+
+.fm-auth-root,
+.fm-auth-root * {
+  margin: 0;
+  padding: 0;
 }
 
 .fm-panel-left {
