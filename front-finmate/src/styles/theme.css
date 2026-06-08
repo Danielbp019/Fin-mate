@@ -267,33 +267,6 @@ body {
   border-color: var(--green-mid);
 }
 
-.lp-trust {
-  margin-top: 28px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--ink-soft);
-  opacity: 0.75;
-}
-
-.lp-trust-dots {
-  display: flex;
-  gap: 3px;
-}
-.lp-trust-dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1.5px solid #fff;
-  font-size: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  color: #fff;
-}
-
 /* HERO RIGHT */
 .lp-hero-right {
   position: relative;
@@ -1358,13 +1331,6 @@ body {
 }
 
 /* Dashboard misc cards */
-.stat-card {
-  background: rgb(var(--v-theme-surface));
-  border-radius: 14px;
-  padding: 20px 22px;
-  border: 0.5px solid rgba(var(--v-theme-on-surface), 0.12);
-}
-
 .stat-row {
   display: flex;
   justify-content: space-between;
