@@ -20,16 +20,25 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, Vitest, ESLint, Zod
 
 ## Comandos
 
-| Comando              | Descripción                           |
-| -------------------- | ------------------------------------- |
-| `npm run dev`        | Servidor de desarrollo con hot-reload |
-| `npm run build`      | Compilación producción                |
-| `npm run preview`    | Previsualizar build                   |
-| `npm run lint`       | Ejecutar ESLint                       |
-| `npm run lint:fix`   | Corregir errores ESLint               |
-| `npm run type-check` | Verificar tipos TypeScript            |
-| `npm run test`       | Tests en modo watch                   |
-| `npm run test:run`   | Tests una sola vez                    |
+| Comando            | Descripción                                       |
+| ------------------ | ------------------------------------------------- |
+| `npm run dev`      | Servidor de desarrollo con hot-reload             |
+| `npm run build`    | Compilación producción                            |
+| `npm run preview`  | Previsualizar build                               |
+| `npm run lint`     | Ejecutar ESLint                                   |
+| `npm run lint:fix` | Corregir errores ESLint                           |
+| `npx eslint`       | **Usar esta** para verificar archivos específicos |
+| `npx eslint --fix` | **Usar esta** para corregir archivos específicos  |
+
+⚠️ **Importante**: Nunca ejecutar `npm run lint:fix`. Hace `prettier --write .` sobre **todos** los archivos y reformatea código no relacionado. En su lugar, usar `npx eslint --fix` solo sobre los archivos que se estén editando. Ejemplo:
+
+```powershell
+npx eslint --fix src/layouts/AuthLayout.vue src/styles/theme.css
+```
+
+| `npm run type-check` | Verificar tipos TypeScript |
+| `npm run test` | Tests en modo watch |
+| `npm run test:run` | Tests una sola vez |
 
 ## Estructura
 

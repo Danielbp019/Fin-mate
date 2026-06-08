@@ -77,6 +77,13 @@
 
         <v-list-item prepend-icon="mdi-account" title="Perfil" :to="{ name: 'Profile' }" />
       </v-list>
+
+      <template #append>
+        <div class="fm-drawer-footer">
+          <div class="fm-drawer-footer-label">Creado por:</div>
+          <img alt="Firma Daniel" class="fm-drawer-signature" :src="firmaSrc" />
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-main>
@@ -88,14 +95,18 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, shallowRef } from 'vue';
+import { computed, onMounted, shallowRef } from 'vue';
 import { useTheme } from 'vuetify';
+import firmaBlack from '@/assets/daniel_firma_black.svg';
+import firmaWhite from '@/assets/daniel_firma_white.svg';
 import { useAuthStore } from '@/stores/auth';
 import '@/styles/theme.css';
 
 const auth = useAuthStore();
 const theme = useTheme();
 const drawer = shallowRef(true);
+
+const firmaSrc = computed(() => (theme.global.name.value === 'light' ? firmaBlack : firmaWhite));
 
 onMounted(() => {
   const saved = localStorage.getItem('theme');
