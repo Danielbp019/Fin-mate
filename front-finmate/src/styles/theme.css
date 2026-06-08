@@ -1415,6 +1415,17 @@ body {
   border-color: rgba(29, 158, 117, 0.5) !important;
 }
 
+/* Force dark text on auth form inputs regardless of Vuetify theme */
+.fm-auth-root .v-field__input {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.fm-auth-root .v-field__input::placeholder {
+  color: rgba(0, 0, 0, 0.38) !important;
+}
+.fm-auth-root .v-label.v-field-label {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
 /* ── Form utilities ── */
 
 .fm-alert {
@@ -1441,7 +1452,7 @@ body {
   display: block;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(var(--v-theme-on-surface), 0.87);
+  color: var(--ink);
   margin-bottom: 6px;
   letter-spacing: 0.1px;
 }
@@ -1487,7 +1498,7 @@ body {
   text-align: center;
   margin-top: 24px;
   font-size: 14px;
-  color: rgba(var(--v-theme-on-surface), 0.6);
+  color: var(--ink-soft);
   font-weight: 300;
 }
 
@@ -1507,7 +1518,7 @@ body {
   text-align: center;
   margin-top: 14px;
   font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), 0.6);
+  color: var(--ink-soft);
   font-weight: 300;
   line-height: 1.6;
 }

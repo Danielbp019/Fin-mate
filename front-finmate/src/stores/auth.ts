@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useTheme } from 'vuetify';
 import api from '@/services/api';
 
 export interface User {
@@ -39,7 +40,12 @@ export const useAuthStore = defineStore('auth', () => {
       await api.post('/auth/logout');
     } finally {
       clear();
-      localStorage.removeItem('theme');
+      try {
+        useTheme().change('light');
+        localStorage.setItem('theme', 'light');
+      } catch {
+        localStorage.removeItem('theme');
+      }
       router.push('/');
     }
   }
