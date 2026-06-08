@@ -75,12 +75,33 @@
             <v-icon :color="item.type === 'income' ? 'green' : 'orange'">
               {{ item.type === 'income' ? 'mdi-trending-up' : 'mdi-trending-down' }}
             </v-icon>
+
             <span>{{ item.type === 'income' ? 'Ingreso' : 'Gasto' }}</span>
           </div>
         </template>
 
         <template #item.categoryId="{ item }">
-          {{ getCategoryName(item.categoryId) }}
+          <div style="display: flex; align-items: center; gap: 8px">
+            <span>{{ getCategoryName(item.categoryId) }}</span>
+
+            <v-chip
+              v-if="item.referenceType === 'debt_payment'"
+              color="orange"
+              size="x-small"
+              variant="tonal"
+            >
+              Deuda
+            </v-chip>
+
+            <v-chip
+              v-else-if="item.referenceType === 'goal_contribution'"
+              color="green"
+              size="x-small"
+              variant="tonal"
+            >
+              Meta Pareja
+            </v-chip>
+          </div>
         </template>
 
         <template #item.amount="{ item }">
@@ -345,13 +366,17 @@ const categoryOptions = computed(() => {
     }));
 });
 
+const AUTO_MANAGED_CATEGORIES = new Set(['Ahorro Meta de Pareja', 'Devolucion Meta de Pareja', 'Pago de Deuda']);
+
 const availableCategories = computed(() => {
-  const cats = !form.value.type
-    ? catStore.expenseCategories
-    : form.value.type === 'income'
+  const cats = form.value.type
+    ? form.value.type === 'income'
       ? catStore.incomeCategories
-      : catStore.expenseCategories;
-  return [...cats].sort((a, b) => a.name.localeCompare(b.name));
+      : catStore.expenseCategories
+    : catStore.expenseCategories;
+  return [...cats]
+    .filter((c) => !AUTO_MANAGED_CATEGORIES.has(c.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
 });
 
 const totalPages = computed(() =>

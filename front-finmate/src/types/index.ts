@@ -30,6 +30,8 @@ export interface Movement {
   amount: string;
   description: string | null;
   movementDate: string;
+  referenceType: string | null;
+  referenceId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -53,6 +55,7 @@ export interface UpdateMovementBody {
 export interface MovementFilters {
   type?: 'income' | 'expense';
   categoryId?: string;
+  referenceType?: string;
   from?: string;
   to?: string;
   page?: number;
@@ -164,11 +167,13 @@ export interface Goal {
   title: string;
   targetAmount: string;
   currentAmount: string;
+  progressPercent: number;
   deadline: string | null;
   status: 'active' | 'completed' | 'cancelled';
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  contributions: Contribution[];
 }
 
 export interface CreateGoalBody {
@@ -188,6 +193,7 @@ export interface Contribution {
   id: string;
   goalId: string;
   userId: string;
+  userName: string;
   amount: string;
   notes: string | null;
   date: string;

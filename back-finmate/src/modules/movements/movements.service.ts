@@ -21,6 +21,8 @@ function toResponse(row: typeof movements.$inferSelect): MovementResponse {
     amount: row.amount,
     description: row.description,
     movementDate: row.movementDate.toISOString(),
+    referenceType: row.referenceType,
+    referenceId: row.referenceId,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };
@@ -78,6 +80,8 @@ export async function create(data: CreateMovementBody, userId: string): Promise<
     amount: data.amount,
     description: data.description ?? null,
     movementDate,
+    referenceType: null,
+    referenceId: null,
     createdAt: now,
     updatedAt: now,
     deletedAt: null,

@@ -4,6 +4,12 @@ import jwt from 'jsonwebtoken';
 
 vi.mock('../../debts.repository.js');
 vi.mock('../payments.repository.js');
+vi.mock('../../../movements/movements.repository.js');
+vi.mock('../../../../shared/database/connection.js', () => ({
+  db: {
+    select: vi.fn(),
+  },
+}));
 vi.mock('../../../../config/env.js', () => ({
   env: {
     jwtSecret: 'test-secret',
@@ -111,6 +117,18 @@ describe('POST /debts/:debtId/payments', () => {
     vi.mocked(debtsRepository.findById).mockResolvedValue(mockDebt);
     vi.mocked(paymentsRepository.create).mockResolvedValue(undefined as never);
     vi.mocked(debtsRepository.update).mockResolvedValue(undefined as never);
+
+    const dbMock = (await import('../../../../shared/database/connection.js')).db;
+    (dbMock.select as ReturnType<typeof vi.fn>).mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue([{ id: 'cat-pago-deuda' }]),
+        }),
+      }),
+    });
+
+    const movementsRepo = await import('../../../movements/movements.repository.js');
+    vi.mocked(movementsRepo.create).mockResolvedValue(undefined as never);
 
     const token = createToken();
 

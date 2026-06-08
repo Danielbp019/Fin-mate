@@ -22,6 +22,8 @@ export interface MovementResponse {
   amount: string;
   description: string | null;
   movementDate: string;
+  referenceType: string | null;
+  referenceId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -29,6 +31,7 @@ export interface MovementResponse {
 export interface MovementListFilters {
   type?: 'income' | 'expense';
   categoryId?: string;
+  referenceType?: string;
   from?: string;
   to?: string;
   page?: number;

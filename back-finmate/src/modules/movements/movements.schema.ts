@@ -34,6 +34,7 @@ export const movementParamsSchema = z.object({
 export const movementListQuerySchema = z.object({
   type: z.enum(['income', 'expense']).optional(),
   categoryId: z.string().uuid().optional(),
+  referenceType: z.string().optional(),
   from: z.string().datetime().optional(),
   to: z.string().datetime().optional(),
   page: z.coerce.number().int().positive().optional(),

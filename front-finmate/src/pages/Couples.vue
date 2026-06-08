@@ -266,8 +266,9 @@
                 </v-chip>
               </div>
 
-              <div v-if="goal.status === 'active'" style="display: flex; gap: 4px">
+              <div style="display: flex; gap: 4px">
                 <v-btn
+                  v-if="goal.status === 'active'"
                   icon
                   size="x-small"
                   title="Contribuir"
@@ -278,7 +279,17 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="isOwner"
+                  icon
+                  size="x-small"
+                  title="Ver resumen"
+                  variant="text"
+                  @click="openSummary(goal)"
+                >
+                  <v-icon>mdi-chart-bar</v-icon>
+                </v-btn>
+
+                <v-btn
+                  v-if="isOwner && goal.status === 'active'"
                   icon
                   size="x-small"
                   title="Editar"
@@ -289,7 +300,7 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="isOwner"
+                  v-if="isOwner && goal.status === 'active'"
                   icon
                   size="x-small"
                   title="Eliminar"
@@ -585,6 +596,96 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="summaryDialog" max-width="520">
+      <v-card>
+        <v-card-title class="text-h5 font-weight-bold pa-4">
+          Resumen de aportes · {{ summaryGoal?.title }}
+        </v-card-title>
+
+        <v-divider />
+
+        <v-card-text class="pa-4">
+          <v-alert
+            v-if="summaryGoal && summaryGoal.status !== 'active'"
+            class="mb-4"
+            density="compact"
+            rounded="lg"
+            type="info"
+            variant="tonal"
+          >
+            Meta {{ summaryGoal.status === 'completed' ? 'completada' : 'cancelada' }}
+          </v-alert>
+
+          <template v-if="summaryGoal && summaryGoal.contributions.length > 0">
+            <div
+              v-for="row in summaryRows"
+              :key="row.userId"
+              class="mb-3 pa-3"
+              style="border-radius: 12px; background: rgba(15, 110, 86, 0.05)"
+            >
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <div>
+                  <span style="font-weight: 600; font-size: 15px">{{ row.userName }}</span>
+
+                  <v-chip
+                    v-if="row.role === 'owner'"
+                    class="ml-2"
+                    color="#0F6E56"
+                    size="x-small"
+                    variant="tonal"
+                  >
+                    Propietario
+                  </v-chip>
+                </div>
+
+                <span style="font-weight: 700; font-size: 16px">
+                  ${{ Number(row.total).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+                </span>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px">
+                <v-progress-linear
+                  :color="row.percentage >= 50 ? '#0F6E56' : 'orange'"
+                  height="6"
+                  :model-value="row.percentage"
+                  rounded
+                  style="flex: 1"
+                />
+
+                <span style="font-size: 13px; font-weight: 500; min-width: 48px; text-align: right">
+                  {{ Math.round(row.percentage) }}%
+                </span>
+              </div>
+            </div>
+
+            <v-divider class="my-3" />
+
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 16px">
+              <span>Total aportado</span>
+
+              <span>
+                ${{ Number(summaryGoal?.currentAmount ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+              </span>
+            </div>
+          </template>
+
+          <div
+            v-else
+            class="text-center pa-4"
+            style="color: rgba(var(--v-theme-on-surface), 0.5)"
+          >
+            <v-icon size="40" style="opacity: 0.4">mdi-currency-usd-off</v-icon>
+            <p class="mt-2">No hay aportes registrados en esta meta</p>
+          </div>
+        </v-card-text>
+
+        <v-card-actions class="pa-4 pt-0">
+          <v-spacer />
+          <v-btn class="fm-btn-submit" rounded="lg" @click="summaryDialog = false">Cerrar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="confirmDissolve" max-width="400">
       <v-card>
         <v-card-title class="text-h5 font-weight-bold pa-4">Disolver grupo</v-card-title>
@@ -721,6 +822,43 @@ const contributeDialog = ref(false);
 const contributingGoal = ref<Goal | null>(null);
 const contributeForm = ref({ amount: '', date: new Date().toISOString().slice(0, 10), notes: '' });
 const contributeError = ref('');
+
+const summaryDialog = ref(false);
+const summaryGoal = ref<Goal | null>(null);
+
+const summaryRows = computed(() => {
+  const goal = summaryGoal.value;
+  if (!goal || goal.contributions.length === 0) return [];
+
+  const totalsByUser = new Map<string, { userName: string; total: number }>();
+
+  for (const c of goal.contributions) {
+    const existing = totalsByUser.get(c.userId) ?? { userName: c.userName, total: 0 };
+    existing.total += Number(c.amount);
+    existing.userName = c.userName;
+    totalsByUser.set(c.userId, existing);
+  }
+
+  const grandTotal = Array.from(totalsByUser.values()).reduce((s, u) => s + u.total, 0);
+
+  const members = store.couple?.members ?? [];
+
+  return Array.from(totalsByUser.entries()).map(([userId, data]) => {
+    const member = members.find((m) => m.userId === userId);
+    return {
+      userId,
+      userName: data.userName || member?.name || 'Usuario',
+      total: data.total,
+      percentage: grandTotal > 0 ? (data.total / grandTotal) * 100 : 0,
+      role: member?.role ?? 'member',
+    };
+  });
+});
+
+function openSummary(goal: Goal) {
+  summaryGoal.value = goal;
+  summaryDialog.value = true;
+}
 
 const confirmDissolve = ref(false);
 const confirmLeave = ref(false);

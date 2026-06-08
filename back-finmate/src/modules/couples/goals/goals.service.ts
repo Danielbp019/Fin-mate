@@ -3,7 +3,8 @@ import { AppError } from '../../../shared/errors/AppError.js';
 import * as goalsRepository from './goals.repository.js';
 import * as couplesRepository from '../couples.repository.js';
 import { db } from '../../../shared/database/connection.js';
-import { movements, categories } from '../../../shared/database/schema.js';
+import { categories, users } from '../../../shared/database/schema.js';
+import * as movementsRepository from '../../movements/movements.repository.js';
 import { eq } from 'drizzle-orm';
 import { add, greaterThanOrEqual, isZero } from 'dinero.js';
 import { dbToDinero, dineroToDb, toNumber } from '../../../shared/money/money.js';
@@ -193,23 +194,31 @@ export async function contribute(
     amount: data.amount,
     description: `Aporte a meta: ${goal.title}`,
     movementDate: contributionDate,
+    referenceType: 'goal_contribution',
+    referenceId: contribution.id,
     createdAt: now,
     updatedAt: now,
   };
 
   await goalsRepository.createContribution(contribution);
-  await db.insert(movements).values(movement);
+  await movementsRepository.create(movement);
   await goalsRepository.update(goalId, {
     currentAmount: dineroToDb(newCurrentMoney),
     status: newStatus,
     updatedAt: now,
   });
 
+  const userResult = await db
+    .select({ name: users.name })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+
   return {
     id: contribution.id,
     goalId: contribution.goalId,
     userId: contribution.userId,
-    userName: '',
+    userName: userResult[0]?.name ?? '',
     amount: contribution.amount,
     notes: contribution.notes,
     date: contribution.date.toISOString(),
@@ -235,11 +244,13 @@ export async function cancelActiveGoalsOnDissolve(coupleId: string): Promise<voi
         amount: goal.currentAmount,
         description: `Devolucion por disolucion de meta: ${goal.title}`,
         movementDate: now,
+        referenceType: 'goal_contribution_refund',
+        referenceId: null,
         createdAt: now,
         updatedAt: now,
       };
 
-      await db.insert(movements).values(movement);
+      await movementsRepository.create(movement);
     }
 
     await goalsRepository.update(goal.id, {

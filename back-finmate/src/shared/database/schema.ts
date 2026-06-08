@@ -102,6 +102,8 @@ export const movements = mysqlTable(
     amount: decimal('amount', { precision: 19, scale: 4 }).notNull(),
     description: varchar('description', { length: 255 }),
     movementDate: datetime('movement_date', { fsp: 3 }).notNull(),
+    referenceType: varchar('reference_type', { length: 50 }),
+    referenceId: char('reference_id', { length: 36 }),
     createdAt: datetime('created_at', { fsp: 3 })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP(3)`),
@@ -113,6 +115,7 @@ export const movements = mysqlTable(
     coupleIdIdx: index('idx_movements_couple_id').on(table.coupleId),
     categoryIdIdx: index('idx_movements_category_id').on(table.categoryId),
     typeDateIdx: index('idx_movements_type_date').on(table.type, table.movementDate),
+    referenceTypeIdx: index('idx_movements_reference_type').on(table.referenceType),
   }),
 );
 

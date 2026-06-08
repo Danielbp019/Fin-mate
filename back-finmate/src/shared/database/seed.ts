@@ -96,6 +96,7 @@ async function seed() {
   const saludId = '20000000-0000-0000-0000-000000000004';
   const ahorroMetaId = '20000000-0000-0000-0000-000000000005';
   const devolucionMetaId = '20000000-0000-0000-0000-000000000006';
+  const pagoDeudaId = '20000000-0000-0000-0000-000000000007';
 
   const systemCategories = [
     {
@@ -158,10 +159,20 @@ async function seed() {
       isSystem: true,
       updatedAt: now,
     },
+    {
+      id: pagoDeudaId,
+      userId: null,
+      type: 'expense' as const,
+      name: 'Pago de Deuda',
+      icon: 'mdi-credit-card-check',
+      isActive: true,
+      isSystem: true,
+      updatedAt: now,
+    },
   ];
 
   await db.insert(categories).values(systemCategories);
-  console.log('  - 6 categorias del sistema insertadas');
+  console.log('  - 7 categorias del sistema insertadas');
   console.log('');
 
   console.log('Insertando categorias de usuario...');
@@ -631,6 +642,147 @@ async function seed() {
   ]);
 
   console.log('  - 2 metas de pareja con 4 contribuciones insertadas');
+  console.log('');
+
+  console.log('Insertando movimientos automaticos para pagos y contribuciones...');
+
+  const autoMovements = [
+    // Debt payment movements
+    {
+      id: '30000000-0000-0000-0000-000000000021',
+      userId: user1Id,
+      coupleId: null,
+      categoryId: pagoDeudaId,
+      type: 'expense' as const,
+      amount: '3000.0000',
+      description: 'Pago de deuda: Tarjeta de Credito',
+      movementDate: d('2026-05-20'),
+      referenceType: 'debt_payment',
+      referenceId: '50000000-0000-0000-0000-000000000001',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000022',
+      userId: user1Id,
+      coupleId: null,
+      categoryId: pagoDeudaId,
+      type: 'expense' as const,
+      amount: '3500.0000',
+      description: 'Pago de deuda: Tarjeta de Credito',
+      movementDate: d('2026-06-15'),
+      referenceType: 'debt_payment',
+      referenceId: '50000000-0000-0000-0000-000000000002',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000023',
+      userId: user1Id,
+      coupleId: null,
+      categoryId: pagoDeudaId,
+      type: 'expense' as const,
+      amount: '15000.0000',
+      description: 'Pago de deuda: Prestamo Personal',
+      movementDate: d('2026-05-10'),
+      referenceType: 'debt_payment',
+      referenceId: '50000000-0000-0000-0000-000000000003',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000024',
+      userId: user2Id,
+      coupleId: null,
+      categoryId: pagoDeudaId,
+      type: 'expense' as const,
+      amount: '5000.0000',
+      description: 'Pago de deuda: Deuda Colegiatura',
+      movementDate: d('2026-05-22'),
+      referenceType: 'debt_payment',
+      referenceId: '50000000-0000-0000-0000-000000000004',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000025',
+      userId: user2Id,
+      coupleId: null,
+      categoryId: pagoDeudaId,
+      type: 'expense' as const,
+      amount: '2000.0000',
+      description: 'Pago de deuda: Deuda Colegiatura',
+      movementDate: d('2026-06-18'),
+      referenceType: 'debt_payment',
+      referenceId: '50000000-0000-0000-0000-000000000005',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000026',
+      userId: user2Id,
+      coupleId: null,
+      categoryId: pagoDeudaId,
+      type: 'expense' as const,
+      amount: '25000.0000',
+      description: 'Pago de deuda: Prestamo Auto',
+      movementDate: d('2026-05-05'),
+      referenceType: 'debt_payment',
+      referenceId: '50000000-0000-0000-0000-000000000006',
+      updatedAt: now,
+    },
+    // Goal contribution movements
+    {
+      id: '30000000-0000-0000-0000-000000000031',
+      userId: user1Id,
+      coupleId: coupleId,
+      categoryId: ahorroMetaId,
+      type: 'expense' as const,
+      amount: '5000.0000',
+      description: 'Aporte a meta: Viaje a Fin de Ano',
+      movementDate: d('2026-06-02'),
+      referenceType: 'goal_contribution',
+      referenceId: '90000000-0000-0000-0000-000000000001',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000032',
+      userId: user2Id,
+      coupleId: coupleId,
+      categoryId: ahorroMetaId,
+      type: 'expense' as const,
+      amount: '3000.0000',
+      description: 'Aporte a meta: Viaje a Fin de Ano',
+      movementDate: d('2026-06-02'),
+      referenceType: 'goal_contribution',
+      referenceId: '90000000-0000-0000-0000-000000000002',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000033',
+      userId: user1Id,
+      coupleId: coupleId,
+      categoryId: ahorroMetaId,
+      type: 'expense' as const,
+      amount: '2000.0000',
+      description: 'Aporte a meta: Fondo de Emergencia',
+      movementDate: d('2026-06-05'),
+      referenceType: 'goal_contribution',
+      referenceId: '90000000-0000-0000-0000-000000000003',
+      updatedAt: now,
+    },
+    {
+      id: '30000000-0000-0000-0000-000000000034',
+      userId: user2Id,
+      coupleId: coupleId,
+      categoryId: ahorroMetaId,
+      type: 'expense' as const,
+      amount: '1000.0000',
+      description: 'Aporte a meta: Fondo de Emergencia',
+      movementDate: d('2026-06-05'),
+      referenceType: 'goal_contribution',
+      referenceId: '90000000-0000-0000-0000-000000000004',
+      updatedAt: now,
+    },
+  ];
+
+  await db.insert(movements).values(autoMovements);
+  console.log(`  - ${autoMovements.length} movimientos automaticos insertados`);
   console.log('');
 
   const totalMovements = await db.$count(movements);

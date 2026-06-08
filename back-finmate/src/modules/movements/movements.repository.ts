@@ -22,6 +22,10 @@ function buildConditions(userId: string, filters: MovementListFilters) {
     conditions.push(lte(movements.movementDate, new Date(filters.to)));
   }
 
+  if (filters.referenceType) {
+    conditions.push(eq(movements.referenceType, filters.referenceType));
+  }
+
   return conditions;
 }
 

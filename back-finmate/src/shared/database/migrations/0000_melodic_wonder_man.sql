@@ -110,6 +110,8 @@ CREATE TABLE `movements` (
 	`amount` decimal(19,4) NOT NULL COMMENT 'Monto del movimiento (19 dígitos, 4 decimales)',
 	`description` varchar(255) COMMENT 'Descripción o nota del movimiento',
 	`movement_date` datetime(3) NOT NULL COMMENT 'Fecha en que ocurrió el movimiento',
+	`reference_type` varchar(50) COMMENT 'Tipo de referencia (debt_payment, goal_contribution)',
+	`reference_id` char(36) COMMENT 'ID del registro origen',
 	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de creación del registro',
 	`updated_at` datetime(3) NOT NULL COMMENT 'Fecha de última actualización',
 	`deleted_at` datetime(3) COMMENT 'Fecha de borrado lógico',
@@ -171,5 +173,6 @@ CREATE INDEX `idx_movements_user_id` ON `movements` (`user_id`);--> statement-br
 CREATE INDEX `idx_movements_couple_id` ON `movements` (`couple_id`);--> statement-breakpoint
 CREATE INDEX `idx_movements_category_id` ON `movements` (`category_id`);--> statement-breakpoint
 CREATE INDEX `idx_movements_type_date` ON `movements` (`type`,`movement_date`);--> statement-breakpoint
+CREATE INDEX `idx_movements_reference_type` ON `movements` (`reference_type`);--> statement-breakpoint
 CREATE INDEX `idx_password_reset_user_id` ON `password_reset_tokens` (`user_id`);--> statement-breakpoint
 CREATE INDEX `idx_refresh_tokens_user_id` ON `refresh_tokens` (`user_id`);
