@@ -1452,9 +1452,13 @@ body {
   display: block;
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink);
+  color: rgba(var(--v-theme-on-surface), 0.87);
   margin-bottom: 6px;
   letter-spacing: 0.1px;
+}
+
+.fm-auth-root .fm-label {
+  color: var(--ink);
 }
 
 .fm-label-row {
@@ -1498,8 +1502,12 @@ body {
   text-align: center;
   margin-top: 24px;
   font-size: 14px;
-  color: var(--ink-soft);
+  color: rgba(var(--v-theme-on-surface), 0.6);
   font-weight: 300;
+}
+
+.fm-auth-root .fm-switch-link {
+  color: var(--ink-soft);
 }
 
 .fm-switch-link a {
@@ -1518,9 +1526,13 @@ body {
   text-align: center;
   margin-top: 14px;
   font-size: 13px;
-  color: var(--ink-soft);
+  color: rgba(var(--v-theme-on-surface), 0.6);
   font-weight: 300;
   line-height: 1.6;
+}
+
+.fm-auth-root .fm-terms {
+  color: var(--ink-soft);
 }
 
 .fm-terms a,
