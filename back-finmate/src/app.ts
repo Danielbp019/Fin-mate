@@ -34,6 +34,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use((req, _res, next) => {
+  console.log(`[${new Date().toLocaleString('es-ES')}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use(pingRouter);
 app.use(authRouter);
 
