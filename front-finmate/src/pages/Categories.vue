@@ -42,6 +42,10 @@
         :items-per-page="-1"
         :loading="store.loading"
       >
+        <template #loader>
+          <LinearLoader :loading="store.loading" />
+        </template>
+
         <template #item.icon="{ item }">
           <v-icon v-if="item.icon" size="24">{{ item.icon }}</v-icon>
           <span v-else class="text-caption text-disabled">&mdash;</span>
@@ -209,6 +213,7 @@ import type { Category, CreateCategoryBody, UpdateCategoryBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref } from 'vue';
 import IconPicker from '@/components/IconPicker.vue';
+import LinearLoader from '@/components/LinearLoader.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { createCategorySchema, updateCategorySchema } from '@/validation';
 import '@/styles/theme.css';

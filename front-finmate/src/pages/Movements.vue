@@ -66,6 +66,10 @@
         :items-per-page="-1"
         :loading="store.loading"
       >
+        <template #loader>
+          <LinearLoader :loading="store.loading" />
+        </template>
+
         <template #item.movementDate="{ item }">
           {{ formatDate(item.movementDate) }}
         </template>
@@ -329,6 +333,7 @@ import type { CreateMovementBody, Movement, UpdateMovementBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
+import LinearLoader from '@/components/LinearLoader.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { useMovementsStore } from '@/stores/movements';
 import { createMovementSchema, updateMovementSchema } from '@/validation';

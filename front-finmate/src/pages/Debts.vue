@@ -62,6 +62,10 @@
         :items-per-page="-1"
         :loading="store.loading"
       >
+        <template #loader>
+          <LinearLoader :loading="store.loading" />
+        </template>
+
         <template #item.priority="{ item }">
           <v-chip :color="priorityColor(item.priority)" size="small">
             {{ priorityLabel(item.priority) }}
@@ -422,6 +426,10 @@
             :items-per-page="-1"
             :loading="paymentsLoading"
           >
+            <template #loader>
+              <LinearLoader :loading="paymentsLoading" />
+            </template>
+
             <template #item.amount="{ item }">
               -${{ Number(item.amount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
             </template>
@@ -532,6 +540,7 @@ import type { CreateDebtBody, CreatePaymentBody, Debt, Payment, UpdateDebtBody }
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
+import LinearLoader from '@/components/LinearLoader.vue';
 import { useDebtsStore } from '@/stores/debts';
 import { createDebtSchema, createPaymentSchema, updateDebtSchema } from '@/validation';
 import '@/styles/theme.css';
