@@ -9,13 +9,13 @@
         <p>Administra tus categorías de ingresos y gastos</p>
       </div>
 
-      <v-btn class="fm-btn-submit" color="#0F6E56" prepend-icon="mdi-plus" @click="openCreate">
+      <v-btn class="fm-btn-submit" color="var(--green-deep)" prepend-icon="mdi-plus" @click="openCreate">
         Nueva categoría
       </v-btn>
     </div>
 
     <v-card>
-      <v-tabs v-model="tab" color="#0F6E56">
+      <v-tabs v-model="tab" color="var(--green-deep)">
         <v-tab value="all">Todas</v-tab>
         <v-tab value="income">Ingresos</v-tab>
         <v-tab value="expense">Gastos</v-tab>

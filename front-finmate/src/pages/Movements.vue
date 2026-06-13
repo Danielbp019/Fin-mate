@@ -9,7 +9,7 @@
         <p>Registra y administra tus ingresos y gastos</p>
       </div>
 
-      <v-btn class="fm-btn-submit" color="#0F6E56" prepend-icon="mdi-plus" @click="openCreate">
+      <v-btn class="fm-btn-submit" color="var(--green-deep)" prepend-icon="mdi-plus" @click="openCreate">
         Nuevo movimiento
       </v-btn>
     </div>
@@ -17,7 +17,7 @@
     <v-card class="mb-4">
       <v-card-text class="pa-4">
         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
-          <v-tabs v-model="filterType" color="#0F6E56" density="compact" hide-slider>
+          <v-tabs v-model="filterType" color="var(--green-deep)" density="compact" hide-slider>
             <v-tab value="">Todos</v-tab>
             <v-tab value="income">Ingresos</v-tab>
             <v-tab value="expense">Gastos</v-tab>

@@ -85,7 +85,7 @@
           <div class="hero-card hc-main">
             <div class="hc-chip">
               <svg aria-hidden="true" height="8" viewBox="0 0 8 8" width="8">
-                <circle cx="4" cy="4" fill="#1D9E75" r="4" />
+                <circle cx="4" cy="4" fill="var(--green-mid)" r="4" />
               </svg>
               Resumen de julio
             </div>
@@ -204,7 +204,7 @@
             <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path
                 d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"
-                stroke="#0F6E56"
+                stroke="var(--green-deep)"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
@@ -224,7 +224,7 @@
             <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path
                 d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
-                stroke="#185FA5"
+                stroke="var(--blue-deep)"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
@@ -244,7 +244,7 @@
             <svg aria-hidden="true" fill="none" height="22" viewBox="0 0 24 24" width="22">
               <path
                 d="M22 12h-4l-3 9L9 3l-3 9H2"
-                stroke="#BA7517"
+                stroke="var(--gold)"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"

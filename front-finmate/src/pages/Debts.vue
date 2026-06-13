@@ -9,7 +9,7 @@
         <p>Administra tus deudas y registra tus pagos</p>
       </div>
 
-      <v-btn class="fm-btn-submit" color="#0F6E56" prepend-icon="mdi-plus" @click="openCreate">
+      <v-btn class="fm-btn-submit" color="var(--green-deep)" prepend-icon="mdi-plus" @click="openCreate">
         Nueva deuda
       </v-btn>
     </div>
@@ -17,7 +17,7 @@
     <v-card class="mb-4">
       <v-card-text class="pa-4">
         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
-          <v-tabs v-model="filterStatus" color="#0F6E56" density="compact" hide-slider>
+          <v-tabs v-model="filterStatus" color="var(--green-deep)" density="compact" hide-slider>
             <v-tab value="">Todas</v-tab>
             <v-tab value="pending">Pendientes</v-tab>
             <v-tab value="paid">Pagadas</v-tab>
@@ -382,7 +382,7 @@
 
             <v-progress-linear
               class="mt-2"
-              color="#0F6E56"
+              color="var(--green-deep)"
               height="8"
               :model-value="progressPercent"
               rounded
@@ -409,7 +409,7 @@
 
             <v-btn
               class="fm-btn-submit"
-              color="#0F6E56"
+              color="var(--green-deep)"
               prepend-icon="mdi-plus"
               size="small"
               @click="openPaymentForm"

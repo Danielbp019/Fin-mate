@@ -12,7 +12,7 @@
           :change="summary?.comparison.incomeChange ?? null"
           icon="mdi-trending-up"
           icon-class="sc-icon-green"
-          icon-color="#0F6E56"
+          icon-color="var(--green-deep)"
           label="Ingresos"
           :loading="loading"
         />
@@ -24,7 +24,7 @@
           :change="summary?.comparison.expenseChange ?? null"
           icon="mdi-trending-down"
           icon-class="sc-icon-gold"
-          icon-color="#BA7517"
+          icon-color="var(--gold)"
           label="Gastos"
           :loading="loading"
         />
@@ -36,7 +36,7 @@
           :change="null"
           icon="mdi-wallet"
           icon-class="sc-icon-blue"
-          icon-color="#185FA5"
+          icon-color="var(--blue-deep)"
           label="Balance"
           :loading="loading"
         />
@@ -131,7 +131,7 @@
                 class="movement-icon"
                 :class="m.type === 'income' ? 'sc-icon-green' : 'sc-icon-gold'"
               >
-                <v-icon :color="m.type === 'income' ? '#0F6E56' : '#BA7517'" size="18">
+                <v-icon :color="m.type === 'income' ? 'var(--green-deep)' : 'var(--gold)'" size="18">
                   {{ m.type === 'income' ? 'mdi-plus' : 'mdi-minus' }}
                 </v-icon>
               </div>

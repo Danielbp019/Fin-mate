@@ -235,7 +235,7 @@
 
         <v-btn
           class="fm-btn-submit"
-          color="#0F6E56"
+          color="var(--green-deep)"
           prepend-icon="mdi-plus"
           @click="openCreateGoal"
         >
@@ -328,7 +328,7 @@
               </div>
 
               <v-progress-linear
-                :color="goal.status === 'completed' ? 'green' : '#0F6E56'"
+                :color="goal.status === 'completed' ? 'green' : 'var(--green-deep)'"
                 height="8"
                 :model-value="goalProgress(goal)"
                 rounded
@@ -623,7 +623,7 @@
                   <v-chip
                     v-if="row.role === 'owner'"
                     class="ml-2"
-                    color="#0F6E56"
+                    color="var(--green-deep)"
                     size="x-small"
                     variant="tonal"
                   >
@@ -638,7 +638,7 @@
 
               <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px">
                 <v-progress-linear
-                  :color="row.percentage >= 50 ? '#0F6E56' : 'orange'"
+                  :color="row.percentage >= 50 ? 'var(--green-deep)' : 'orange'"
                   height="6"
                   :model-value="row.percentage"
                   rounded
