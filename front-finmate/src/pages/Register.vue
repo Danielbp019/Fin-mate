@@ -283,7 +283,7 @@ async function handleRegister() {
   width: 350px;
   height: 350px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--white-05);
   bottom: -80px;
   left: -100px;
 }

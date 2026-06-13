@@ -75,7 +75,12 @@ src/
 6. **Consola**: No usar emojis en textos de consola.
 7. **Módulos**: Cada módulo nuevo va en una categoría nueva en el drawer.
 8. **Autenticación**: Toda página del drawer requiere usuario autenticado.
-9. **CSS**: Un solo archivo: `styles/theme.css`. No dispersar estilos.
+9. **CSS** — Un solo archivo: `styles/theme.css`. No dispersar estilos en componentes ni crear otros archivos CSS.
+   - **Siempre usar variables CSS existentes** del `:root`. Nunca hardcodear colores, opacidades o `font-family` que ya tengan variable.
+   - **Si necesitas una variante de opacidad** de un color existente, usa el tier más cercano ya definido (`.05`, `.10`, `.15`, `.25`, `.40`, `.50`, `.55`, `.65`, `.80`). No añadas opacidades nuevas.
+   - **Si agregas un nuevo color**, añádelo como variable en `:root` con nombre semántico (`--green-dark`, `--red`, etc.) y reutilízalo en lugar de repetir el hex.
+   - **No uses** `rgba(r, g, b, x)` directamente — usa las variables `--color-xx` predefinidas.
+   - **Actualiza** `:root` primero antes de usar una nueva variable en el resto del archivo.
 10. **Tests**: Escribir en `src/tests/` con el mismo nombre del módulo.
 11. **Prioridad tests**: Stores y servicios primero; componentes y páginas después.
 
@@ -131,8 +136,3 @@ Todas las entradas con **Zod**.
 - Abandonar o disolver grupo
 
 ## Pendientes / Bugs
-
-- **Pareja**: texto no usa `theme.css`, no se adapta a claro/oscuro
-- **Buscadores**: deudas y movimientos deben ser instantáneos (no por botón)
-- **Movimientos**: falta columna explícita ingreso/gasto
-- **Filtro fechas**: si se automatiza, conservar opción manual

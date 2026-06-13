@@ -72,14 +72,14 @@
             <div
               style="
                 height: 12px;
-                background: #e8f0e8;
+                background: var(--surface-muted);
                 border-radius: 4px;
                 margin-bottom: 8px;
                 width: 60%;
               "
             />
 
-            <div style="height: 24px; background: #e8f0e8; border-radius: 4px; width: 80%" />
+            <div style="height: 24px; background: var(--surface-muted); border-radius: 4px; width: 80%" />
           </div>
 
           <div class="hero-card hc-main">
@@ -152,7 +152,7 @@
                   font-size: 13px;
                   font-weight: 600;
                   color: var(--gold);
-                  font-family: 'Playfair Display', serif;
+                  font-family: var(--font-serif);
                 "
               >
                 +$820

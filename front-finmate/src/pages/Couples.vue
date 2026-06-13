@@ -133,7 +133,7 @@
                 border-radius: 50%;
                 font-size: 16px;
                 font-weight: 600;
-                color: #0f6e56;
+                color: var(--green-deep);
               "
             >
               {{ member.name.charAt(0).toUpperCase() }}
@@ -189,7 +189,7 @@
               </div>
             </v-form>
 
-            <p v-if="inviteSuccess" class="mt-2 text-caption" style="color: #0f6e56">
+            <p v-if="inviteSuccess" class="mt-2 text-caption" style="color: var(--green-deep)">
               Invitación enviada correctamente
             </p>
           </v-card-text>
@@ -271,7 +271,7 @@
               </div>
 
               <div style="display: flex; gap: 4px">
-                <v-tooltip location="top" v-if="goal.status === 'active'" text="Aportar a esta meta">
+                <v-tooltip v-if="goal.status === 'active'" location="top" text="Aportar a esta meta">
                   <template #activator="{ props }">
                     <v-btn v-bind="props" icon size="x-small" variant="text" @click="openContribute(goal)">
                       <v-icon>mdi-hand-coin</v-icon>
@@ -287,7 +287,7 @@
                   </template>
                 </v-tooltip>
 
-                <v-tooltip location="top" v-if="isOwner && goal.status === 'active'" text="Editar meta">
+                <v-tooltip v-if="isOwner && goal.status === 'active'" location="top" text="Editar meta">
                   <template #activator="{ props }">
                     <v-btn v-bind="props" icon size="x-small" variant="text" @click="openEditGoal(goal)">
                       <v-icon>mdi-pencil</v-icon>
@@ -295,7 +295,7 @@
                   </template>
                 </v-tooltip>
 
-                <v-tooltip location="top" v-if="isOwner && goal.status === 'active'" text="Eliminar meta">
+                <v-tooltip v-if="isOwner && goal.status === 'active'" location="top" text="Eliminar meta">
                   <template #activator="{ props }">
                     <v-btn v-bind="props" icon size="x-small" variant="text" @click="confirmDeleteGoal = goal">
                       <v-icon color="error">mdi-delete</v-icon>
@@ -511,7 +511,7 @@
             {{ contributeError }}
           </v-alert>
 
-          <div class="mb-4 pa-3" style="background: rgba(15, 110, 86, 0.05); border-radius: 12px">
+          <div class="mb-4 pa-3" style="background: var(--green-deep-05); border-radius: 12px">
             <div style="display: flex; justify-content: space-between; font-size: 13px">
               <span>Progreso actual</span>
 
@@ -614,7 +614,7 @@
               v-for="row in summaryRows"
               :key="row.userId"
               class="mb-3 pa-3"
-              style="border-radius: 12px; background: rgba(15, 110, 86, 0.05)"
+              style="border-radius: 12px; background: var(--green-deep-05)"
             >
               <div style="display: flex; justify-content: space-between; align-items: center">
                 <div>
