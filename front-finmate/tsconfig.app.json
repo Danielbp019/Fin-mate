@@ -6,6 +6,7 @@
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "baseUrl": ".",
+    "rootDir": ".",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "paths": {
       "@/*": ["./src/*"]
