@@ -3,7 +3,7 @@
     <h3 class="chart-title">{{ title }}</h3>
 
     <div v-if="loading" class="chart-loading">
-      <v-progress-circular color="primary" indeterminate size="32" />
+      <CircularLoader :size="32" />
     </div>
 
     <div v-else-if="noData" class="chart-empty">
@@ -30,6 +30,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { computed } from 'vue';
 import { Doughnut } from 'vue-chartjs';
+import CircularLoader from '@/components/CircularLoader.vue';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

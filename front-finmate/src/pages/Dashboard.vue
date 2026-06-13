@@ -115,7 +115,7 @@
           <h3 class="content-card-title">Últimos movimientos</h3>
 
           <div v-if="loading" class="chart-loading">
-            <v-progress-circular color="primary" indeterminate size="32" />
+            <CircularLoader :size="32" />
           </div>
 
           <div
@@ -154,7 +154,7 @@
           <h3 class="content-card-title">Deudas activas</h3>
 
           <div v-if="loading" class="chart-loading">
-            <v-progress-circular color="primary" indeterminate size="32" />
+            <CircularLoader :size="32" />
           </div>
 
           <div v-else-if="!summary?.activeDebts" class="chart-empty">
@@ -177,26 +177,32 @@
           </div>
         </div>
 
-        <div v-if="summary?.coupleGoals" class="summary-card" style="margin-top: 16px">
+        <div class="summary-card" style="margin-top: 16px">
           <h3 class="content-card-title">Metas de pareja</h3>
 
-          <div class="stat-row">
-            <span class="stat-row-label">Metas activas</span>
-            <span class="stat-row-value">{{ summary.coupleGoals.active }}</span>
+          <div v-if="loading" class="chart-loading">
+            <CircularLoader :size="32" />
           </div>
 
-          <div class="progress-section">
-            <div class="progress-header">
-              <span class="left">Progreso general</span>
-              <span class="right">{{ summary.coupleGoals.totalProgress }}%</span>
+          <div v-else-if="summary?.coupleGoals">
+            <div class="stat-row">
+              <span class="stat-row-label">Metas activas</span>
+              <span class="stat-row-value">{{ summary.coupleGoals.active }}</span>
             </div>
 
-            <v-progress-linear
-              color="green"
-              height="8"
-              :model-value="summary.coupleGoals.totalProgress"
-              rounded
-            />
+            <div class="progress-section">
+              <div class="progress-header">
+                <span class="left">Progreso general</span>
+                <span class="right">{{ summary.coupleGoals.totalProgress }}%</span>
+              </div>
+
+              <v-progress-linear
+                color="green"
+                height="8"
+                :model-value="summary.coupleGoals.totalProgress"
+                rounded
+              />
+            </div>
           </div>
         </div>
       </v-col>
@@ -207,6 +213,7 @@
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue';
 import BarChart from '@/components/BarChart.vue';
+import CircularLoader from '@/components/CircularLoader.vue';
 import DoughnutChart from '@/components/DoughnutChart.vue';
 import LineChart from '@/components/LineChart.vue';
 import SummaryCard from '@/components/SummaryCard.vue';

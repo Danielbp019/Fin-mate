@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container">
-    <template v-if="store.loading && !store.couple">
-      <v-progress-circular color="#0F6E56" indeterminate size="40" width="3" />
-    </template>
+    <div v-if="store.loading && !store.couple" class="chart-loading">
+      <CircularLoader :size="40" :width="3" />
+    </div>
 
     <template v-else-if="!store.couple">
       <div class="dashboard-greeting">
@@ -770,6 +770,7 @@
 <script lang="ts" setup>
 import type { Goal } from '@/types';
 import { computed, onMounted, ref, watch } from 'vue';
+import CircularLoader from '@/components/CircularLoader.vue';
 import DatePicker from '@/components/DatePicker.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useCouplesStore } from '@/stores/couples';

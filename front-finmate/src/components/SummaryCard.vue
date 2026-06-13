@@ -9,14 +9,7 @@
     </div>
 
     <div class="summary-card-value">
-      <v-progress-circular
-        v-if="loading"
-        class="mr-2"
-        color="grey"
-        indeterminate
-        size="20"
-        :width="2"
-      />
+      <CircularLoader v-if="loading" class="mr-2" :size="20" :width="2" />
 
       <template v-else>{{ formattedAmount }}</template>
     </div>
@@ -35,6 +28,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import CircularLoader from '@/components/CircularLoader.vue';
 
 const props = defineProps<{
   label: string;
