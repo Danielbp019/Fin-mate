@@ -43,9 +43,12 @@
             }}</v-icon>
           </button>
 
-          <button class="btn-primary" @click="auth.logout">
+          <v-btn class="fm-btn-submit" :loading="loggingOut" @click="handleLogout">
             <v-icon>mdi-logout</v-icon> Salir
-          </button>
+            <template #loader>
+              <v-progress-circular color="white" indeterminate size="20" width="2" />
+            </template>
+          </v-btn>
         </div>
       </template>
     </v-app-bar>
@@ -95,7 +98,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, shallowRef } from 'vue';
+import { computed, onMounted, ref, shallowRef } from 'vue';
 import { useTheme } from 'vuetify';
 import firmaBlack from '@/assets/daniel_firma_black.svg';
 import firmaWhite from '@/assets/daniel_firma_white.svg';
@@ -107,6 +110,17 @@ const theme = useTheme();
 const drawer = shallowRef(true);
 
 const firmaSrc = computed(() => (theme.global.name.value === 'light' ? firmaBlack : firmaWhite));
+
+const loggingOut = ref(false);
+
+async function handleLogout() {
+  loggingOut.value = true;
+  try {
+    await auth.logout();
+  } finally {
+    loggingOut.value = false;
+  }
+}
 
 onMounted(() => {
   const saved = localStorage.getItem('theme');
