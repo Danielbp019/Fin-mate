@@ -17,8 +17,8 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-          background: '#f8faf8',
-          surface: '#f8faf8',
+          background: '#f0f2f0',
+          surface: '#fafafa',
         },
       },
     },
