@@ -72,12 +72,9 @@
           </div>
 
           <div class="fm-deco-pair">
-            <div class="fm-deco-avatar" style="background: rgba(186, 117, 23, 0.4)">A</div>
+            <div class="fm-deco-avatar" style="background: var(--gold)">A</div>
 
-            <div
-              class="fm-deco-avatar"
-              style="background: rgba(24, 95, 165, 0.4); margin-left: -8px"
-            >
+            <div class="fm-deco-avatar" style="background: var(--blue-mid); margin-left: -8px">
               M
             </div>
 
@@ -272,7 +269,7 @@ async function handleRegister() {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: rgba(29, 158, 117, 0.22);
+  background: var(--green-mid-22);
   top: -120px;
   right: -160px;
 }

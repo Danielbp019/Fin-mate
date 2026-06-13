@@ -24,6 +24,8 @@ export default createVuetify({
     },
   },
   defaults: {
+    VOverlay: { scrollStrategy: 'none' },
+    VDialog: { scrollStrategy: 'none' },
     VLabel: { style: 'font-size: 14px; font-weight: 500;' },
     VBtn: { style: 'font-size: 14px; font-weight: 500;' },
     VTextField: { style: 'font-size: 14px;' },

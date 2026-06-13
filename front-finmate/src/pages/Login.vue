@@ -174,7 +174,7 @@ async function handleLogin() {
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: rgba(29, 158, 117, 0.25);
+  background: var(--green-mid-25);
   bottom: -200px;
   right: -150px;
 }

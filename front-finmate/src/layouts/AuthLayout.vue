@@ -28,7 +28,7 @@
       </v-app-bar-title>
 
       <template #append>
-        <div class="d-flex align-center ga-3">
+        <div class="d-flex align-center ga-3" style="margin-right: 4px">
           <span style="color: var(--green-deep); font-size: 14px; font-weight: 500"
             >Bienvenido, {{ auth.user?.name }}</span
           >
@@ -44,7 +44,8 @@
           </button>
 
           <v-btn class="fm-btn-submit" :loading="loggingOut" @click="handleLogout">
-            <v-icon>mdi-logout</v-icon> Salir
+            <v-icon>mdi-logout</v-icon>
+            Salir
             <template #loader>
               <v-progress-circular color="white" indeterminate size="20" width="2" />
             </template>

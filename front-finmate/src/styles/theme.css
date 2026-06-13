@@ -34,6 +34,8 @@ p {
   --green-deep-40: rgba(15, 110, 86, 0.40);
 
   /* Opacity tiers — green-mid */
+  --green-mid-22: rgba(29, 158, 117, 0.22);
+  --green-mid-25: rgba(29, 158, 117, 0.25);
   --green-mid-50: rgba(29, 158, 117, 0.50);
 
   /* Opacity tiers — white on dark backgrounds */
@@ -59,6 +61,7 @@ p {
 
 html {
   font-size: 16px;
+  overflow-y: scroll;
 }
 
 body {

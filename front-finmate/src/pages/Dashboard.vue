@@ -65,9 +65,7 @@
             empty-text="No hay datos suficientes"
             :labels="balanceLabels"
             :loading="loading"
-            :no-data="
-              !loading && (!summary?.monthlyBalance || summary.monthlyBalance.length === 0)
-            "
+            :no-data="!loading && (!summary?.monthlyBalance || summary.monthlyBalance.length === 0)"
             title="Balance por mes"
           />
         </div>
@@ -100,8 +98,7 @@
             :labels="expenseCategoryLabels"
             :loading="loading"
             :no-data="
-              !loading &&
-              (!summary?.expenseByCategory || summary.expenseByCategory.length === 0)
+              !loading && (!summary?.expenseByCategory || summary.expenseByCategory.length === 0)
             "
             title="Gastos por categoría"
           />
@@ -131,7 +128,10 @@
                 class="movement-icon"
                 :class="m.type === 'income' ? 'sc-icon-green' : 'sc-icon-gold'"
               >
-                <v-icon :color="m.type === 'income' ? 'var(--green-deep)' : 'var(--gold)'" size="18">
+                <v-icon
+                  :color="m.type === 'income' ? 'var(--green-deep)' : 'var(--gold)'"
+                  size="18"
+                >
                   {{ m.type === 'income' ? 'mdi-plus' : 'mdi-minus' }}
                 </v-icon>
               </div>
@@ -236,20 +236,17 @@ const currentMonthLabel = computed(() => {
 
 const palette = [
   '#0F6E56',
-  '#1D9E75',
   '#378ADD',
   '#BA7517',
   '#D32F2F',
   '#7B1FA2',
-  '#00897B',
   '#E64A19',
-  '#5C6BC0',
-  '#43A047',
+  '#00897B',
   '#F9A825',
+  '#5C6BC0',
+  '#C2185B',
   '#6D4C41',
   '#78909C',
-  '#C2185B',
-  '#303F9F',
 ];
 
 const categoryColors = computed(() => {
