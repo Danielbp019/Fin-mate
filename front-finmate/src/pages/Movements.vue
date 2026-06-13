@@ -381,7 +381,7 @@ const headers = [
 
 const categoryOptions = computed(() => {
   return catStore.categories
-    .sort((a, b) => a.name.localeCompare(b.name))
+    .toSorted((a, b) => a.name.localeCompare(b.name))
     .map((c) => ({
       title: c.name,
       value: c.id,
@@ -398,7 +398,7 @@ const availableCategories = computed(() => {
     : catStore.expenseCategories;
   return [...cats]
     .filter((c) => !AUTO_MANAGED_CATEGORIES.has(c.name))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .toSorted((a, b) => a.name.localeCompare(b.name));
 });
 
 const totalPages = computed(() =>
