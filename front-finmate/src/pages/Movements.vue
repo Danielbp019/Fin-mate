@@ -118,7 +118,7 @@
         </template>
 
         <template #item.actions="{ item }">
-          <template v-if="item.referenceType !== 'goal_contribution'">
+          <template v-if="item.referenceType !== 'goal_contribution' && item.referenceType !== 'debt_payment'">
             <v-tooltip location="top" text="Editar movimiento">
               <template #activator="{ props }">
                 <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
@@ -461,7 +461,7 @@ function openCreate() {
 }
 
 function openEdit(mov: Movement) {
-  if (mov.referenceType === 'goal_contribution') return;
+  if (mov.referenceType === 'goal_contribution' || mov.referenceType === 'debt_payment') return;
   editingId.value = mov.id;
   formDate.value = new Date(mov.movementDate);
   form.value = {
@@ -476,7 +476,7 @@ function openEdit(mov: Movement) {
 }
 
 function confirmDelete(mov: Movement) {
-  if (mov.referenceType === 'goal_contribution') return;
+  if (mov.referenceType === 'goal_contribution' || mov.referenceType === 'debt_payment') return;
   deletingItem.value = mov;
   deleteDialogOpen.value = true;
 }
