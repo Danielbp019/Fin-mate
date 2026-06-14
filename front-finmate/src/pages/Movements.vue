@@ -86,6 +86,10 @@
 
         <template #item.categoryId="{ item }">
           <div style="display: flex; align-items: center; gap: 8px">
+            <v-icon v-if="getCategoryIcon(item.categoryId)" size="22">
+              {{ getCategoryIcon(item.categoryId) }}
+            </v-icon>
+
             <span>{{ getCategoryName(item.categoryId) }}</span>
 
             <v-chip
@@ -403,6 +407,10 @@ const totalPages = computed(() =>
 
 function getCategoryName(id: string) {
   return catStore.getCategoryById(id)?.name ?? id;
+}
+
+function getCategoryIcon(id: string) {
+  return catStore.getCategoryById(id)?.icon ?? null;
 }
 
 function formatDate(iso: string) {
