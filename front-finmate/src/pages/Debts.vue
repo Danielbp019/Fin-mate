@@ -86,6 +86,10 @@
           ${{ Number(item.currentAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
         </template>
 
+        <template #item.interestRate="{ item }">
+          {{ item.interestRate ? `${item.interestRate}%` : '—' }}
+        </template>
+
         <template #item.actions="{ item }">
           <v-tooltip location="top" text="Editar deuda">
             <template #activator="{ props }">
@@ -618,6 +622,7 @@ const headers = [
   { title: 'Prioridad', key: 'priority', sortable: false },
   { title: 'Estado', key: 'status', sortable: false },
   { title: 'Día venc.', key: 'dueDay', sortable: false },
+  { title: 'Interes', key: 'interestRate', sortable: false },
   { title: 'Acciones', key: 'actions', sortable: false, align: 'end' as const },
 ];
 
