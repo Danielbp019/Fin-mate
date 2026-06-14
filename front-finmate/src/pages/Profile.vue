@@ -7,7 +7,7 @@
 
     <div class="page-grid">
       <div class="content-card">
-        <h3 class="content-card-title">Actualizar nombre</h3>
+        <h2 class="content-card-title">Actualizar nombre</h2>
 
         <v-alert
           v-if="nameError"
@@ -69,7 +69,7 @@
       </div>
 
       <div class="content-card">
-        <h3 class="content-card-title">Cambiar contrase&ntilde;a</h3>
+        <h2 class="content-card-title">Cambiar contrase&ntilde;a</h2>
 
         <v-alert
           v-if="passwordError"

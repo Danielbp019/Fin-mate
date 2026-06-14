@@ -33,7 +33,7 @@
       <v-col cols="12" md="4">
         <SummaryCard
           :amount="summary?.currentMonth.balance ?? '0'"
-          :change="null"
+          :change="balanceChange"
           icon="mdi-wallet"
           icon-class="sc-icon-blue"
           icon-color="var(--blue-deep)"
@@ -109,7 +109,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <div class="summary-card">
-          <h3 class="content-card-title">Últimos movimientos</h3>
+          <h2 class="content-card-title">Últimos movimientos</h2>
 
           <div v-if="loading" class="chart-loading">
             <CircularLoader :size="32" />
@@ -137,7 +137,11 @@
               </div>
 
               <div class="movement-info">
-                <div class="movement-category">{{ m.categoryName }}</div>
+                <div class="movement-category">
+                  <v-icon v-if="m.categoryIcon" class="mr-1" size="16">{{ m.categoryIcon }}</v-icon>
+                  {{ m.categoryName }} · {{ formatDate(m.movementDate) }}
+                </div>
+
                 <div class="movement-desc">{{ m.description || 'Sin descripción' }}</div>
               </div>
 
@@ -151,7 +155,7 @@
 
       <v-col cols="12" md="6">
         <div class="summary-card">
-          <h3 class="content-card-title">Deudas activas</h3>
+          <h2 class="content-card-title">Deudas activas</h2>
 
           <div v-if="loading" class="chart-loading">
             <CircularLoader :size="32" />
@@ -178,7 +182,7 @@
         </div>
 
         <div class="summary-card" style="margin-top: 16px">
-          <h3 class="content-card-title">Metas de pareja</h3>
+          <h2 class="content-card-title">Metas de pareja</h2>
 
           <div v-if="loading" class="chart-loading">
             <CircularLoader :size="32" />
@@ -234,6 +238,15 @@ const currentMonthLabel = computed(() => {
   const now = new Date();
   return `${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
 });
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-MX', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 
 const palette = [
   '#0F6E56',
@@ -315,7 +328,14 @@ const balanceColors = computed(() =>
   balanceData.value.map((v) => (v >= 0 ? 'rgba(29, 158, 117, 0.7)' : 'rgba(211, 47, 47, 0.7)')),
 );
 
-
+const balanceChange = computed(() => {
+  const list = summary.value?.monthlyBalance;
+  if (!list || list.length < 2) return null;
+  const current = Number.parseFloat(list.at(-1)!.balance);
+  const previous = Number.parseFloat(list.at(-2)!.balance);
+  if (previous === 0) return null;
+  return Math.round(((current - previous) / Math.abs(previous)) * 100);
+});
 
 onMounted(() => {
   dashboard.fetchSummary();

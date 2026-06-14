@@ -1,6 +1,6 @@
 <template>
   <div class="chart-wrapper">
-    <h3 class="chart-title">{{ title }}</h3>
+    <h2 class="chart-title">{{ title }}</h2>
 
     <div v-if="loading" class="chart-loading">
       <CircularLoader :size="32" />
