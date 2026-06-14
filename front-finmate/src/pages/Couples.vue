@@ -26,7 +26,7 @@
       <div class="page-grid">
         <v-card>
           <v-card-text class="pa-4">
-            <h2 class="text-h6 font-weight-bold mb-1">Crear grupo</h2>
+            <h2 class="content-card-title" style="font-size: 18px; margin-bottom: 8px">Crear grupo</h2>
 
             <p class="text-caption mb-4">
               Crea un grupo de finanzas compartidas e invita a tu pareja
@@ -34,9 +34,10 @@
 
             <v-form @submit.prevent="handleCreate">
               <div class="fm-field-group">
-                <label class="fm-label">Nombre del grupo</label>
+                <label class="fm-label" for="couple-name">Nombre del grupo</label>
 
                 <v-text-field
+                  id="couple-name"
                   v-model="createForm.name"
                   v-capitalize-first
                   class="fm-input"
@@ -68,7 +69,7 @@
 
         <v-card>
           <v-card-text class="pa-4">
-            <h2 class="text-h6 font-weight-bold mb-1">¿Te invitaron?</h2>
+            <h2 class="content-card-title" style="font-size: 18px; margin-bottom: 8px">¿Te invitaron?</h2>
 
             <p class="text-caption mb-2">
               Si tu pareja ya creó un grupo y te envió una invitación por correo, recibirás un
@@ -146,7 +147,7 @@
 
           <div
             class="summary-card-change"
-            style="font-size: 13px; color: rgba(var(--v-theme-on-surface), 0.6)"
+            style="font-size: 13px; color: rgba(var(--v-theme-on-surface), 0.87)"
           >
             {{ member.email }}
           </div>
@@ -158,12 +159,13 @@
           style="display: flex; flex-direction: column; justify-content: center"
         >
           <v-card-text class="pa-4">
-            <h3 class="text-subtitle-2 font-weight-bold mb-2">Invitar a mi pareja</h3>
+            <h2 class="content-card-title" style="font-size: 16px; margin-bottom: 8px">Invitar a mi pareja</h2>
 
             <v-form @submit.prevent="handleInvite">
               <div style="display: flex; gap: 8px">
                 <v-text-field
                   v-model="inviteEmail"
+                  aria-label="Correo electrónico"
                   class="fm-input"
                   density="compact"
                   hide-details="auto"
@@ -229,7 +231,7 @@
         "
       >
         <div>
-          <h2 class="text-h5 font-weight-bold">Metas compartidas</h2>
+          <h2 class="content-card-title" style="font-size: 20px; margin-bottom: 4px">Metas compartidas</h2>
           <p class="text-caption">Ahorren juntos para lo que más importa</p>
         </div>
 
@@ -246,9 +248,9 @@
       <div
         v-if="store.goals.length === 0"
         class="text-center pa-8"
-        style="color: rgba(var(--v-theme-on-surface), 0.5)"
-      >
-        <v-icon size="48" style="opacity: 0.4">mdi-flag-outline</v-icon>
+            style="color: rgba(var(--v-theme-on-surface), 0.87)"
+          >
+            <v-icon size="48" style="opacity: 0.6">mdi-flag-outline</v-icon>
         <p class="mt-2">Aún no hay metas. ¡Crea la primera!</p>
       </div>
 
@@ -257,7 +259,7 @@
           <v-card-text class="pa-4">
             <div style="display: flex; justify-content: space-between; align-items: start">
               <div>
-                <h3 class="font-weight-bold" style="font-size: 16px">{{ goal.title }}</h3>
+                <h3 class="chart-title" style="font-size: 16px; margin-bottom: 0">{{ goal.title }}</h3>
 
                 <v-chip
                   v-if="goal.status !== 'active'"
@@ -318,7 +320,7 @@
                   {{ formatCurrency(goal.currentAmount) }}
                 </span>
 
-                <span style="color: rgba(var(--v-theme-on-surface), 0.6)">
+                <span style="color: rgba(var(--v-theme-on-surface), 0.87)">
                   {{ formatCurrency(goal.targetAmount) }}
                 </span>
               </div>
@@ -338,11 +340,11 @@
                   margin-top: 4px;
                 "
               >
-                <span style="color: rgba(var(--v-theme-on-surface), 0.6)"
+                <span style="color: rgba(var(--v-theme-on-surface), 0.87)"
                   >{{ Math.round(goalProgress(goal)) }}%</span
                 >
 
-                <span v-if="goal.deadline" style="color: rgba(var(--v-theme-on-surface), 0.6)">
+                <span v-if="goal.deadline" style="color: rgba(var(--v-theme-on-surface), 0.87)">
                   Meta: {{ formatDate(goal.deadline) }}
                 </span>
               </div>
@@ -373,9 +375,10 @@
 
           <v-form @submit.prevent="handleEditName">
             <div class="fm-field-group">
-              <label class="fm-label">Nombre</label>
+              <label class="fm-label" for="couple-name-edit">Nombre</label>
 
               <v-text-field
+                id="couple-name-edit"
                 v-model="editNameForm.name"
                 v-capitalize-first
                 class="fm-input"
@@ -429,9 +432,10 @@
 
           <v-form @submit.prevent="handleSaveGoal">
             <div class="fm-field-group">
-              <label class="fm-label">Título</label>
+              <label class="fm-label" for="goal-title">Título</label>
 
               <v-text-field
+                id="goal-title"
                 v-model="goalForm.title"
                 v-capitalize-first
                 class="fm-input"
@@ -445,14 +449,14 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Monto objetivo</label>
+              <label class="fm-label" for="goal-amount">Monto objetivo</label>
 
-              <AmountInput v-model="goalForm.targetAmount" placeholder="0" required />
+              <AmountInput id="goal-amount" v-model="goalForm.targetAmount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Fecha límite (opcional)</label>
-              <DatePicker v-model="goalDeadline" />
+              <label class="fm-label" for="goal-deadline">Fecha límite (opcional)</label>
+              <DatePicker id="goal-deadline" v-model="goalDeadline" />
             </div>
 
             <v-btn
@@ -508,20 +512,21 @@
 
           <v-form @submit.prevent="handleContribute">
             <div class="fm-field-group">
-              <label class="fm-label">Monto a contribuir</label>
+              <label class="fm-label" for="contribute-amount">Monto a contribuir</label>
 
-              <AmountInput v-model="contributeForm.amount" placeholder="0" required />
+              <AmountInput id="contribute-amount" v-model="contributeForm.amount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Fecha</label>
-              <DatePicker v-model="contributeDate" required />
+              <label class="fm-label" for="contribute-date">Fecha</label>
+              <DatePicker id="contribute-date" v-model="contributeDate" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Notas (opcional)</label>
+              <label class="fm-label" for="contribute-notes">Notas (opcional)</label>
 
               <v-textarea
+                id="contribute-notes"
                 v-model="contributeForm.notes"
                 v-capitalize-first
                 class="fm-input"
@@ -629,9 +634,9 @@
           <div
             v-else
             class="text-center pa-4"
-            style="color: rgba(var(--v-theme-on-surface), 0.5)"
+            style="color: rgba(var(--v-theme-on-surface), 0.87)"
           >
-            <v-icon size="40" style="opacity: 0.4">mdi-currency-usd-off</v-icon>
+            <v-icon size="40" style="opacity: 0.6">mdi-currency-usd-off</v-icon>
             <p class="mt-2">No hay aportes registrados en esta meta</p>
           </div>
         </v-card-text>

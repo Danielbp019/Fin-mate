@@ -2,6 +2,8 @@
   <v-menu v-model="menu" :close-on-content-click="false">
     <template #activator="{ props: fieldProps }">
       <v-text-field
+        :id="props.id"
+        :aria-label="props.label"
         v-bind="fieldProps"
         class="fm-input"
         clearable
@@ -29,6 +31,8 @@ import { computed, ref } from 'vue';
 const props = withDefaults(
   defineProps<{
     modelValue: Date | null;
+    label?: string;
+    id?: string;
     placeholder?: string;
     density?: 'default' | 'comfortable' | 'compact';
     required?: boolean;

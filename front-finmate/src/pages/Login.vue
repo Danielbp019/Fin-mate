@@ -81,9 +81,10 @@
 
         <v-form class="fm-form" @submit.prevent="handleLogin">
           <div class="fm-field-group">
-            <label class="fm-label">Correo electrónico</label>
+            <label class="fm-label" for="login-email">Correo electrónico</label>
 
             <v-text-field
+              id="login-email"
               v-model="email"
               class="fm-input"
               density="comfortable"
@@ -99,11 +100,12 @@
 
           <div class="fm-field-group">
             <div class="fm-label-row">
-              <label class="fm-label">Contraseña</label>
+              <label class="fm-label" for="login-password">Contraseña</label>
               <a class="fm-forgot" href="#">¿La olvidaste?</a>
             </div>
 
             <v-text-field
+              id="login-password"
               v-model="password"
               class="fm-input"
               density="comfortable"

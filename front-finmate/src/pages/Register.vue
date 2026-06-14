@@ -118,9 +118,10 @@
 
         <v-form class="fm-form" @submit.prevent="handleRegister">
           <div class="fm-field-group">
-            <label class="fm-label">Nombre completo</label>
+            <label class="fm-label" for="register-name">Nombre completo</label>
 
             <v-text-field
+              id="register-name"
               v-model="name"
               v-capitalize-first
               class="fm-input"
@@ -135,9 +136,10 @@
           </div>
 
           <div class="fm-field-group">
-            <label class="fm-label">Correo electrónico</label>
+            <label class="fm-label" for="register-email">Correo electrónico</label>
 
             <v-text-field
+              id="register-email"
               v-model="email"
               class="fm-input"
               density="comfortable"
@@ -153,9 +155,10 @@
 
           <div class="fm-field-row">
             <div class="fm-field-group">
-              <label class="fm-label">Contraseña</label>
+              <label class="fm-label" for="register-password">Contraseña</label>
 
               <v-text-field
+                id="register-password"
                 v-model="password"
                 class="fm-input"
                 density="comfortable"
@@ -170,9 +173,10 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Confirmar contraseña</label>
+              <label class="fm-label" for="register-confirm">Confirmar contraseña</label>
 
               <v-text-field
+                id="register-confirm"
                 v-model="confirmPassword"
                 class="fm-input"
                 density="comfortable"
@@ -290,18 +294,10 @@ async function handleRegister() {
   margin-bottom: 28px;
 }
 
-.fm-panel-headline {
-  font-size: 38px;
-}
-
 .fm-panel-sub {
   font-size: 15px;
   max-width: 260px;
   margin-bottom: 0;
-}
-
-.fm-form-title {
-  font-size: 28px;
 }
 
 .fm-form-sub {

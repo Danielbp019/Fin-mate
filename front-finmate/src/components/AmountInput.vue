@@ -1,6 +1,8 @@
 <template>
   <v-text-field
+    :id="id"
     v-model="display"
+    :aria-label="label"
     class="fm-input"
     :density="density"
     hide-details="auto"
@@ -23,6 +25,8 @@ const props = withDefaults(
   defineProps<{
     modelValue: string | null | undefined;
     locale?: string;
+    id?: string;
+    label?: string;
     placeholder?: string;
     density?: 'default' | 'comfortable' | 'compact';
     required?: boolean;

@@ -290,7 +290,7 @@
           <button type="button" @click="showTerms = true">Términos</button>
         </div>
 
-        <div style="font-size: 13px; color: var(--ink-soft); opacity: 0.6">© 2026 FinMate</div>
+        <div style="font-size: 13px; color: var(--ink-soft); opacity: 0.87">© 2026 FinMate</div>
       </div>
     </footer>
 

@@ -37,9 +37,10 @@
 
         <v-form @submit.prevent="handleUpdateName">
           <div class="fm-field-group">
-            <label class="fm-label">Nombre</label>
+            <label class="fm-label" for="profile-name">Nombre</label>
 
             <v-text-field
+              id="profile-name"
               v-model="name"
               v-capitalize-first
               class="fm-input"
@@ -99,9 +100,10 @@
 
         <v-form @submit.prevent="handleChangePassword">
           <div class="fm-field-group">
-            <label class="fm-label">Contrase&ntilde;a actual</label>
+            <label class="fm-label" for="profile-current-password">Contrase&ntilde;a actual</label>
 
             <v-text-field
+              id="profile-current-password"
               v-model="currentPassword"
               class="fm-input"
               density="comfortable"
@@ -116,9 +118,10 @@
           </div>
 
           <div class="fm-field-group">
-            <label class="fm-label">Nueva contrase&ntilde;a</label>
+            <label class="fm-label" for="profile-new-password">Nueva contrase&ntilde;a</label>
 
             <v-text-field
+              id="profile-new-password"
               v-model="newPassword"
               class="fm-input"
               density="comfortable"
@@ -133,9 +136,10 @@
           </div>
 
           <div class="fm-field-group">
-            <label class="fm-label">Confirmar nueva contrase&ntilde;a</label>
+            <label class="fm-label" for="profile-confirm-password">Confirmar nueva contrase&ntilde;a</label>
 
             <v-text-field
+              id="profile-confirm-password"
               v-model="confirmPassword"
               class="fm-input"
               density="comfortable"

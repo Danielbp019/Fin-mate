@@ -1,5 +1,7 @@
 <template>
   <v-text-field
+    :id="id"
+    :aria-label="label"
     class="fm-input"
     :density="density"
     hide-details="auto"
@@ -22,6 +24,8 @@ import { ref, watch } from 'vue';
 const props = withDefaults(
   defineProps<{
     modelValue: string | null | undefined;
+    label?: string;
+    id?: string;
     placeholder?: string;
     density?: 'default' | 'comfortable' | 'compact';
     required?: boolean;

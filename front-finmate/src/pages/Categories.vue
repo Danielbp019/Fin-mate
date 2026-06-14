@@ -120,9 +120,10 @@
 
           <v-form @submit.prevent="handleSave">
             <div class="fm-field-group">
-              <label class="fm-label">Nombre</label>
+              <label class="fm-label" for="cat-name">Nombre</label>
 
               <v-text-field
+                id="cat-name"
                 v-model="form.name"
                 v-capitalize-first
                 class="fm-input"
@@ -136,9 +137,10 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Tipo</label>
+              <label class="fm-label" for="cat-type">Tipo</label>
 
               <v-select
+                id="cat-type"
                 v-model="form.type"
                 class="fm-input"
                 density="comfortable"
@@ -151,8 +153,8 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Icono (opcional)</label>
-              <IconPicker v-model="form.icon" />
+              <label class="fm-label" for="cat-icon">Icono (opcional)</label>
+              <IconPicker id="cat-icon" v-model="form.icon" />
             </div>
 
             <v-btn

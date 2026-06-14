@@ -25,21 +25,22 @@
 
           <v-select
             v-model="filterCategoryId"
+            aria-label="Categoría"
             class="fm-input"
             clearable
-            density="compact"
-            hide-details="auto"
-            :items="categoryOptions"
-            placeholder="Categoría"
-            rounded="lg"
-            style="min-width: 160px"
-            variant="outlined"
-          />
+          density="compact"
+          hide-details="auto"
+          :items="categoryOptions"
+          placeholder="Categoría"
+          rounded="lg"
+          style="min-width: 160px"
+          variant="outlined"
+        />
 
-          <span class="fm-label" style="margin-bottom: 0">Desde:</span>
-          <DatePicker v-model="filterFrom" density="compact" placeholder="Desde" />
-          <span class="fm-label" style="margin-bottom: 0">Hasta:</span>
-          <DatePicker v-model="filterTo" density="compact" placeholder="Hasta" />
+        <label class="fm-label" for="filter-from" style="margin-bottom: 0">Desde:</label>
+        <DatePicker id="filter-from" v-model="filterFrom" aria-label="Desde" density="compact" placeholder="Desde" />
+        <label class="fm-label" for="filter-to" style="margin-bottom: 0">Hasta:</label>
+        <DatePicker id="filter-to" v-model="filterTo" aria-label="Hasta" density="compact" placeholder="Hasta" />
         </div>
       </v-card-text>
     </v-card>
@@ -165,7 +166,7 @@
           </template>
         </v-tooltip>
 
-        <span class="text-caption" style="color: rgba(var(--v-theme-on-surface), 0.6)">
+        <span class="text-caption" style="color: rgba(var(--v-theme-on-surface), 0.87)">
           Página {{ store.pagination.page }} de {{ totalPages }} ({{ store.pagination.total }}
           registros)
         </span>
@@ -209,9 +210,10 @@
 
           <v-form @submit.prevent="handleSave">
             <div class="fm-field-group">
-              <label class="fm-label">Tipo</label>
+              <label class="fm-label" for="mov-type">Tipo</label>
 
               <v-select
+                id="mov-type"
                 v-model="form.type"
                 class="fm-input"
                 density="comfortable"
@@ -225,9 +227,10 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Categoría</label>
+              <label class="fm-label" for="mov-category">Categoría</label>
 
               <v-select
+                id="mov-category"
                 v-model="form.categoryId"
                 class="fm-input"
                 clearable
@@ -244,20 +247,21 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Monto</label>
+              <label class="fm-label" for="mov-amount">Monto</label>
 
-              <AmountInput v-model="form.amount" placeholder="0" required />
+              <AmountInput id="mov-amount" v-model="form.amount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Fecha</label>
-              <DatePicker v-model="formDate" required />
+              <label class="fm-label" for="mov-date">Fecha</label>
+              <DatePicker id="mov-date" v-model="formDate" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Descripción (opcional)</label>
+              <label class="fm-label" for="mov-description">Descripción (opcional)</label>
 
               <v-textarea
+                id="mov-description"
                 v-model="form.description"
                 v-capitalize-first
                 class="fm-input"

@@ -1,6 +1,14 @@
 <template>
   <div>
-    <div :class="['fm-select-trigger', { focused: dialogOpen }]" @click="dialogOpen = true">
+    <div
+      :id="id"
+      :class="['fm-select-trigger', { focused: dialogOpen }]"
+      role="button"
+      tabindex="0"
+      @click="dialogOpen = true"
+      @keydown.enter.prevent="dialogOpen = true"
+      @keydown.space.prevent="dialogOpen = true"
+    >
       <div class="d-flex align-center ga-2">
         <v-icon v-if="modelValue" size="24">{{ modelValue }}</v-icon>
         <span v-else class="text-body-2 text-disabled">Ninguno</span>
@@ -16,6 +24,7 @@
         <v-card-text class="pa-4 pt-2">
           <v-text-field
             v-model="search"
+            aria-label="Buscar icono"
             class="fm-input mb-3"
             clearable
             density="compact"
@@ -31,7 +40,11 @@
               v-for="icon in filteredIcons"
               :key="icon"
               :class="['fm-picker-cell', { selected: modelValue === icon }]"
+              role="button"
+              tabindex="0"
               @click="selectIcon(icon)"
+              @keydown.enter.prevent="selectIcon(icon)"
+              @keydown.space.prevent="selectIcon(icon)"
             >
               <v-icon size="24">{{ icon }}</v-icon>
             </div>
@@ -55,7 +68,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-withDefaults(defineProps<{ modelValue?: string }>(), { modelValue: '' });
+withDefaults(defineProps<{ modelValue?: string; id?: string }>(), { modelValue: '' });
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
 const dialogOpen = ref(false);

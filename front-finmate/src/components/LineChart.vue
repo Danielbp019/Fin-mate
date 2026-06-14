@@ -1,6 +1,6 @@
 <template>
   <div class="chart-wrapper">
-    <h2 class="chart-title">{{ title }}</h2>
+    <component :is="headingLevel" class="chart-title">{{ title }}</component>
 
     <div v-if="loading" class="chart-loading">
       <CircularLoader :size="32" />
@@ -45,20 +45,26 @@ ChartJS.register(
   Filler,
 );
 
-const props = defineProps<{
-  title: string;
-  labels: string[];
-  datasets: {
-    label: string;
-    data: number[];
-    borderColor: string;
-    backgroundColor: string;
-    fill?: boolean;
-  }[];
-  loading?: boolean;
-  noData?: boolean;
-  emptyText?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      borderColor: string;
+      backgroundColor: string;
+      fill?: boolean;
+    }[];
+    loading?: boolean;
+    noData?: boolean;
+    emptyText?: string;
+    headingLevel?: string;
+  }>(),
+  {
+    headingLevel: 'h2',
+  },
+);
 
 const chartData = computed(() => ({
   labels: props.labels,

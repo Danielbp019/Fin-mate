@@ -26,16 +26,17 @@
 
           <v-select
             v-model="filterPriority"
+            aria-label="Prioridad"
             class="fm-input"
             clearable
-            density="compact"
-            hide-details="auto"
-            :items="priorityOptions"
-            placeholder="Prioridad"
-            rounded="lg"
-            style="min-width: 140px"
-            variant="outlined"
-          />
+          density="compact"
+          hide-details="auto"
+          :items="priorityOptions"
+          placeholder="Prioridad"
+          rounded="lg"
+          style="min-width: 140px"
+          variant="outlined"
+        />
         </div>
       </v-card-text>
     </v-card>
@@ -149,9 +150,10 @@
 
           <v-form @submit.prevent="handleSave">
             <div class="fm-field-group">
-              <label class="fm-label">Título</label>
+              <label class="fm-label" for="debt-title">Título</label>
 
               <v-text-field
+                id="debt-title"
                 v-model="form.title"
                 v-capitalize-first
                 class="fm-input"
@@ -166,15 +168,16 @@
 
             <div class="fm-field-row">
               <div class="fm-field-group">
-                <label class="fm-label">Monto inicial</label>
+                <label class="fm-label" for="debt-amount">Monto inicial</label>
 
-                <AmountInput v-model="form.initialAmount" placeholder="0" required />
+                <AmountInput id="debt-amount" v-model="form.initialAmount" placeholder="0" required />
               </div>
 
               <div class="fm-field-group">
-                <label class="fm-label">Prioridad</label>
+                <label class="fm-label" for="debt-priority">Prioridad</label>
 
                 <v-select
+                  id="debt-priority"
                   v-model="form.priority"
                   class="fm-input"
                   density="comfortable"
@@ -189,23 +192,24 @@
 
             <div class="fm-field-row">
               <div class="fm-field-group">
-                <label class="fm-label">Tasa de interés % (opcional)</label>
+                <label class="fm-label" for="debt-interest">Tasa de interés % (opcional)</label>
 
-                <InterestRateInput v-model="form.interestRate" />
+                <InterestRateInput id="debt-interest" v-model="form.interestRate" />
               </div>
 
               <div class="fm-field-group">
-                <label class="fm-label">Pago mínimo (opcional)</label>
+                <label class="fm-label" for="debt-min-payment">Pago mínimo (opcional)</label>
 
-                <AmountInput v-model="form.minimumPayment" placeholder="0" />
+                <AmountInput id="debt-min-payment" v-model="form.minimumPayment" placeholder="0" />
               </div>
             </div>
 
             <div class="fm-field-row">
               <div class="fm-field-group">
-                <label class="fm-label">Día de vencimiento (opcional)</label>
+                <label class="fm-label" for="debt-due-day">Día de vencimiento (opcional)</label>
 
                 <v-text-field
+                  id="debt-due-day"
                   v-model="form.dueDay"
                   class="fm-input"
                   density="comfortable"
@@ -220,15 +224,16 @@
               </div>
 
               <div class="fm-field-group">
-                <label class="fm-label">Fecha de inicio (opcional)</label>
-                <DatePicker v-model="debtStartDate" />
+                <label class="fm-label" for="debt-start-date">Fecha de inicio (opcional)</label>
+                <DatePicker id="debt-start-date" v-model="debtStartDate" />
               </div>
             </div>
 
             <div v-if="editingId" class="fm-field-group">
-              <label class="fm-label">Estado</label>
+              <label class="fm-label" for="debt-status">Estado</label>
 
               <v-select
+                id="debt-status"
                 v-model="form.status"
                 class="fm-input"
                 density="comfortable"
@@ -240,9 +245,10 @@
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Descripción (opcional)</label>
+              <label class="fm-label" for="debt-description">Descripción (opcional)</label>
 
               <v-textarea
+                id="debt-description"
                 v-model="form.description"
                 v-capitalize-first
                 class="fm-input"
@@ -438,20 +444,21 @@
 
           <v-form @submit.prevent="handlePaymentSave">
             <div class="fm-field-group">
-              <label class="fm-label">Monto</label>
+              <label class="fm-label" for="pay-amount">Monto</label>
 
-              <AmountInput v-model="payForm.amount" placeholder="0" required />
+              <AmountInput id="pay-amount" v-model="payForm.amount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Fecha</label>
-              <DatePicker v-model="payDate" required />
+              <label class="fm-label" for="pay-date">Fecha</label>
+              <DatePicker id="pay-date" v-model="payDate" required />
             </div>
 
             <div class="fm-field-group">
-              <label class="fm-label">Notas (opcional)</label>
+              <label class="fm-label" for="pay-notes">Notas (opcional)</label>
 
               <v-textarea
+                id="pay-notes"
                 v-model="payForm.notes"
                 v-capitalize-first
                 class="fm-input"
