@@ -447,19 +447,7 @@
             <div class="fm-field-group">
               <label class="fm-label">Monto objetivo</label>
 
-              <v-text-field
-                v-model="goalForm.targetAmount"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                min="0"
-                placeholder="0.00"
-                required
-                rounded="lg"
-                step="0.01"
-                type="number"
-                variant="outlined"
-              />
+              <AmountInput v-model="goalForm.targetAmount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
@@ -522,19 +510,7 @@
             <div class="fm-field-group">
               <label class="fm-label">Monto a contribuir</label>
 
-              <v-text-field
-                v-model="contributeForm.amount"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                min="0"
-                placeholder="0.00"
-                required
-                rounded="lg"
-                step="0.01"
-                type="number"
-                variant="outlined"
-              />
+              <AmountInput v-model="contributeForm.amount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
@@ -758,6 +734,7 @@
 <script lang="ts" setup>
 import type { Goal } from '@/types';
 import { computed, onMounted, ref, watch } from 'vue';
+import AmountInput from '@/components/AmountInput.vue';
 import CircularLoader from '@/components/CircularLoader.vue';
 import DatePicker from '@/components/DatePicker.vue';
 import { useAuthStore } from '@/stores/auth';

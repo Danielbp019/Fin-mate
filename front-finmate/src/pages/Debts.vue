@@ -168,19 +168,7 @@
               <div class="fm-field-group">
                 <label class="fm-label">Monto inicial</label>
 
-                <v-text-field
-                  v-model="form.initialAmount"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  min="0"
-                  placeholder="0.00"
-                  required
-                  rounded="lg"
-                  step="0.01"
-                  type="number"
-                  variant="outlined"
-                />
+                <AmountInput v-model="form.initialAmount" placeholder="0" required />
               </div>
 
               <div class="fm-field-group">
@@ -201,37 +189,15 @@
 
             <div class="fm-field-row">
               <div class="fm-field-group">
-                <label class="fm-label">Tasa de interés (opcional)</label>
+                <label class="fm-label">Tasa de interés % (opcional)</label>
 
-                <v-text-field
-                  v-model="form.interestRate"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  min="0"
-                  placeholder="0.00"
-                  rounded="lg"
-                  step="0.01"
-                  type="number"
-                  variant="outlined"
-                />
+                <InterestRateInput v-model="form.interestRate" />
               </div>
 
               <div class="fm-field-group">
                 <label class="fm-label">Pago mínimo (opcional)</label>
 
-                <v-text-field
-                  v-model="form.minimumPayment"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  min="0"
-                  placeholder="0.00"
-                  rounded="lg"
-                  step="0.01"
-                  type="number"
-                  variant="outlined"
-                />
+                <AmountInput v-model="form.minimumPayment" placeholder="0" />
               </div>
             </div>
 
@@ -474,19 +440,7 @@
             <div class="fm-field-group">
               <label class="fm-label">Monto</label>
 
-              <v-text-field
-                v-model="payForm.amount"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                min="0"
-                placeholder="0.00"
-                required
-                rounded="lg"
-                step="0.01"
-                type="number"
-                variant="outlined"
-              />
+              <AmountInput v-model="payForm.amount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
@@ -535,7 +489,9 @@
 import type { CreateDebtBody, CreatePaymentBody, Debt, Payment, UpdateDebtBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
+import AmountInput from '@/components/AmountInput.vue';
 import DatePicker from '@/components/DatePicker.vue';
+import InterestRateInput from '@/components/InterestRateInput.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useDebtsStore } from '@/stores/debts';
 import { formatCurrency, formatInterestRate } from '@/utils/format';
@@ -615,7 +571,7 @@ const headers = [
   { title: 'Prioridad', key: 'priority', sortable: false },
   { title: 'Estado', key: 'status', sortable: false },
   { title: 'Día venc.', key: 'dueDay', sortable: false },
-  { title: 'Interes', key: 'interestRate', sortable: false },
+  { title: 'Interés %', key: 'interestRate', sortable: false },
   { title: 'Acciones', key: 'actions', sortable: false, align: 'end' as const },
 ];
 

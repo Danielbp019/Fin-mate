@@ -242,19 +242,7 @@
             <div class="fm-field-group">
               <label class="fm-label">Monto</label>
 
-              <v-text-field
-                v-model="form.amount"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                min="0"
-                placeholder="0.00"
-                required
-                rounded="lg"
-                step="0.01"
-                type="number"
-                variant="outlined"
-              />
+              <AmountInput v-model="form.amount" placeholder="0" required />
             </div>
 
             <div class="fm-field-group">
@@ -334,6 +322,7 @@
 import type { CreateMovementBody, Movement, UpdateMovementBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
+import AmountInput from '@/components/AmountInput.vue';
 import DatePicker from '@/components/DatePicker.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useCategoriesStore } from '@/stores/categories';
