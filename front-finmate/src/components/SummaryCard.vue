@@ -29,6 +29,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import CircularLoader from '@/components/CircularLoader.vue';
+import { formatCurrency } from '@/utils/format';
 
 const props = defineProps<{
   label: string;
@@ -40,16 +41,7 @@ const props = defineProps<{
   loading?: boolean;
 }>();
 
-const formattedAmount = computed(() => {
-  const num = Number.parseFloat(props.amount);
-  if (Number.isNaN(num)) return '$0';
-  return new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(num);
-});
+const formattedAmount = computed(() => formatCurrency(props.amount));
 
 const changeClass = computed(() => {
   if (props.change === null) return 'change-neutral';

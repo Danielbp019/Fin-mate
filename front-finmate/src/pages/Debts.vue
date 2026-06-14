@@ -79,15 +79,15 @@
         </template>
 
         <template #item.initialAmount="{ item }">
-          ${{ Number(item.initialAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+          {{ formatCurrency(item.initialAmount) }}
         </template>
 
         <template #item.currentAmount="{ item }">
-          ${{ Number(item.currentAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+          {{ formatCurrency(item.currentAmount) }}
         </template>
 
         <template #item.interestRate="{ item }">
-          {{ item.interestRate ? `${item.interestRate}%` : '—' }}
+          {{ formatInterestRate(item.interestRate) }}
         </template>
 
         <template #item.actions="{ item }">
@@ -358,11 +358,7 @@
                 <span class="text-caption">Monto inicial</span>
 
                 <p class="text-h6 font-weight-bold mt-0 mb-0">
-                  ${{
-                    Number(selectedDebt.initialAmount).toLocaleString('es-MX', {
-                      minimumFractionDigits: 2,
-                    })
-                  }}
+                  {{ formatCurrency(selectedDebt.initialAmount) }}
                 </p>
               </div>
 
@@ -370,11 +366,7 @@
                 <span class="text-caption">Monto actual</span>
 
                 <p class="text-h6 font-weight-bold mt-0 mb-0">
-                  ${{
-                    Number(selectedDebt.currentAmount).toLocaleString('es-MX', {
-                      minimumFractionDigits: 2,
-                    })
-                  }}
+                  {{ formatCurrency(selectedDebt.currentAmount) }}
                 </p>
               </div>
 
@@ -435,7 +427,7 @@
             </template>
 
             <template #item.amount="{ item }">
-              -${{ Number(item.amount).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+              -{{ formatCurrency(item.amount) }}
             </template>
 
             <template #item.paymentDate="{ item }">
@@ -546,6 +538,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import DatePicker from '@/components/DatePicker.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useDebtsStore } from '@/stores/debts';
+import { formatCurrency, formatInterestRate } from '@/utils/format';
 import { createDebtSchema, createPaymentSchema, updateDebtSchema } from '@/validation';
 import '@/styles/theme.css';
 
@@ -717,10 +710,10 @@ function openEdit(debt: Debt) {
   debtStartDate.value = debt.startDate ? new Date(debt.startDate) : null;
   form.value = {
     title: debt.title,
-    initialAmount: debt.initialAmount,
+    initialAmount: String(Number(debt.initialAmount)),
     priority: debt.priority,
-    interestRate: debt.interestRate,
-    minimumPayment: debt.minimumPayment,
+    interestRate: debt.interestRate ? String(Number(debt.interestRate)) : '',
+    minimumPayment: debt.minimumPayment ? String(Number(debt.minimumPayment)) : '',
     dueDay: debt.dueDay ?? undefined,
     startDate: debt.startDate?.slice(0, 10) ?? '',
     description: debt.description ?? '',

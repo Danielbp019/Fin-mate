@@ -142,7 +142,7 @@
               </div>
 
               <div class="movement-amount" :class="m.type">
-                {{ formatAmount(m.amount) }}
+                {{ formatCurrency(m.amount) }}
               </div>
             </div>
           </div>
@@ -171,7 +171,7 @@
               <span class="stat-row-label">Total pendiente</span>
 
               <span class="stat-row-value">{{
-                formatAmount(summary!.activeDebts!.totalRemaining)
+                formatCurrency(summary!.activeDebts!.totalRemaining)
               }}</span>
             </div>
           </div>
@@ -219,6 +219,7 @@ import LineChart from '@/components/LineChart.vue';
 import SummaryCard from '@/components/SummaryCard.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useDashboardStore } from '@/stores/dashboard';
+import { formatCurrency } from '@/utils/format';
 import '@/styles/theme.css';
 
 const auth = useAuthStore();
@@ -314,16 +315,7 @@ const balanceColors = computed(() =>
   balanceData.value.map((v) => (v >= 0 ? 'rgba(29, 158, 117, 0.7)' : 'rgba(211, 47, 47, 0.7)')),
 );
 
-function formatAmount(amount: string): string {
-  const num = Number.parseFloat(amount);
-  if (Number.isNaN(num)) return '$0';
-  return new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(num);
-}
+
 
 onMounted(() => {
   dashboard.fetchSummary();

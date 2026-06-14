@@ -31,6 +31,7 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { computed } from 'vue';
 import { Doughnut } from 'vue-chartjs';
 import CircularLoader from '@/components/CircularLoader.vue';
+import { formatCurrency } from '@/utils/format';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -65,7 +66,7 @@ const chartOptions = {
     tooltip: {
       callbacks: {
         label: (ctx: { parsed: number; label: string }) =>
-          `${ctx.label}: $${ctx.parsed.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`,
+          `${ctx.label}: ${formatCurrency(String(ctx.parsed))}`,
       },
     },
   },
@@ -76,7 +77,7 @@ const legendItems = computed(() =>
   props.labels.map((label, i) => ({
     label,
     color: props.colors[i] || '#ccc',
-    value: `$${props.data[i]?.toLocaleString('es-MX', { minimumFractionDigits: 2 }) || '0'}`,
+    value: formatCurrency(String(props.data[i] ?? 0)),
   })),
 );
 </script>

@@ -32,6 +32,7 @@ import {
 import { computed } from 'vue';
 import { Line } from 'vue-chartjs';
 import CircularLoader from '@/components/CircularLoader.vue';
+import { formatCurrency } from '@/utils/format';
 
 ChartJS.register(
   CategoryScale,
@@ -82,7 +83,7 @@ const chartOptions = {
       callbacks: {
         label: (ctx: TooltipItem<'line'>) => {
           const val = ctx.parsed.y ?? 0;
-          return `${ctx.dataset.label}: $${val.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+          return `${ctx.dataset.label}: ${formatCurrency(String(val))}`;
         },
       },
     },
@@ -92,7 +93,7 @@ const chartOptions = {
     y: {
       grid: { color: 'rgba(0,0,0,0.06)' },
       ticks: {
-        callback: (value: string | number) => `$${Number(value).toLocaleString('es-MX')}`,
+        callback: (value: string | number) => formatCurrency(String(value)),
       },
     },
   },

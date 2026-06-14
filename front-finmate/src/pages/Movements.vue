@@ -113,33 +113,35 @@
             :class="item.type === 'income' ? 'green--text' : 'orange--text'"
             style="font-weight: 600"
           >
-            {{ formatAmount(item) }}
+            {{ item.type === 'income' ? '+' : '-' }}{{ formatCurrency(item.amount) }}
           </span>
         </template>
 
         <template #item.actions="{ item }">
-          <v-tooltip location="top" text="Editar movimiento">
-            <template #activator="{ props }">
-              <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
+          <template v-if="item.referenceType !== 'goal_contribution'">
+            <v-tooltip location="top" text="Editar movimiento">
+              <template #activator="{ props }">
+                <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+            </v-tooltip>
 
-          <v-tooltip location="top" text="Eliminar movimiento">
-            <template #activator="{ props }">
-              <v-btn
-                v-bind="props"
-                color="error"
-                icon
-                size="small"
-                variant="text"
-                @click="confirmDelete(item)"
-              >
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </template>
-          </v-tooltip>
+            <v-tooltip location="top" text="Eliminar movimiento">
+              <template #activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  color="error"
+                  icon
+                  size="small"
+                  variant="text"
+                  @click="confirmDelete(item)"
+                >
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+            </v-tooltip>
+          </template>
         </template>
       </v-data-table>
 
@@ -305,7 +307,7 @@
 
           <p class="mt-2 text-caption">
             {{ getCategoryName(deletingItem?.categoryId ?? '') }} —
-            {{ formatAmount(deletingItem) }}
+            {{ deletingItem ? (deletingItem.type === 'income' ? '+' : '-') + formatCurrency(deletingItem.amount) : '' }}
           </p>
         </v-card-text>
 
@@ -336,6 +338,7 @@ import DatePicker from '@/components/DatePicker.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { useMovementsStore } from '@/stores/movements';
+import { formatCurrency } from '@/utils/format';
 import { createMovementSchema, updateMovementSchema } from '@/validation';
 import '@/styles/theme.css';
 
@@ -388,7 +391,10 @@ const categoryOptions = computed(() => {
     }));
 });
 
-const AUTO_MANAGED_CATEGORIES = new Set(['Ahorro Meta de Pareja', 'Devolucion Meta de Pareja', 'Pago de Deuda']);
+const AUTO_MANAGED_CATEGORIES = new Set([
+  'Ahorro Meta de Pareja',
+  'Devolucion Meta de Pareja',
+]);
 
 const availableCategories = computed(() => {
   const cats = form.value.type
@@ -416,12 +422,6 @@ function formatDate(iso: string) {
     month: '2-digit',
     year: 'numeric',
   });
-}
-
-function formatAmount(item: Movement | null | undefined) {
-  if (!item) return '';
-  const prefix = item.type === 'income' ? '+' : '-';
-  return `${prefix}$${Number(item.amount).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
 }
 
 onMounted(() => {
@@ -472,12 +472,13 @@ function openCreate() {
 }
 
 function openEdit(mov: Movement) {
+  if (mov.referenceType === 'goal_contribution') return;
   editingId.value = mov.id;
   formDate.value = new Date(mov.movementDate);
   form.value = {
     categoryId: mov.categoryId,
     type: mov.type,
-    amount: mov.amount,
+    amount: String(Number(mov.amount)),
     description: mov.description ?? '',
     movementDate: formDate.value.toISOString().slice(0, 10),
   };
@@ -486,6 +487,7 @@ function openEdit(mov: Movement) {
 }
 
 function confirmDelete(mov: Movement) {
+  if (mov.referenceType === 'goal_contribution') return;
   deletingItem.value = mov;
   deleteDialogOpen.value = true;
 }

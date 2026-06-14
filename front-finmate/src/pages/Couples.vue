@@ -315,15 +315,11 @@
                 "
               >
                 <span style="font-weight: 500">
-                  ${{
-                    Number(goal.currentAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 })
-                  }}
+                  {{ formatCurrency(goal.currentAmount) }}
                 </span>
 
                 <span style="color: rgba(var(--v-theme-on-surface), 0.6)">
-                  ${{
-                    Number(goal.targetAmount).toLocaleString('es-MX', { minimumFractionDigits: 2 })
-                  }}
+                  {{ formatCurrency(goal.targetAmount) }}
                 </span>
               </div>
 
@@ -516,16 +512,8 @@
               <span>Progreso actual</span>
 
               <span style="font-weight: 500">
-                ${{
-                  Number(contributingGoal?.currentAmount ?? 0).toLocaleString('es-MX', {
-                    minimumFractionDigits: 2,
-                  })
-                }}
-                de ${{
-                  Number(contributingGoal?.targetAmount ?? 0).toLocaleString('es-MX', {
-                    minimumFractionDigits: 2,
-                  })
-                }}
+                {{ formatCurrency(contributingGoal?.currentAmount ?? '0') }}
+                de {{ formatCurrency(contributingGoal?.targetAmount ?? '0') }}
               </span>
             </div>
           </div>
@@ -632,7 +620,7 @@
                 </div>
 
                 <span style="font-weight: 700; font-size: 16px">
-                  ${{ Number(row.total).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+                  {{ formatCurrency(String(row.total)) }}
                 </span>
               </div>
 
@@ -656,8 +644,8 @@
             <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 16px">
               <span>Total aportado</span>
 
-              <span>
-                ${{ Number(summaryGoal?.currentAmount ?? 0).toLocaleString('es-MX', { minimumFractionDigits: 2 }) }}
+                <span>
+                {{ formatCurrency(summaryGoal?.currentAmount ?? '0') }}
               </span>
             </div>
           </template>
@@ -774,6 +762,7 @@ import CircularLoader from '@/components/CircularLoader.vue';
 import DatePicker from '@/components/DatePicker.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useCouplesStore } from '@/stores/couples';
+import { formatCurrency } from '@/utils/format';
 import {
   contributeSchema,
   createCoupleSchema,
@@ -972,7 +961,7 @@ function openEditGoal(goal: Goal) {
   goalDeadline.value = goal.deadline ? new Date(goal.deadline) : null;
   goalForm.value = {
     title: goal.title,
-    targetAmount: goal.targetAmount,
+    targetAmount: String(Number(goal.targetAmount)),
     deadline: goal.deadline?.slice(0, 10) ?? '',
   };
   goalFormError.value = '';

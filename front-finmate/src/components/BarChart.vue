@@ -30,6 +30,7 @@ import {
 import { computed } from 'vue';
 import { Bar } from 'vue-chartjs';
 import CircularLoader from '@/components/CircularLoader.vue';
+import { formatCurrency } from '@/utils/format';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -64,7 +65,7 @@ const chartOptions = {
       callbacks: {
         label: (ctx: TooltipItem<'bar'>) => {
           const val = ctx.parsed.y ?? 0;
-          return `$${val.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+          return formatCurrency(String(val));
         },
       },
     },
@@ -74,7 +75,7 @@ const chartOptions = {
     y: {
       grid: { color: 'rgba(0,0,0,0.06)' },
       ticks: {
-        callback: (value: string | number) => `$${Number(value).toLocaleString('es-MX')}`,
+        callback: (value: string | number) => formatCurrency(String(value)),
       },
     },
   },
