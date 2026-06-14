@@ -383,6 +383,7 @@ const categoryOptions = computed(() => {
 const AUTO_MANAGED_CATEGORIES = new Set([
   'Ahorro Meta de Pareja',
   'Devolucion Meta de Pareja',
+  'Pago de Deuda',
 ]);
 
 const availableCategories = computed(() => {
