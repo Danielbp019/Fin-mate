@@ -134,5 +134,3 @@ Todas las entradas con **Zod**.
 - Invitar por email
 - Metas compartidas: CRUD + contribuciones
 - Abandonar o disolver grupo
-
-## Pendientes / Bugs

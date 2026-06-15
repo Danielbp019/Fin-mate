@@ -68,7 +68,7 @@
       <div class="feat-grid feat-grid--4">
         <div class="feat-card">
           <div class="feat-icon fi-green">
-            <v-icon size="22">mdi-swap-horizontal-bold</v-icon>
+            <v-icon color="var(--green-deep)" size="22">mdi-swap-horizontal-bold</v-icon>
           </div>
 
           <div class="feat-name">1. Registra todo</div>
@@ -81,7 +81,7 @@
 
         <div class="feat-card">
           <div class="feat-icon fi-gold">
-            <v-icon size="22">mdi-credit-card-clock-outline</v-icon>
+            <v-icon color="var(--gold)" size="22">mdi-credit-card-clock-outline</v-icon>
           </div>
 
           <div class="feat-name">2. Gestiona tus deudas</div>
@@ -94,7 +94,7 @@
 
         <div class="feat-card">
           <div class="feat-icon fi-blue">
-            <v-icon size="22">mdi-account-heart</v-icon>
+            <v-icon color="var(--blue-deep)" size="22">mdi-account-heart</v-icon>
           </div>
 
           <div class="feat-name">3. Activa el modo pareja</div>
@@ -107,7 +107,7 @@
 
         <div class="feat-card">
           <div class="feat-icon fi-green">
-            <v-icon size="22">mdi-view-dashboard</v-icon>
+            <v-icon color="var(--green-deep)" size="22">mdi-view-dashboard</v-icon>
           </div>
 
           <div class="feat-name">4. Unifica en Movimientos</div>
