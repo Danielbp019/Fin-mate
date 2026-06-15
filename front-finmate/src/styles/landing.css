@@ -648,22 +648,6 @@ body {
   transform: translateY(-1px);
 }
 
-.btn-ghost-white {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--white-80);
-  background: var(--white-10);
-  border: 1px solid var(--white-25);
-  padding: 12px 20px;
-  border-radius: 9px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.btn-ghost-white:hover {
-  background: var(--white-15);
-}
-
 /* STATS */
 .lp-stats {
   display: grid;

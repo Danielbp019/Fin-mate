@@ -84,18 +84,6 @@ body {
   }
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
 /* ── Auth nav bar (v-app-bar override) ── */
 .auth-nav-bar.v-app-bar {
   background: rgba(248, 250, 248, 0.92);
@@ -496,25 +484,6 @@ body {
   letter-spacing: 0.1px;
 }
 
-.fm-label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.fm-forgot {
-  font-size: 13px;
-  color: var(--green-mid);
-  text-decoration: none;
-  font-weight: 400;
-  transition: color 0.15s;
-}
-
-.fm-forgot:hover {
-  color: var(--green-deep);
-}
-
 .v-btn.fm-btn-submit {
   background: var(--green-deep);
   color: #fff;
@@ -531,52 +500,6 @@ body {
   background: var(--green-dark);
   box-shadow: 0 6px 20px var(--green-deep-40);
   transform: translateY(-1px);
-}
-
-.fm-switch-link {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 14px;
-  color: rgba(var(--v-theme-on-surface), 0.6);
-  font-weight: 300;
-}
-
-.fm-switch-link a {
-  color: var(--green-deep);
-  font-weight: 500;
-  text-decoration: none;
-  margin-left: 4px;
-  transition: color 0.15s;
-}
-
-.fm-switch-link a:hover {
-  color: var(--green-mid);
-}
-
-.fm-terms {
-  text-align: center;
-  margin-top: 14px;
-  font-size: 13px;
-  color: rgba(var(--v-theme-on-surface), 0.6);
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-.fm-terms a,
-.fm-terms button {
-  color: var(--green-mid);
-  text-decoration: none;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-family: inherit;
-  display: inline;
-}
-
-.fm-terms a:hover,
-.fm-terms button:hover {
-  text-decoration: underline;
 }
 
 /* ── Custom select trigger ── */
@@ -657,12 +580,6 @@ body {
 }
 
 /* ── Text utilities ── */
-
-.text-ink-soft-12 {
-  font-size: 12px;
-  color: var(--ink-soft);
-  font-weight: 300;
-}
 
 .text-87 {
   color: rgba(var(--v-theme-on-surface), 0.87);
