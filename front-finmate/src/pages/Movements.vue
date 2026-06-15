@@ -166,7 +166,7 @@
           </template>
         </v-tooltip>
 
-        <span class="text-caption" style="color: rgba(var(--v-theme-on-surface), 0.87)">
+        <span class="text-caption text-87">
           Página {{ store.pagination.page }} de {{ totalPages }} ({{ store.pagination.total }}
           registros)
         </span>

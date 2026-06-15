@@ -2,7 +2,7 @@
   <div class="fm-auth-root">
     <!-- Panel izquierdo decorativo -->
     <div class="fm-panel-left">
-      <div class="fm-panel-bg" />
+      <div class="fm-panel-bg fm-panel-bg--login" />
 
       <div class="fm-panel-content">
         <router-link class="fm-logo" :to="{ name: 'Landing' }">
@@ -168,27 +168,3 @@ async function handleLogin() {
   }
 }
 </script>
-
-<style scoped>
-.fm-panel-bg::after {
-  content: '';
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: var(--green-mid-25);
-  bottom: -200px;
-  right: -150px;
-}
-
-.fm-panel-bg::before {
-  content: '';
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: var(--white-05);
-  top: -60px;
-  left: -80px;
-}
-</style>

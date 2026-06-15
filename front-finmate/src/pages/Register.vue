@@ -2,7 +2,7 @@
   <div class="fm-auth-root">
     <!-- Panel izquierdo decorativo -->
     <div class="fm-panel-left">
-      <div class="fm-panel-bg" />
+      <div class="fm-panel-bg fm-panel-bg--register" />
 
       <div class="fm-panel-content">
         <router-link class="fm-logo" :to="{ name: 'Landing' }">
@@ -12,7 +12,7 @@
           FinMate
         </router-link>
 
-        <div class="fm-panel-body">
+        <div class="fm-panel-body fm-panel-body--register">
           <h2 class="fm-panel-headline">
             Empieza tu<br />
             camino a la<br />
@@ -20,7 +20,7 @@
             financiera.
           </h2>
 
-          <p class="fm-panel-sub">
+          <p class="fm-panel-sub fm-panel-sub--register">
             Crea tu cuenta gratis y toma el control de cada peso desde el primer día.
           </p>
         </div>
@@ -99,7 +99,7 @@
     <!-- Panel derecho: formulario -->
     <div class="fm-panel-right">
       <div class="fm-form-wrapper">
-        <div class="fm-form-header">
+        <div class="fm-form-header fm-form-header--register">
           <h1 class="fm-form-title">Crea tu cuenta</h1>
         </div>
 
@@ -265,46 +265,3 @@ async function handleRegister() {
   }
 }
 </script>
-
-<style scoped>
-.fm-panel-bg::after {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: var(--green-mid-22);
-  top: -120px;
-  right: -160px;
-}
-
-.fm-panel-bg::before {
-  content: '';
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  background: var(--white-05);
-  bottom: -80px;
-  left: -100px;
-}
-
-.fm-panel-body {
-  margin-top: 40px;
-  margin-bottom: 28px;
-}
-
-.fm-panel-sub {
-  font-size: 15px;
-  max-width: 260px;
-  margin-bottom: 0;
-}
-
-.fm-form-sub {
-  font-size: 14px;
-}
-
-.fm-form-header {
-  margin-bottom: 28px;
-}
-</style>

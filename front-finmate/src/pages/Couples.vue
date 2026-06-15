@@ -247,8 +247,7 @@
 
       <div
         v-if="store.goals.length === 0"
-        class="text-center pa-8"
-            style="color: rgba(var(--v-theme-on-surface), 0.87)"
+        class="text-center pa-8 text-87"
           >
             <v-icon size="48" style="opacity: 0.6">mdi-flag-outline</v-icon>
         <p class="mt-2">Aún no hay metas. ¡Crea la primera!</p>
@@ -320,7 +319,7 @@
                   {{ formatCurrency(goal.currentAmount) }}
                 </span>
 
-                <span style="color: rgba(var(--v-theme-on-surface), 0.87)">
+                <span class="text-87">
                   {{ formatCurrency(goal.targetAmount) }}
                 </span>
               </div>
@@ -340,11 +339,11 @@
                   margin-top: 4px;
                 "
               >
-                <span style="color: rgba(var(--v-theme-on-surface), 0.87)"
+                <span class="text-87"
                   >{{ Math.round(goalProgress(goal)) }}%</span
                 >
 
-                <span v-if="goal.deadline" style="color: rgba(var(--v-theme-on-surface), 0.87)">
+                <span v-if="goal.deadline" class="text-87">
                   Meta: {{ formatDate(goal.deadline) }}
                 </span>
               </div>
@@ -499,7 +498,7 @@
             {{ contributeError }}
           </v-alert>
 
-          <div class="mb-4 pa-3" style="background: var(--green-deep-05); border-radius: 12px">
+          <div class="mb-4 pa-3 bg-green-deep-05">
             <div style="display: flex; justify-content: space-between; font-size: 13px">
               <span>Progreso actual</span>
 
@@ -582,8 +581,7 @@
             <div
               v-for="row in summaryRows"
               :key="row.userId"
-              class="mb-3 pa-3"
-              style="border-radius: 12px; background: var(--green-deep-05)"
+              class="mb-3 pa-3 bg-green-deep-05"
             >
               <div style="display: flex; justify-content: space-between; align-items: center">
                 <div>
@@ -633,8 +631,7 @@
 
           <div
             v-else
-            class="text-center pa-4"
-            style="color: rgba(var(--v-theme-on-surface), 0.87)"
+            class="text-center pa-4 text-87"
           >
             <v-icon size="40" style="opacity: 0.6">mdi-currency-usd-off</v-icon>
             <p class="mt-2">No hay aportes registrados en esta meta</p>

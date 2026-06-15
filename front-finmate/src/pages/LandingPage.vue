@@ -106,7 +106,7 @@
 
             <div class="hc-mini-stat" style="margin-bottom: 8px">
               <div>
-                <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
+                <div class="text-ink-soft-12 mb-1">
                   Ingresos
                 </div>
 
@@ -118,7 +118,7 @@
 
             <div class="hc-mini-stat" style="margin-bottom: 8px">
               <div>
-                <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
+                <div class="text-ink-soft-12 mb-1">
                   Gastos
                 </div>
 
@@ -130,7 +130,7 @@
 
             <div class="hc-mini-stat">
               <div>
-                <div style="font-size: 12px; color: var(--ink-soft); margin-bottom: 2px">
+                <div class="text-ink-soft-12 mb-1">
                   Deuda activa
                 </div>
 
@@ -145,7 +145,7 @@
             <div class="fb-icon fi-gold">💰</div>
 
             <div>
-              <div style="font-size: 11px; color: var(--ink-soft)">Ahorro del mes</div>
+              <div class="text-ink-soft-12">Ahorro del mes</div>
 
               <div
                 style="
@@ -164,7 +164,7 @@
             <div class="fb-icon fi-blue">👫</div>
 
             <div>
-              <div style="font-size: 11px; color: var(--ink-soft)">Modo pareja</div>
+              <div class="text-ink-soft-12">Modo pareja</div>
 
               <div style="font-size: 12px; font-weight: 500; color: var(--blue-deep)">
                 Sincronizado

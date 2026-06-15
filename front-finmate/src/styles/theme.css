@@ -775,6 +775,48 @@ body {
   background: var(--green-deep);
 }
 
+/* Auth panel decoration variants */
+.fm-panel-bg--login::after {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: var(--green-mid-25);
+  bottom: -200px;
+  right: -150px;
+}
+.fm-panel-bg--login::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--white-05);
+  top: -60px;
+  left: -80px;
+}
+.fm-panel-bg--register::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: var(--green-mid-22);
+  top: -120px;
+  right: -160px;
+}
+.fm-panel-bg--register::before {
+  content: '';
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: var(--white-05);
+  bottom: -80px;
+  left: -100px;
+}
+
 .fm-panel-content {
   position: relative;
   z-index: 1;
@@ -812,6 +854,10 @@ body {
   margin-top: 48px;
   margin-bottom: 32px;
 }
+.fm-auth-root .fm-panel-body--register {
+  margin-top: 40px;
+  margin-bottom: 28px;
+}
 
 .fm-panel-headline {
   font-family: var(--font-serif);
@@ -835,6 +881,11 @@ body {
   line-height: 1.7;
   max-width: 280px;
   margin-bottom: 32px;
+}
+.fm-auth-root .fm-panel-sub--register {
+  font-size: 15px;
+  max-width: 260px;
+  margin-bottom: 0;
 }
 
 .fm-stats-col {
@@ -1043,6 +1094,9 @@ body {
 .fm-form-header {
   margin-bottom: 32px;
 }
+.fm-auth-root .fm-form-header--register {
+  margin-bottom: 28px;
+}
 
 .fm-form-title {
   font-family: var(--font-serif);
@@ -1074,10 +1128,10 @@ body {
 }
 
 /* ── Auth nav bar (v-app-bar override) ── */
-.auth-nav-bar {
-  background: rgba(248, 250, 248, 0.92) !important;
-  border-bottom: 0.5px solid var(--green-deep-15) !important;
-  box-shadow: none !important;
+.auth-nav-bar.v-app-bar {
+  background: rgba(248, 250, 248, 0.92);
+  border-bottom: 0.5px solid var(--green-deep-15);
+  box-shadow: none;
   backdrop-filter: blur(8px);
 }
 
@@ -1185,13 +1239,6 @@ body {
 }
 .change-neutral {
   color: rgba(var(--v-theme-on-surface), 0.6);
-}
-
-/* Main content area */
-.dashboard-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 16px;
 }
 
 .content-card {
@@ -1430,23 +1477,23 @@ body {
 .fm-input .v-field__outline__start,
 .fm-input .v-field__outline__end,
 .fm-input .v-field__outline__notch {
-  border-color: var(--green-deep-25) !important;
+  border-color: var(--green-deep-25);
 }
 
 .fm-input .v-field--focused .v-field__outline__start,
 .fm-input .v-field--focused .v-field__outline__end,
 .fm-input .v-field--focused .v-field__outline__notch {
-  border-color: var(--green-mid) !important;
+  border-color: var(--green-mid);
 }
 
 .fm-input .v-field .v-icon {
-  color: var(--green-mid) !important;
+  color: var(--green-mid);
 }
 
 .v-theme--dark .fm-input .v-field__outline__start,
 .v-theme--dark .fm-input .v-field__outline__end,
 .v-theme--dark .fm-input .v-field__outline__notch {
-  border-color: var(--green-mid-50) !important;
+  border-color: var(--green-mid-50);
 }
 
 /* Force dark text on auth form inputs regardless of Vuetify theme */
@@ -1514,21 +1561,21 @@ body {
   color: var(--green-deep);
 }
 
-.fm-btn-submit {
-  background: var(--green-deep) !important;
-  color: #fff !important;
-  font-family: var(--font-sans) !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  box-shadow: 0 4px 14px var(--green-deep-25) !important;
-  transition: all 0.18s !important;
+.v-btn.fm-btn-submit {
+  background: var(--green-deep);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: 0 4px 14px var(--green-deep-25);
+  transition: all 0.18s;
 }
 
-.fm-btn-submit:hover {
-  background: var(--green-dark) !important;
-  box-shadow: 0 6px 20px var(--green-deep-40) !important;
+.v-btn.fm-btn-submit:hover {
+  background: var(--green-dark);
+  box-shadow: 0 6px 20px var(--green-deep-40);
   transform: translateY(-1px);
 }
 
@@ -1661,6 +1708,23 @@ body {
   .page-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ── Text utilities ── */
+
+.text-ink-soft-12 {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 300;
+}
+
+.text-87 {
+  color: rgba(var(--v-theme-on-surface), 0.87);
+}
+
+.bg-green-deep-05 {
+  background: var(--green-deep-05);
+  border-radius: 12px;
 }
 
 /* ── Drawer ── */
