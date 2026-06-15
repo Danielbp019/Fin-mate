@@ -57,7 +57,7 @@ const innerValue = computed({
 
 const displayValue = computed(() => {
   if (!props.modelValue) return '';
-  return props.modelValue.toLocaleDateString('es-MX', {
+  return props.modelValue.toLocaleDateString('es-CO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

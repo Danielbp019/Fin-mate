@@ -28,30 +28,30 @@ p {
 
   /* Opacity tiers — green-deep */
   --green-deep-05: rgba(15, 110, 86, 0.05);
-  --green-deep-10: rgba(15, 110, 86, 0.10);
+  --green-deep-10: rgba(15, 110, 86, 0.1);
   --green-deep-15: rgba(15, 110, 86, 0.15);
   --green-deep-25: rgba(15, 110, 86, 0.25);
-  --green-deep-40: rgba(15, 110, 86, 0.40);
+  --green-deep-40: rgba(15, 110, 86, 0.4);
 
   /* Opacity tiers — green-mid */
   --green-mid-22: rgba(29, 158, 117, 0.22);
   --green-mid-25: rgba(29, 158, 117, 0.25);
-  --green-mid-50: rgba(29, 158, 117, 0.50);
+  --green-mid-50: rgba(29, 158, 117, 0.5);
 
   /* Opacity tiers — white on dark backgrounds */
   --white-05: rgba(255, 255, 255, 0.05);
-  --white-10: rgba(255, 255, 255, 0.10);
+  --white-10: rgba(255, 255, 255, 0.1);
   --white-15: rgba(255, 255, 255, 0.15);
   --white-25: rgba(255, 255, 255, 0.25);
   --white-55: rgba(255, 255, 255, 0.55);
   --white-65: rgba(255, 255, 255, 0.65);
-  --white-80: rgba(255, 255, 255, 0.80);
+  --white-80: rgba(255, 255, 255, 0.8);
 
   /* Opacity tiers — black on light backgrounds */
   --black-07: rgba(0, 0, 0, 0.07);
   --black-08: rgba(0, 0, 0, 0.08);
   --black-38: rgba(0, 0, 0, 0.38);
-  --black-60: rgba(0, 0, 0, 0.60);
+  --black-60: rgba(0, 0, 0, 0.6);
   --black-87: rgba(0, 0, 0, 0.87);
 
   /* Font families */
@@ -554,6 +554,9 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+}
+.feat-grid--4 {
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .feat-card {

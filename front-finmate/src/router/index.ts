@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('@/pages/Register.vue'),
     },
     {
+      path: '/como-funciona',
+      name: 'HowItWorks',
+      component: () => import('@/pages/HowItWorks.vue'),
+    },
+    {
       path: '/dashboard',
       component: () => import('@/layouts/AuthLayout.vue'),
       children: [
@@ -61,7 +66,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const auth = useAuthStore();
 
-  const guestRoutes = new Set(['Landing', 'Login', 'Register']);
+  const guestRoutes = new Set(['Landing', 'Login', 'Register', 'HowItWorks']);
 
   if (!auth.appReady && !guestRoutes.has(to.name as string)) {
     await auth.initialize();

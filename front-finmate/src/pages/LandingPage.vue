@@ -16,7 +16,9 @@
       </div>
 
       <div class="lp-nav-actions">
-        <button class="btn-ghost">¿Cómo funciona?</button>
+        <button class="btn-ghost" @click="router.push({ name: 'HowItWorks' })">
+          ¿Cómo funciona?
+        </button>
         <button class="btn-ghost" @click="router.push({ name: 'Login' })">Iniciar sesión</button>
 
         <button class="btn-primary" @click="router.push({ name: 'Register' })">
@@ -79,7 +81,9 @@
               "
             />
 
-            <div style="height: 24px; background: var(--surface-muted); border-radius: 4px; width: 80%" />
+            <div
+              style="height: 24px; background: var(--surface-muted); border-radius: 4px; width: 80%"
+            />
           </div>
 
           <div class="hero-card hc-main">
@@ -106,9 +110,7 @@
 
             <div class="hc-mini-stat" style="margin-bottom: 8px">
               <div>
-                <div class="text-ink-soft-12 mb-1">
-                  Ingresos
-                </div>
+                <div class="text-ink-soft-12 mb-1">Ingresos</div>
 
                 <div class="hc-stat-num">$7,200</div>
               </div>
@@ -118,9 +120,7 @@
 
             <div class="hc-mini-stat" style="margin-bottom: 8px">
               <div>
-                <div class="text-ink-soft-12 mb-1">
-                  Gastos
-                </div>
+                <div class="text-ink-soft-12 mb-1">Gastos</div>
 
                 <div class="hc-stat-num">$2,380</div>
               </div>
@@ -130,9 +130,7 @@
 
             <div class="hc-mini-stat">
               <div>
-                <div class="text-ink-soft-12 mb-1">
-                  Deuda activa
-                </div>
+                <div class="text-ink-soft-12 mb-1">Deuda activa</div>
 
                 <div class="hc-stat-num">$1,450</div>
               </div>
@@ -269,44 +267,20 @@
       </div>
 
       <div class="strip-right">
-        <button class="btn-ghost-white">Ver demo</button>
-
         <button class="btn-white" @click="router.push({ name: 'Register' })">
           Crear cuenta gratis
         </button>
       </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="lp-footer">
-      <div class="footer-logo">
-        FinMate — una aplicación de
-        <img alt="firma" class="footer-signature" :src="firmaNegra" />
-      </div>
-
-      <div class="footer-right">
-        <div class="footer-links">
-          <button type="button" @click="showPrivacy = true">Privacidad</button>
-          <button type="button" @click="showTerms = true">Términos</button>
-        </div>
-
-        <div style="font-size: 13px; color: var(--ink-soft); opacity: 0.87">© 2026 FinMate</div>
-      </div>
-    </footer>
-
-    <LegalModal v-model="showPrivacy" type="privacy" />
-    <LegalModal v-model="showTerms" type="terms" />
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import firmaNegra from '@/assets/daniel_firma_black.svg';
-import LegalModal from '@/components/LegalModal.vue';
+import Footer from '@/components/Footer.vue';
 import '@/styles/theme.css';
 
 const router = useRouter();
-const showPrivacy = ref(false);
-const showTerms = ref(false);
 </script>
