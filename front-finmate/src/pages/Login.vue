@@ -148,7 +148,7 @@
 import type { AxiosError } from 'axios';
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import '@/styles/theme.css';
+import '@/styles/landing.css';
 
 const auth = useAuthStore();
 const email = ref('');

@@ -282,7 +282,7 @@
 /** LandingPage — página de aterrizaje con hero, features, estadísticas y call-to-action. Usado en ruta '/' */
 import { useRouter } from 'vue-router';
 import Footer from '@/components/Footer.vue';
-import '@/styles/theme.css';
+import '@/styles/landing.css';
 
 const router = useRouter();
 </script>

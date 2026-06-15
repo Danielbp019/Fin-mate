@@ -51,7 +51,9 @@ src/
   types/                Interfaces TypeScript
   plugins/              Configuración de plugins
   router/               Rutas + auth guard
-  styles/               Estilos globales (theme.css)
+  styles/               Estilos globales
+    theme.css             Variables + páginas autenticadas (Dashboard, Profile, etc.)
+    landing.css           Páginas públicas (Landing, HowItWorks, Login, Register)
   components/           Componentes reutilizables
   utils/                Utilitarios (format.ts — capitalizeFirst)
   directives/           Directivas Vue (capitalizeFirst.ts)

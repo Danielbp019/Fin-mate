@@ -75,7 +75,7 @@ src/
 6. **Consola**: No usar emojis en textos de consola.
 7. **Módulos**: Cada módulo nuevo va en una categoría nueva en el drawer.
 8. **Autenticación**: Toda página del drawer requiere usuario autenticado.
-9. **CSS** — Un solo archivo: `styles/theme.css`. No dispersar estilos en componentes ni crear otros archivos CSS.
+9. **CSS** — Dos archivos: `styles/landing.css` (LandingPage, HowItWorks, Login, Register) y `styles/theme.css` (Dashboard, Profile, Categories, Movements, Debts, Couples + AuthLayout). No dispersar estilos en componentes ni crear otros archivos CSS.
    - **Siempre usar variables CSS existentes** del `:root`. Nunca hardcodear colores, opacidades o `font-family` que ya tengan variable.
    - **Si necesitas una variante de opacidad** de un color existente, usa el tier más cercano ya definido (`.05`, `.10`, `.15`, `.25`, `.40`, `.50`, `.55`, `.65`, `.80`). No añadas opacidades nuevas.
    - **Si agregas un nuevo color**, añádelo como variable en `:root` con nombre semántico (`--green-dark`, `--red`, etc.) y reutilízalo en lugar de repetir el hex.
