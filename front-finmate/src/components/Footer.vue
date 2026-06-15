@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+/** Footer — pie de página del landing con enlaces a privacidad y términos. Usado en: LandingPage, HowItWorks */
 import { ref } from 'vue';
 import firmaNegra from '@/assets/daniel_firma_black.svg';
 import LegalModal from '@/components/LegalModal.vue';

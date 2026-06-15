@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+/** LineChart — gráfico de líneas (Chart.js Line) para evolución mensual de ingresos/gastos. Usado en: Dashboard */
 import type { TooltipItem } from 'chart.js';
 import {
   CategoryScale,

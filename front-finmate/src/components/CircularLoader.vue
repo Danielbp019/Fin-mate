@@ -5,3 +5,7 @@
     v-bind="$attrs"
   />
 </template>
+
+<script setup lang="ts">
+/** CircularLoader — loader circular indeterminado (v-progress-circular). Usado en: Dashboard, Couples, BarChart, DoughnutChart, LineChart, SummaryCard */
+</script>

@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+/** SummaryCard — tarjeta resumen con monto formateado, icono y variación porcentual vs mes anterior. Usado en: Dashboard */
 import { computed } from 'vue';
 import CircularLoader from '@/components/CircularLoader.vue';
 import { formatCurrency } from '@/utils/format';

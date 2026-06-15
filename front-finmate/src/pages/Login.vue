@@ -144,6 +144,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Login — página de inicio de sesión con formulario email/contraseña. Usado en ruta '/login' */
 import type { AxiosError } from 'axios';
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';

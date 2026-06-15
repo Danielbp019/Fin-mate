@@ -225,6 +225,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Register — página de registro con formulario de datos personales y validación Zod. Usado en ruta '/register' */
 import type { AxiosError } from 'axios';
 import { ref } from 'vue';
 import LegalModal from '@/components/LegalModal.vue';

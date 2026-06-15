@@ -19,7 +19,7 @@
       />
     </template>
 
-    <v-locale-provider locale="es">
+    <v-locale-provider locale="es-CO">
       <v-date-picker v-model="innerValue" @update:model-value="menu = false" />
     </v-locale-provider>
   </v-menu>

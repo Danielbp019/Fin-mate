@@ -493,6 +493,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Debts — CRUD de deudas con filtros, gestión de pagos, barra de progreso y diálogos múltiples. Usado en ruta '/debts' */
 import type { CreateDebtBody, CreatePaymentBody, Debt, Payment, UpdateDebtBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -633,7 +634,7 @@ function statusColor(s: string) {
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString('es-MX', {
+  return d.toLocaleDateString('es-CO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

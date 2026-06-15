@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts" setup>
+/** BarChart — gráfico de barras (Chart.js Bar) para balance mensual. Usado en: Dashboard */
 import type { TooltipItem } from 'chart.js';
 import {
   BarElement,

@@ -327,6 +327,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Movements — CRUD de movimientos con filtros por tipo/categoría/fecha, paginación, tabla y diálogos de crear/editar/eliminar. Usado en ruta '/movements' */
 import type { CreateMovementBody, Movement, UpdateMovementBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -419,7 +420,7 @@ function getCategoryIcon(id: string) {
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString('es-MX', {
+  return d.toLocaleDateString('es-CO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

@@ -99,6 +99,7 @@
 </template>
 
 <script lang="ts" setup>
+/** AuthLayout — layout principal para usuarios autenticados con AppBar, NavigationDrawer y router-view. Usado como layout base de rutas protegidas */
 import { computed, onMounted, ref, shallowRef } from 'vue';
 import { useTheme } from 'vuetify';
 import firmaBlack from '@/assets/daniel_firma_black.svg';

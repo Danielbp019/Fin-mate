@@ -19,6 +19,7 @@
         <button class="btn-ghost" @click="router.push({ name: 'HowItWorks' })">
           ¿Cómo funciona?
         </button>
+
         <button class="btn-ghost" @click="router.push({ name: 'Login' })">Iniciar sesión</button>
 
         <button class="btn-primary" @click="router.push({ name: 'Register' })">
@@ -278,6 +279,7 @@
 </template>
 
 <script setup lang="ts">
+/** LandingPage — página de aterrizaje con hero, features, estadísticas y call-to-action. Usado en ruta '/' */
 import { useRouter } from 'vue-router';
 import Footer from '@/components/Footer.vue';
 import '@/styles/theme.css';

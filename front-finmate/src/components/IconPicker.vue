@@ -66,6 +66,7 @@
 </template>
 
 <script lang="ts" setup>
+/** IconPicker — selector de iconos Material Design Icons con búsqueda y diálogo. Usado en: Categories */
 import { computed, ref } from 'vue';
 
 withDefaults(defineProps<{ modelValue?: string; id?: string }>(), { modelValue: '' });

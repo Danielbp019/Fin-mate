@@ -211,6 +211,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Categories — CRUD de categorías con tabs por tipo (ingreso/gasto), tabla con iconos y diálogos de crear/editar/eliminar. Usado en ruta '/categories' */
 import type { Category, CreateCategoryBody, UpdateCategoryBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref } from 'vue';

@@ -215,6 +215,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Dashboard — panel principal con resumen mensual, gráficos (líneas, barras, donas), últimos movimientos, deudas activas y metas de pareja. Usado en ruta '/dashboard' */
 import { computed, onMounted } from 'vue';
 import BarChart from '@/components/BarChart.vue';
 import CircularLoader from '@/components/CircularLoader.vue';
@@ -241,7 +242,7 @@ const currentMonthLabel = computed(() => {
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString('es-MX', {
+  return d.toLocaleDateString('es-CO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

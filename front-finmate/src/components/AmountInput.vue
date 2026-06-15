@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang="ts">
+/** AmountInput — campo de texto con formato moneda COP y separadores de miles. Usado en: Movements, Debts, Couples */
 import { computed, ref } from 'vue';
 import { formatNumber, stripFormatting } from '@/utils/format';
 

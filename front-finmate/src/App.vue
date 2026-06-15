@@ -6,4 +6,6 @@
   </v-app>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+/** App.vue — componente raíz que monta router-view dentro de v-app. Punto de entrada de la aplicación */
+</script>

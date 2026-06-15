@@ -19,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+/** InterestRateInput — campo de texto para tasa de interés con sanitización y formato decimal. Usado en: Debts */
 import { ref, watch } from 'vue';
 
 const props = withDefaults(

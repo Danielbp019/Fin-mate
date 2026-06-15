@@ -172,6 +172,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Profile — página de perfil para actualizar nombre y cambiar contraseña con validación Zod. Usado en ruta '/profile' */
 import type { AxiosError } from 'axios';
 import { onMounted, ref } from 'vue';
 import api from '@/services/api';

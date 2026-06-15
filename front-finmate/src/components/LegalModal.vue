@@ -90,6 +90,7 @@
 </template>
 
 <script lang="ts" setup>
+/** LegalModal — modal de políticas de privacidad y términos de uso con contenido estático. Usado en: Footer, Register */
 defineProps<{
   modelValue: boolean;
   type: 'privacy' | 'terms';

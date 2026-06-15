@@ -20,6 +20,7 @@
         <button class="btn-ghost" @click="router.push({ name: 'Login' })">
           Iniciar sesi&oacute;n
         </button>
+
         <button class="btn-primary" @click="router.push({ name: 'Register' })">
           Empezar gratis
         </button>
@@ -161,6 +162,7 @@
 </template>
 
 <script setup lang="ts">
+/** HowItWorks — página explicativa del funcionamiento de la app en 4 pasos. Usado en ruta '/how-it-works' */
 import { useRouter } from 'vue-router';
 import Footer from '@/components/Footer.vue';
 import '@/styles/theme.css';

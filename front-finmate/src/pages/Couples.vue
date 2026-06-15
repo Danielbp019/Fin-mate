@@ -734,6 +734,7 @@
 </template>
 
 <script lang="ts" setup>
+/** Couples — gestión de grupo de pareja (crear/invitar/abandonar/disolver) y metas compartidas con contribuciones. Usado en ruta '/couples' */
 import type { Goal } from '@/types';
 import { computed, onMounted, ref, watch } from 'vue';
 import AmountInput from '@/components/AmountInput.vue';
@@ -846,7 +847,7 @@ function goalProgress(goal: Goal) {
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return d.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 onMounted(async () => {

@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+/** DoughnutChart — gráfico de dona (Chart.js Doughnut) para distribución de ingresos/gastos por categoría. Usado en: Dashboard */
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { computed } from 'vue';
 import { Doughnut } from 'vue-chartjs';
