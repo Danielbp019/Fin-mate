@@ -105,7 +105,7 @@ import { useTheme } from 'vuetify';
 import firmaBlack from '@/assets/daniel_firma_black.svg';
 import firmaWhite from '@/assets/daniel_firma_white.svg';
 import { useAuthStore } from '@/stores/auth';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 const auth = useAuthStore();
 const theme = useTheme();

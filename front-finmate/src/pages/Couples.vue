@@ -751,7 +751,7 @@ import {
   updateCoupleSchema,
   updateGoalSchema,
 } from '@/validation';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 const store = useCouplesStore();
 const auth = useAuthStore();

@@ -504,7 +504,7 @@ import LinearLoader from '@/components/LinearLoader.vue';
 import { useDebtsStore } from '@/stores/debts';
 import { formatCurrency, formatInterestRate } from '@/utils/format';
 import { createDebtSchema, createPaymentSchema, updateDebtSchema } from '@/validation';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 interface DebtForm {
   title: string;

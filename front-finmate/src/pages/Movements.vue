@@ -338,7 +338,7 @@ import { useCategoriesStore } from '@/stores/categories';
 import { useMovementsStore } from '@/stores/movements';
 import { formatCurrency } from '@/utils/format';
 import { createMovementSchema, updateMovementSchema } from '@/validation';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 const catStore = useCategoriesStore();
 const store = useMovementsStore();

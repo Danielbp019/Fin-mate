@@ -231,7 +231,7 @@ import { ref } from 'vue';
 import LegalModal from '@/components/LegalModal.vue';
 import { useAuthStore } from '@/stores/auth';
 import { registerSchema } from '@/validation';
-import '@/styles/landing.css';
+import '@/styles/unauth.css';
 
 const auth = useAuthStore();
 const name = ref('');

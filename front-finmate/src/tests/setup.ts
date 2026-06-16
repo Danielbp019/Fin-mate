@@ -1,7 +1,7 @@
 import { config } from '@vue/test-utils';
 import { vi } from 'vitest';
 
-vi.mock('@/styles/theme.css', () => ({}));
+vi.mock('@/styles/auth.css', () => ({}));
 vi.mock('@/components/LegalModal.vue', () => ({ default: { template: '<div />' } }));
 
 vi.mock('axios', () => {

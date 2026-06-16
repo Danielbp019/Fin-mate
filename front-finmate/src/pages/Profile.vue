@@ -178,7 +178,7 @@ import { onMounted, ref } from 'vue';
 import api from '@/services/api';
 import { useAuthStore } from '@/stores/auth';
 import { changePasswordSchema, updateProfileSchema } from '@/validation';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 const auth = useAuthStore();
 

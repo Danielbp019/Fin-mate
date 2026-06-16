@@ -219,7 +219,7 @@ import IconPicker from '@/components/IconPicker.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { createCategorySchema, updateCategorySchema } from '@/validation';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 const store = useCategoriesStore();
 

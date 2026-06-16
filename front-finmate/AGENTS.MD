@@ -33,7 +33,7 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, Vitest, ESLint, Zod
 ⚠️ **Importante**: Nunca ejecutar `npm run lint:fix`. Hace `prettier --write .` sobre **todos** los archivos y reformatea código no relacionado. En su lugar, usar `npx eslint --fix` solo sobre los archivos que se estén editando. Ejemplo:
 
 ```powershell
-npx eslint --fix src/layouts/AuthLayout.vue src/styles/theme.css
+npx eslint --fix src/layouts/AuthLayout.vue src/styles/auth.css
 ```
 
 | `npm run type-check` | Verificar tipos TypeScript |
@@ -53,7 +53,7 @@ src/
   types/                   Interfaces TypeScript
   plugins/                 Vuetify, Router, Pinia
   router/                  Vue Router + auth guard
-  styles/                  theme.css (único archivo de estilos)
+  styles/                  base.css, auth.css, unauth.css
   components/              Componentes reutilizables
   utils/                   format.ts — capitalizeFirst
   directives/              capitalizeFirst.ts — v-capitalize-first
@@ -75,7 +75,7 @@ src/
 6. **Consola**: No usar emojis en textos de consola.
 7. **Módulos**: Cada módulo nuevo va en una categoría nueva en el drawer.
 8. **Autenticación**: Toda página del drawer requiere usuario autenticado.
-9. **CSS** — Dos archivos: `styles/landing.css` (LandingPage, HowItWorks, Login, Register) y `styles/theme.css` (Dashboard, Profile, Categories, Movements, Debts, Couples + AuthLayout). No dispersar estilos en componentes ni crear otros archivos CSS.
+9. **CSS** — Tres archivos: `styles/base.css` (compartido), `styles/unauth.css` (LandingPage, HowItWorks, Login, Register) y `styles/auth.css` (Dashboard, Profile, Categories, Movements, Debts, Couples + AuthLayout). No dispersar estilos en componentes ni crear otros archivos CSS.
    - **Siempre usar variables CSS existentes** del `:root`. Nunca hardcodear colores, opacidades o `font-family` que ya tengan variable.
    - **Si necesitas una variante de opacidad** de un color existente, usa el tier más cercano ya definido (`.05`, `.10`, `.15`, `.25`, `.40`, `.50`, `.55`, `.65`, `.80`). No añadas opacidades nuevas.
    - **Si agregas un nuevo color**, añádelo como variable en `:root` con nombre semántico (`--green-dark`, `--red`, etc.) y reutilízalo en lugar de repetir el hex.

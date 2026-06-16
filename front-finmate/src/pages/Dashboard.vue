@@ -225,7 +225,7 @@ import SummaryCard from '@/components/SummaryCard.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useDashboardStore } from '@/stores/dashboard';
 import { formatCurrency } from '@/utils/format';
-import '@/styles/theme.css';
+import '@/styles/auth.css';
 
 const auth = useAuthStore();
 const dashboard = useDashboardStore();
