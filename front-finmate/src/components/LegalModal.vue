@@ -4,7 +4,7 @@
     :model-value="modelValue"
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <v-card theme="light">
+    <v-card rounded="xl" theme="light">
       <v-card-title class="text-h5 pa-4 d-flex align-center">
         {{ title || (type === 'privacy' ? 'Privacidad' : 'Términos de uso') }}
         <v-spacer />

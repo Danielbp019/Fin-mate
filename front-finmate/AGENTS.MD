@@ -83,7 +83,7 @@ src/
    - **Actualiza** `:root` primero antes de usar una nueva variable en el resto del archivo.
 10. **Tests**: Escribir en `src/tests/` con el mismo nombre del módulo.
 11. **Prioridad tests**: Stores y servicios primero; componentes y páginas después.
-12. **Diálogos**: Solo dos tamaños de `max-width` — `800` para `DebtPayoffModal` (Plan de pago) y `540` para el resto. Siempre incluir botón X de cierre en el título con el patrón `d-flex align-center` + `<v-spacer />` + `<v-btn icon variant="text" @click="..."><v-icon>mdi-close</v-icon></v-btn>`.
+12. **Diálogos**: Solo dos tamaños de `max-width` — `800` para `DebtPayoffModal` (Plan de pago) y `540` para el resto. Todos con `<v-card rounded="xl">`. Siempre incluir botón X de cierre en el título con el patrón `d-flex align-center` + `<v-spacer />` + `<v-btn icon variant="text" @click="..."><v-icon>mdi-close</v-icon></v-btn>`.
 
 ## Autenticación
 

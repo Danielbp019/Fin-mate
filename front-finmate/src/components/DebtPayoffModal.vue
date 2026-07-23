@@ -4,7 +4,7 @@
     :model-value="dialog"
     @update:model-value="$emit('update:dialog', $event)"
   >
-    <v-card>
+    <v-card rounded="xl">
       <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
         <v-icon class="mr-2" color="var(--green-deep)">mdi-lightbulb-on-outline</v-icon>
         Plan de pago

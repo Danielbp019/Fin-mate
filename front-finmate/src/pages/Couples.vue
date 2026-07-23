@@ -354,7 +354,7 @@
     </template>
 
     <v-dialog v-model="editNameDialog" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Editar nombre del grupo
           <v-spacer />
@@ -416,7 +416,7 @@
     </v-dialog>
 
     <v-dialog v-model="goalDialog" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           {{ editingGoal ? 'Editar meta' : 'Nueva meta' }}
           <v-spacer />
@@ -490,7 +490,7 @@
     </v-dialog>
 
     <v-dialog v-model="contributeDialog" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Contribuir · {{ contributingGoal?.title }}
           <v-spacer />
@@ -576,7 +576,7 @@
     </v-dialog>
 
     <v-dialog v-model="summaryDialog" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Resumen de aportes · {{ summaryGoal?.title }}
           <v-spacer />
@@ -669,7 +669,7 @@
     </v-dialog>
 
     <v-dialog v-model="confirmDissolve" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Disolver grupo
           <v-spacer />
@@ -711,7 +711,7 @@
     </v-dialog>
 
     <v-dialog v-model="confirmLeave" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Abandonar grupo
           <v-spacer />
@@ -748,7 +748,7 @@
     </v-dialog>
 
     <v-dialog v-model="showDeleteGoal" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Eliminar meta
           <v-spacer />

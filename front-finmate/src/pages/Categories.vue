@@ -97,7 +97,7 @@
     </v-card>
 
     <v-dialog v-model="dialogOpen" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           {{ editingId ? 'Editar categoría' : 'Nueva categoría' }}
           <v-spacer />
@@ -181,7 +181,7 @@
     </v-dialog>
 
     <v-dialog v-model="deleteDialogOpen" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Eliminar categoría
           <v-spacer />

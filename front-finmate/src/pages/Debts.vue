@@ -135,7 +135,7 @@
     </v-card>
 
     <v-dialog v-model="dialogOpen" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           {{ editingId ? 'Editar deuda' : 'Nueva deuda' }}
           <v-spacer />
@@ -294,7 +294,7 @@
     </v-dialog>
 
     <v-dialog v-model="deleteDialogOpen" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Eliminar deuda
           <v-spacer />
@@ -333,7 +333,7 @@
     </v-dialog>
 
     <v-dialog v-model="paymentsDialogOpen" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Pagos · {{ selectedDebt?.title }}
           <v-spacer />
@@ -450,7 +450,7 @@
     </v-dialog>
 
     <v-dialog v-model="paymentDialogOpen" max-width="540">
-      <v-card>
+      <v-card rounded="xl">
         <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Registrar pago
           <v-spacer />
