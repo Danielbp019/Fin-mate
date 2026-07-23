@@ -353,9 +353,17 @@
       </div>
     </template>
 
-    <v-dialog v-model="editNameDialog" max-width="420">
+    <v-dialog v-model="editNameDialog" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Editar nombre del grupo</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Editar nombre del grupo
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="editNameDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">
@@ -407,10 +415,15 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="goalDialog" max-width="520">
+    <v-dialog v-model="goalDialog" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           {{ editingGoal ? 'Editar meta' : 'Nueva meta' }}
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="goalDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-divider />
@@ -476,10 +489,15 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="contributeDialog" max-width="420">
+    <v-dialog v-model="contributeDialog" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Contribuir · {{ contributingGoal?.title }}
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="contributeDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-divider />
@@ -557,10 +575,15 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="summaryDialog" max-width="520">
+    <v-dialog v-model="summaryDialog" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Resumen de aportes · {{ summaryGoal?.title }}
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="summaryDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-divider />
@@ -645,9 +668,17 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="confirmDissolve" max-width="400">
+    <v-dialog v-model="confirmDissolve" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Disolver grupo</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Disolver grupo
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="confirmDissolve = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">
@@ -679,9 +710,17 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="confirmLeave" max-width="400">
+    <v-dialog v-model="confirmLeave" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Abandonar grupo</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Abandonar grupo
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="confirmLeave = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">
@@ -708,9 +747,17 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="showDeleteGoal" max-width="400">
+    <v-dialog v-model="showDeleteGoal" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar meta</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Eliminar meta
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="confirmDeleteGoal = null">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">

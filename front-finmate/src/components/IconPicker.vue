@@ -19,7 +19,14 @@
 
     <v-dialog v-model="dialogOpen" max-width="540">
       <v-card rounded="xl">
-        <v-card-title class="text-h6 font-weight-bold pa-4 pb-2"> Seleccionar icono </v-card-title>
+        <v-card-title class="text-h6 font-weight-bold pa-4 pb-2 d-flex align-center">
+          Seleccionar icono
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="dialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
 
         <v-card-text class="pa-4 pt-2">
           <v-text-field

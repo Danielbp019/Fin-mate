@@ -134,10 +134,15 @@
       </v-data-table>
     </v-card>
 
-    <v-dialog v-model="dialogOpen" max-width="520">
+    <v-dialog v-model="dialogOpen" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           {{ editingId ? 'Editar deuda' : 'Nueva deuda' }}
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="dialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-divider />
@@ -288,9 +293,17 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="deleteDialogOpen" max-width="400">
+    <v-dialog v-model="deleteDialogOpen" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar deuda</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Eliminar deuda
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="deleteDialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">
@@ -319,10 +332,15 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="paymentsDialogOpen" max-width="600">
+    <v-dialog v-model="paymentsDialogOpen" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           Pagos · {{ selectedDebt?.title }}
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="paymentsDialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-divider />
@@ -431,9 +449,17 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="paymentDialogOpen" max-width="420">
+    <v-dialog v-model="paymentDialogOpen" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Registrar pago</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Registrar pago
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="paymentDialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">

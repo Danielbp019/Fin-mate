@@ -1,13 +1,18 @@
 <template>
   <v-dialog
-    max-width="640"
+    max-width="540"
     :model-value="modelValue"
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <v-card theme="light">
-      <v-card-title class="text-h5 pa-4">{{
-        title || (type === 'privacy' ? 'Privacidad' : 'Términos de uso')
-      }}</v-card-title>
+      <v-card-title class="text-h5 pa-4 d-flex align-center">
+        {{ title || (type === 'privacy' ? 'Privacidad' : 'Términos de uso') }}
+        <v-spacer />
+
+        <v-btn icon variant="text" @click="$emit('update:modelValue', false)">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
 
       <v-divider />
 

@@ -186,10 +186,15 @@
       </div>
     </v-card>
 
-    <v-dialog v-model="dialogOpen" max-width="520">
+    <v-dialog v-model="dialogOpen" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
           {{ editingId ? 'Editar movimiento' : 'Nuevo movimiento' }}
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="dialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
 
         <v-divider />
@@ -293,9 +298,17 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="deleteDialogOpen" max-width="400">
+    <v-dialog v-model="deleteDialogOpen" max-width="540">
       <v-card>
-        <v-card-title class="text-h5 font-weight-bold pa-4">Eliminar movimiento</v-card-title>
+        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+          Eliminar movimiento
+          <v-spacer />
+
+          <v-btn icon variant="text" @click="deleteDialogOpen = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
         <v-divider />
 
         <v-card-text class="pa-4">
