@@ -217,11 +217,11 @@
 <script lang="ts" setup>
 /** Dashboard — panel principal con resumen mensual, gráficos (líneas, barras, donas), últimos movimientos, deudas activas y metas de pareja. Usado en ruta '/dashboard' */
 import { computed, onMounted } from 'vue';
-import BarChart from '@/components/BarChart.vue';
 import CircularLoader from '@/components/CircularLoader.vue';
-import DoughnutChart from '@/components/DoughnutChart.vue';
-import LineChart from '@/components/LineChart.vue';
-import SummaryCard from '@/components/SummaryCard.vue';
+import BarChart from '@/components/Dashboard/BarChart.vue';
+import DoughnutChart from '@/components/Dashboard/DoughnutChart.vue';
+import LineChart from '@/components/Dashboard/LineChart.vue';
+import SummaryCard from '@/components/Dashboard/SummaryCard.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useDashboardStore } from '@/stores/dashboard';
 import { formatCurrency } from '@/utils/format';

@@ -67,6 +67,16 @@
           <LinearLoader :loading="store.loading" />
         </template>
 
+        <template #item.initialAmount="{ item }">
+          {{ formatCurrency(item.initialAmount) }}
+        </template>
+
+        <template #item.currentAmount="{ item }">
+          <span :style="{ color: Number(item.currentAmount) > 0 ? 'var(--red)' : 'var(--green-deep)' }">
+            {{ formatCurrency(item.currentAmount) }}
+          </span>
+        </template>
+
         <template #item.priority="{ item }">
           <v-chip :color="priorityColor(item.priority)" size="small">
             {{ priorityLabel(item.priority) }}
@@ -79,23 +89,21 @@
           </v-chip>
         </template>
 
-        <template #item.initialAmount="{ item }">
-          {{ formatCurrency(item.initialAmount) }}
-        </template>
-
-        <template #item.currentAmount="{ item }">
-          {{ formatCurrency(item.currentAmount) }}
+        <template #item.dueDay="{ item }">
+          <span v-if="item.dueDay">{{ item.dueDay }}</span>
+          <span v-else class="text-caption text-disabled">&mdash;</span>
         </template>
 
         <template #item.interestRate="{ item }">
-          {{ formatInterestRate(item.interestRate) }}
+          <span v-if="item.interestRate">{{ formatInterestRate(item.interestRate) }}</span>
+          <span v-else class="text-caption text-disabled">&mdash;</span>
         </template>
 
         <template #item.actions="{ item }">
-          <v-tooltip location="top" text="Editar deuda">
+          <v-tooltip location="top" text="Ver plan de pago">
             <template #activator="{ props }">
-              <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
-                <v-icon>mdi-pencil</v-icon>
+              <v-btn v-bind="props" icon size="small" variant="text" @click="openPayoffPlan(item)">
+                <v-icon>mdi-lightbulb-on-outline</v-icon>
               </v-btn>
             </template>
           </v-tooltip>
@@ -108,24 +116,17 @@
             </template>
           </v-tooltip>
 
-          <v-tooltip location="top" text="Plan de pago">
+          <v-tooltip location="top" text="Editar deuda">
             <template #activator="{ props }">
-              <v-btn v-bind="props" icon size="small" variant="text" @click="openPayoffPlan(item)">
-                <v-icon>mdi-lightbulb-on-outline</v-icon>
+              <v-btn v-bind="props" icon size="small" variant="text" @click="openEdit(item)">
+                <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </template>
           </v-tooltip>
 
           <v-tooltip location="top" text="Eliminar deuda">
             <template #activator="{ props }">
-              <v-btn
-                v-bind="props"
-                color="error"
-                icon
-                size="small"
-                variant="text"
-                @click="confirmDelete(item)"
-              >
+              <v-btn v-bind="props" color="error" icon size="small" variant="text" @click="confirmDelete(item)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </template>
@@ -134,395 +135,56 @@
       </v-data-table>
     </v-card>
 
-    <v-dialog v-model="dialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          {{ editingId ? 'Editar deuda' : 'Nueva deuda' }}
-          <v-spacer />
+    <DebtDialogsForm
+      v-model="dialogOpen"
+      :description="form.description"
+      :due-day="form.dueDay"
+      :form-error="formError"
+      :initial-amount="form.initialAmount"
+      :interest-rate="form.interestRate"
+      :is-editing="!!editingId"
+      :minimum-payment="form.minimumPayment"
+      :priority="form.priority ?? 'medium'"
+      :saving="saving"
+      :start-date="debtStartDate"
+      :status="form.status"
+      :title="form.title"
+      @save="handleSave"
+      @update:description="form.description = $event"
+      @update:due-day="form.dueDay = $event"
+      @update:form-error="formError = $event"
+      @update:initial-amount="form.initialAmount = $event"
+      @update:interest-rate="form.interestRate = $event"
+      @update:minimum-payment="form.minimumPayment = $event"
+      @update:priority="form.priority = $event as 'low' | 'medium' | 'high'"
+      @update:start-date="debtStartDate = $event ?? null"
+      @update:status="form.status = $event as 'pending' | 'paid' | 'overdue'"
+      @update:title="form.title = $event"
+    />
 
-          <v-btn icon variant="text" @click="dialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
+    <DebtDialogsPayments
+      v-model="paymentsDialogOpen"
+      :current-amount="selectedDebt?.currentAmount ?? '0'"
+      :debt-id="selectedDebt?.id ?? ''"
+      :debt-title="selectedDebt?.title ?? ''"
+      :error="paymentsError"
+      :initial-amount="selectedDebt?.initialAmount ?? '0'"
+      :loading="paymentsLoading"
+      :payments="payments"
+      @update:error="paymentsError = $event"
+    />
 
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="formError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="formError = ''"
-          >
-            {{ formError }}
-          </v-alert>
-
-          <v-form @submit.prevent="handleSave">
-            <div class="fm-field-group">
-              <label class="fm-label" for="debt-title">Título</label>
-
-              <v-text-field
-                id="debt-title"
-                v-model="form.title"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                placeholder="Ej: Tarjeta de crédito"
-                required
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
-
-            <div class="fm-field-row">
-              <div class="fm-field-group">
-                <label class="fm-label" for="debt-amount">Monto inicial</label>
-
-                <AmountInput id="debt-amount" v-model="form.initialAmount" placeholder="0" required />
-              </div>
-
-              <div class="fm-field-group">
-                <label class="fm-label" for="debt-priority">Prioridad</label>
-
-                <v-select
-                  id="debt-priority"
-                  v-model="form.priority"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  :items="priorityOptions"
-                  required
-                  rounded="lg"
-                  variant="outlined"
-                />
-              </div>
-            </div>
-
-            <div class="fm-field-row">
-              <div class="fm-field-group">
-                <label class="fm-label" for="debt-interest">Tasa de interés % (opcional)</label>
-
-                <InterestRateInput id="debt-interest" v-model="form.interestRate" />
-              </div>
-
-              <div class="fm-field-group">
-                <label class="fm-label" for="debt-min-payment">Pago mínimo (opcional)</label>
-
-                <AmountInput id="debt-min-payment" v-model="form.minimumPayment" placeholder="0" />
-              </div>
-            </div>
-
-            <div class="fm-field-row">
-              <div class="fm-field-group">
-                <label class="fm-label" for="debt-due-day">Día de vencimiento (opcional)</label>
-
-                <v-text-field
-                  id="debt-due-day"
-                  v-model="form.dueDay"
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  max="31"
-                  min="1"
-                  placeholder="15"
-                  rounded="lg"
-                  type="number"
-                  variant="outlined"
-                />
-              </div>
-
-              <div class="fm-field-group">
-                <label class="fm-label" for="debt-start-date">Fecha de inicio (opcional)</label>
-                <DatePicker id="debt-start-date" v-model="debtStartDate" />
-              </div>
-            </div>
-
-            <div v-if="editingId" class="fm-field-group">
-              <label class="fm-label" for="debt-status">Estado</label>
-
-              <v-select
-                id="debt-status"
-                v-model="form.status"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                :items="statusOptions"
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="debt-description">Descripción (opcional)</label>
-
-              <v-textarea
-                id="debt-description"
-                v-model="form.description"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                maxlength="255"
-                placeholder="Agrega una nota"
-                rounded="lg"
-                rows="2"
-                variant="outlined"
-              />
-            </div>
-
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="saving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              {{ editingId ? 'Guardar cambios' : 'Crear deuda' }}
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="deleteDialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Eliminar deuda
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="deleteDialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <p>
-            ¿Estás seguro de eliminar la deuda <strong>{{ deletingItem?.title }}</strong
-            >?
-          </p>
-
-          <p class="mt-2 text-caption">Esta acción no elimina los pagos registrados.</p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="deleteDialogOpen = false">Cancelar</v-btn>
-
-          <v-btn
-            color="error"
-            :loading="deleting"
-            rounded="lg"
-            variant="tonal"
-            @click="handleDelete"
-          >
-            Eliminar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="paymentsDialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Pagos · {{ selectedDebt?.title }}
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="paymentsDialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <div
-            v-if="selectedDebt"
-            class="mb-4 pa-3"
-            style="background: rgba(var(--v-theme-primary), 0.05); border-radius: 12px"
-          >
-            <div style="display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap">
-              <div>
-                <span class="text-caption">Monto inicial</span>
-
-                <p class="text-h6 font-weight-bold mt-0 mb-0">
-                  {{ formatCurrency(selectedDebt.initialAmount) }}
-                </p>
-              </div>
-
-              <div>
-                <span class="text-caption">Monto actual</span>
-
-                <p class="text-h6 font-weight-bold mt-0 mb-0">
-                  {{ formatCurrency(selectedDebt.currentAmount) }}
-                </p>
-              </div>
-
-              <div>
-                <span class="text-caption">Progreso</span>
-                <p class="text-h6 font-weight-bold mt-0 mb-0">{{ progressPercent }}%</p>
-              </div>
-            </div>
-
-            <v-progress-linear
-              class="mt-2"
-              color="var(--green-deep)"
-              height="8"
-              :model-value="progressPercent"
-              rounded
-            />
-          </div>
-
-          <v-alert
-            v-if="paymentsError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="paymentsError = ''"
-          >
-            {{ paymentsError }}
-          </v-alert>
-
-          <div class="d-flex align-center justify-space-between mb-3">
-            <span class="text-subtitle-2 font-weight-bold"
-              >{{ payments.length }} pago(s) registrados</span
-            >
-
-            <v-btn
-              class="fm-btn-submit"
-              color="var(--green-deep)"
-              prepend-icon="mdi-plus"
-              size="small"
-              @click="openPaymentForm"
-            >
-              Registrar pago
-            </v-btn>
-          </div>
-
-          <v-data-table
-            class="pa-0"
-            :headers="paymentHeaders"
-            hide-default-footer
-            :items="payments"
-            :items-per-page="-1"
-            :loading="paymentsLoading"
-          >
-            <template #loader>
-              <LinearLoader :loading="paymentsLoading" />
-            </template>
-
-            <template #item.amount="{ item }">
-              -{{ formatCurrency(item.amount) }}
-            </template>
-
-            <template #item.paymentDate="{ item }">
-              {{ formatDate(item.paymentDate) }}
-            </template>
-
-            <template #item.notes="{ item }">
-              {{ item.notes ?? '-' }}
-            </template>
-          </v-data-table>
-
-          <p v-if="payments.length === 0 && !paymentsLoading" class="text-center text-caption mt-4">
-            Aún no hay pagos registrados para esta deuda.
-          </p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="paymentsDialogOpen = false">Cerrar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="paymentDialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Registrar pago
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="paymentDialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="payFormError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="payFormError = ''"
-          >
-            {{ payFormError }}
-          </v-alert>
-
-          <v-form @submit.prevent="handlePaymentSave">
-            <div class="fm-field-group">
-              <label class="fm-label" for="pay-amount">Monto</label>
-
-              <AmountInput id="pay-amount" v-model="payForm.amount" placeholder="0" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="pay-date">Fecha</label>
-              <DatePicker id="pay-date" v-model="payDate" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="pay-notes">Notas (opcional)</label>
-
-              <v-textarea
-                id="pay-notes"
-                v-model="payForm.notes"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                maxlength="255"
-                placeholder="Nota sobre el pago"
-                rounded="lg"
-                rows="2"
-                variant="outlined"
-              />
-            </div>
-
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="paySaving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              Registrar pago
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <ConfirmDeleteDialog
+      v-model="deleteDialogOpen"
+      :item-name="deletingItem?.title"
+      :loading="deleting"
+      title="Eliminar deuda"
+      @confirm="handleDelete"
+    >
+      <template #message>
+        <p class="mt-2 text-caption">Esta acción no elimina los pagos registrados.</p>
+      </template>
+    </ConfirmDeleteDialog>
 
     <DebtPayoffModal
       v-model:dialog="payoffDialog"
@@ -532,18 +194,17 @@
 </template>
 
 <script lang="ts" setup>
-/** Debts — CRUD de deudas con filtros, gestión de pagos, barra de progreso y diálogos múltiples. Usado en ruta '/debts' */
-import type { CreateDebtBody, CreatePaymentBody, Debt, Payment, UpdateDebtBody } from '@/types';
+import type { CreateDebtBody, Debt, Payment, UpdateDebtBody } from '@/types';
 import type { AxiosError } from 'axios';
-import { computed, onMounted, ref, watch } from 'vue';
-import AmountInput from '@/components/AmountInput.vue';
-import DatePicker from '@/components/DatePicker.vue';
-import DebtPayoffModal from '@/components/DebtPayoffModal.vue';
-import InterestRateInput from '@/components/InterestRateInput.vue';
+import { onMounted, ref, watch } from 'vue';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue';
+import DebtPayoffModal from '@/components/DebtDialogs/DebtPayoffModal.vue';
+import DebtDialogsForm from '@/components/DebtDialogs/FormDialog.vue';
+import DebtDialogsPayments from '@/components/DebtDialogs/PaymentsDialog.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useDebtsStore } from '@/stores/debts';
 import { formatCurrency, formatInterestRate } from '@/utils/format';
-import { createDebtSchema, createPaymentSchema, updateDebtSchema } from '@/validation';
+import { createDebtSchema, updateDebtSchema } from '@/validation';
 import '@/styles/auth.css';
 
 interface DebtForm {
@@ -572,17 +233,12 @@ const filterStatus = ref('');
 const filterPriority = ref<string | null>(null);
 
 const debtStartDate = ref<Date | null>(null);
-const payDate = ref(new Date());
 
 const payoffDialog = ref(false);
 const payoffDebt = ref<Debt | null>(null);
 
 watch(debtStartDate, (d) => {
   form.value.startDate = d ? d.toISOString().slice(0, 10) : '';
-});
-
-watch(payDate, (d) => {
-  payForm.value.paymentDate = d.toISOString().slice(0, 10);
 });
 
 let filterTimeout: ReturnType<typeof setTimeout>;
@@ -609,11 +265,7 @@ const priorityOptions = [
   { title: 'Alta', value: 'high' },
 ];
 
-const statusOptions = [
-  { title: 'Pendiente', value: 'pending' },
-  { title: 'Pagada', value: 'paid' },
-  { title: 'Vencida', value: 'overdue' },
-];
+
 
 const headers = [
   { title: 'Título', key: 'title', align: 'start' as const },
@@ -631,29 +283,6 @@ const selectedDebt = ref<Debt | null>(null);
 const payments = ref<Payment[]>([]);
 const paymentsLoading = ref(false);
 const paymentsError = ref('');
-
-const paymentDialogOpen = ref(false);
-const payForm = ref<CreatePaymentBody>({
-  amount: '',
-  paymentDate: new Date().toISOString().slice(0, 10),
-  notes: '',
-});
-const paySaving = ref(false);
-const payFormError = ref('');
-
-const paymentHeaders = [
-  { title: 'Monto', key: 'amount', sortable: false },
-  { title: 'Fecha', key: 'paymentDate', sortable: false },
-  { title: 'Notas', key: 'notes', sortable: false },
-];
-
-const progressPercent = computed(() => {
-  if (!selectedDebt.value) return 0;
-  const init = Number(selectedDebt.value.initialAmount);
-  const curr = Number(selectedDebt.value.currentAmount);
-  if (init <= 0) return 0;
-  return Math.round(((init - curr) / init) * 100);
-});
 
 function priorityLabel(p: string) {
   const map: Record<string, string> = { low: 'Baja', medium: 'Media', high: 'Alta' };
@@ -673,15 +302,6 @@ function statusLabel(s: string) {
 function statusColor(s: string) {
   const map: Record<string, string> = { pending: 'blue', paid: 'green', overdue: 'red' };
   return map[s] ?? 'grey';
-}
-
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  return d.toLocaleDateString('es-CO', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
 }
 
 onMounted(() => {
@@ -820,48 +440,6 @@ async function openPayments(debt: Debt) {
     paymentsError.value = msg;
   } finally {
     paymentsLoading.value = false;
-  }
-}
-
-function openPaymentForm() {
-  payDate.value = new Date();
-  payForm.value = {
-    amount: '',
-    paymentDate: payDate.value.toISOString().slice(0, 10),
-    notes: '',
-  };
-  payFormError.value = '';
-  paymentDialogOpen.value = true;
-}
-
-async function handlePaymentSave() {
-  const result = createPaymentSchema.safeParse({
-    amount: payForm.value.amount,
-    paymentDate: payDate.value.toISOString(),
-    notes: payForm.value.notes?.trim() || undefined,
-  });
-  if (!result.success) {
-    payFormError.value = result.error.issues[0].message;
-    return;
-  }
-  paySaving.value = true;
-  payFormError.value = '';
-  try {
-    const payload = result.data as CreatePaymentBody;
-
-    if (selectedDebt.value) {
-      await store.createPayment(selectedDebt.value.id, payload);
-      paymentDialogOpen.value = false;
-      payments.value = await store.fetchPayments(selectedDebt.value.id);
-      await store.fetchDebts();
-    }
-  } catch (error: unknown) {
-    const msg =
-      (error as AxiosError<{ error?: string }>).response?.data?.error ??
-      'Error al registrar el pago';
-    payFormError.value = msg;
-  } finally {
-    paySaving.value = false;
   }
 }
 </script>

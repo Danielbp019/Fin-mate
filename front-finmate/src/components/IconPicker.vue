@@ -17,7 +17,7 @@
       <v-icon class="fm-trigger-arrow" size="20">mdi-chevron-down</v-icon>
     </div>
 
-    <v-dialog v-model="dialogOpen" max-width="540">
+    <v-dialog v-model="dialogOpen" max-width="540" scrollable>
       <v-card rounded="xl">
         <v-card-title class="text-h6 font-weight-bold pa-4 pb-2 d-flex align-center">
           Seleccionar icono
@@ -58,7 +58,7 @@
           </div>
         </v-card-text>
 
-        <v-card-actions class="pa-4 pt-0">
+        <v-card-actions class="pa-4">
           <v-btn v-if="modelValue" color="error" rounded="lg" variant="tonal" @click="clearIcon">
             Quitar icono
           </v-btn>

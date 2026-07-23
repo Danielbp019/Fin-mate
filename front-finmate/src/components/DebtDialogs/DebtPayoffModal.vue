@@ -2,6 +2,7 @@
   <v-dialog
     max-width="800"
     :model-value="dialog"
+    scrollable
     @update:model-value="$emit('update:dialog', $event)"
   >
     <v-card rounded="xl">

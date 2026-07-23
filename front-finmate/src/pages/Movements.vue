@@ -186,167 +186,52 @@
       </div>
     </v-card>
 
-    <v-dialog v-model="dialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          {{ editingId ? 'Editar movimiento' : 'Nuevo movimiento' }}
-          <v-spacer />
+    <MovementDialog
+      v-model="dialogOpen"
+      :amount="form.amount"
+      :available-categories="availableCategories"
+      :category-id="form.categoryId"
+      :description="form.description ?? ''"
+      :form-error="formError"
+      :is-editing="!!editingId"
+      :movement-date="formDate"
+      :saving="saving"
+      :type="form.type"
+      @save="handleSave"
+      @update:amount="form.amount = $event"
+      @update:category-id="form.categoryId = $event"
+      @update:description="form.description = $event"
+      @update:form-error="formError = $event"
+      @update:movement-date="formDate = $event; form.movementDate = $event.toISOString().slice(0, 10)"
+      @update:type="form.type = $event as 'income' | 'expense'; form.categoryId = null"
+    />
 
-          <v-btn icon variant="text" @click="dialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
+    <ConfirmDeleteDialog
+      v-model="deleteDialogOpen"
+      :loading="deleting"
+      title="Eliminar movimiento"
+      @confirm="handleDelete"
+    >
+      <template #message>
+        <p>¿Estás seguro de eliminar este movimiento?</p>
 
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="formError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="formError = ''"
-          >
-            {{ formError }}
-          </v-alert>
-
-          <v-form @submit.prevent="handleSave">
-            <div class="fm-field-group">
-              <label class="fm-label" for="mov-type">Tipo</label>
-
-              <v-select
-                id="mov-type"
-                v-model="form.type"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                :items="typeOptions"
-                required
-                rounded="lg"
-                variant="outlined"
-                @update:model-value="form.categoryId = null"
-              />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="mov-category">Categoría</label>
-
-              <v-select
-                id="mov-category"
-                v-model="form.categoryId"
-                class="fm-input"
-                clearable
-                density="comfortable"
-                hide-details="auto"
-                item-title="name"
-                item-value="id"
-                :items="availableCategories"
-                placeholder="Selecciona una categoría"
-                required
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="mov-amount">Monto</label>
-
-              <AmountInput id="mov-amount" v-model="form.amount" placeholder="0" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="mov-date">Fecha</label>
-              <DatePicker id="mov-date" v-model="formDate" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="mov-description">Descripción (opcional)</label>
-
-              <v-textarea
-                id="mov-description"
-                v-model="form.description"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                maxlength="255"
-                placeholder="Agrega una nota"
-                rounded="lg"
-                rows="2"
-                variant="outlined"
-              />
-            </div>
-
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="saving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              {{ editingId ? 'Guardar cambios' : 'Crear movimiento' }}
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="deleteDialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Eliminar movimiento
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="deleteDialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <p>¿Estás seguro de eliminar este movimiento?</p>
-
-          <p class="mt-2 text-caption">
-            {{ getCategoryName(deletingItem?.categoryId ?? '') }} —
-            {{ deletingItem ? (deletingItem.type === 'income' ? '+' : '-') + formatCurrency(deletingItem.amount) : '' }}
-          </p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="deleteDialogOpen = false">Cancelar</v-btn>
-
-          <v-btn
-            color="error"
-            :loading="deleting"
-            rounded="lg"
-            variant="tonal"
-            @click="handleDelete"
-          >
-            Eliminar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        <p class="mt-2 text-caption">
+          {{ getCategoryName(deletingItem?.categoryId ?? '') }} con un
+          {{ deletingItem ? (deletingItem.type === 'income' ? 'Ingreso de ' : 'Gasto de ') + formatCurrency(deletingItem.amount) : '' }}
+        </p>
+      </template>
+    </ConfirmDeleteDialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-/** Movements — CRUD de movimientos con filtros por tipo/categoría/fecha, paginación, tabla y diálogos de crear/editar/eliminar. Usado en ruta '/movements' */
 import type { CreateMovementBody, Movement, UpdateMovementBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
-import AmountInput from '@/components/AmountInput.vue';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue';
 import DatePicker from '@/components/DatePicker.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
+import MovementDialog from '@/components/MovementDialog.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { useMovementsStore } from '@/stores/movements';
 import { formatCurrency } from '@/utils/format';
@@ -378,11 +263,6 @@ const form = ref<CreateMovementBody>({
   description: '',
   movementDate: new Date().toISOString().slice(0, 10),
 });
-
-const typeOptions = [
-  { title: 'Ingreso', value: 'income' },
-  { title: 'Gasto', value: 'expense' },
-];
 
 const headers = [
   { title: 'Fecha', key: 'movementDate', sortable: false },
@@ -416,7 +296,8 @@ const availableCategories = computed(() => {
     : catStore.expenseCategories;
   return [...cats]
     .filter((c) => !AUTO_MANAGED_CATEGORIES.has(c.name))
-    .toSorted((a, b) => a.name.localeCompare(b.name));
+    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .map((c) => ({ title: c.name, value: c.id }));
 });
 
 const totalPages = computed(() =>

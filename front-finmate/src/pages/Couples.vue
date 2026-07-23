@@ -1,239 +1,178 @@
 <template>
   <div class="dashboard-container">
-    <div v-if="store.loading && !store.couple" class="chart-loading">
-      <CircularLoader :size="40" :width="3" />
-    </div>
-
-    <template v-else-if="!store.couple">
+    <template v-if="!store.couple">
+      <!-- Sin grupo -->
       <div class="dashboard-greeting">
-        <h1>Pareja</h1>
-        <p>Administra tus finanzas en pareja con metas compartidas</p>
+        <h1>Mi Pareja</h1>
+        <p>Administra tus finanzas en pareja</p>
       </div>
 
-      <v-alert
-        v-if="store.error"
-        class="mb-4"
-        closable
-        density="compact"
-        rounded="lg"
-        type="error"
-        variant="tonal"
-        @click:close="store.error = ''"
-      >
-        {{ store.error }}
-      </v-alert>
+      <v-card>
+        <v-card-text class="pa-4">
+          <v-alert
+            v-if="store.error"
+            class="mb-4"
+            closable
+            density="compact"
+            rounded="lg"
+            type="error"
+            variant="tonal"
+            @click:close="store.error = ''"
+          >
+            {{ store.error }}
+          </v-alert>
 
-      <div class="page-grid">
-        <v-card>
-          <v-card-text class="pa-4">
-            <h2 class="content-card-title" style="font-size: 18px; margin-bottom: 8px">Crear grupo</h2>
+          <h2 class="text-h5 font-weight-bold mb-2">Crear grupo</h2>
 
-            <p class="text-caption mb-4">
-              Crea un grupo de finanzas compartidas e invita a tu pareja
-            </p>
+          <p class="text-body-2 text-medium-emphasis mb-4">
+            Crea un grupo para compartir metas financieras con tu pareja.
+          </p>
 
-            <v-form @submit.prevent="handleCreate">
-              <div class="fm-field-group">
-                <label class="fm-label" for="couple-name">Nombre del grupo</label>
+          <v-form @submit.prevent="handleCreate">
+            <v-text-field
+              v-model="createForm.name"
+              v-capitalize-first
+              class="fm-input"
+              density="comfortable"
+              hide-details="auto"
+              placeholder="Nombre del grupo"
+              required
+              rounded="lg"
+              variant="outlined"
+            />
 
-                <v-text-field
-                  id="couple-name"
-                  v-model="createForm.name"
-                  v-capitalize-first
-                  class="fm-input"
-                  density="comfortable"
-                  hide-details="auto"
-                  placeholder="Ej: Nuestras finanzas"
-                  required
-                  rounded="lg"
-                  variant="outlined"
-                />
-              </div>
+            <v-btn
+              class="fm-btn-submit mt-3"
+              :loading="store.saving"
+              rounded="lg"
+              size="large"
+              type="submit"
+            >
+              Crear grupo
+              <template #loader>
+                <v-progress-circular color="white" indeterminate size="20" width="2" />
+              </template>
+            </v-btn>
+          </v-form>
 
-              <v-btn
-                block
-                class="fm-btn-submit mt-2"
-                :loading="store.saving"
-                rounded="lg"
-                size="large"
-                type="submit"
-              >
-                Crear grupo
-                <template #loader>
-                  <v-progress-circular color="white" indeterminate size="20" width="2" />
-                </template>
-              </v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
+          <v-divider class="my-4" />
 
-        <v-card>
-          <v-card-text class="pa-4">
-            <h2 class="content-card-title" style="font-size: 18px; margin-bottom: 8px">¿Te invitaron?</h2>
+          <h2 class="text-h5 font-weight-bold mb-2">Unirse a un grupo</h2>
 
-            <p class="text-caption mb-2">
-              Si tu pareja ya creó un grupo y te envió una invitación por correo, recibirás un
-              enlace para unirte automáticamente.
-            </p>
+          <p class="text-body-2 text-medium-emphasis mb-4">
+            Solicita unirte al grupo de tu pareja.
+          </p>
 
-            <p class="text-caption">
-              Si tienes un enlace de invitación, ábrelo desde este navegador para unirte.
-            </p>
-          </v-card-text>
-        </v-card>
-      </div>
+          <v-form @submit.prevent="handleInvite">
+            <v-text-field
+              v-model="inviteEmail"
+              class="fm-input"
+              density="comfortable"
+              hide-details="auto"
+              placeholder="Correo de tu pareja"
+              required
+              rounded="lg"
+              type="email"
+              variant="outlined"
+            />
+
+            <v-alert
+              v-if="inviteSuccess"
+              class="mt-3"
+              closable
+              density="compact"
+              rounded="lg"
+              type="success"
+              variant="tonal"
+              @click:close="inviteSuccess = false"
+            >
+              Invitación enviada correctamente
+            </v-alert>
+
+            <v-btn
+              class="fm-btn-submit mt-3"
+              :loading="inviting"
+              rounded="lg"
+              size="large"
+              type="submit"
+            >
+              Invitar
+              <template #loader>
+                <v-progress-circular color="white" indeterminate size="20" width="2" />
+              </template>
+            </v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
     </template>
 
     <template v-else>
+      <!-- Con grupo -->
       <div
         class="dashboard-greeting"
         style="display: flex; align-items: center; justify-content: space-between"
       >
         <div>
-          <div style="display: flex; align-items: center; gap: 12px">
-            <h1>{{ store.couple.name }}</h1>
+          <h1>{{ store.couple.name }}</h1>
+          <p>Administra las metas financieras de tu grupo</p>
+        </div>
 
-            <v-tooltip location="top" text="Editar nombre del grupo">
-              <template #activator="{ props }">
-                <v-btn v-bind="props" icon size="small" variant="text" @click="openEditName">
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-            </v-tooltip>
-          </div>
+        <div style="display: flex; gap: 8px">
+          <v-btn variant="text" @click="openEditName">
+            <v-icon start>mdi-pencil</v-icon>
+            Editar nombre
+          </v-btn>
 
-          <p>Grupo de finanzas compartidas</p>
+          <v-btn v-if="isOwner" color="error" variant="tonal" @click="confirmDissolve = true">
+            Disolver
+          </v-btn>
+
+          <v-btn color="error" variant="tonal" @click="confirmLeave = true">
+            Abandonar
+          </v-btn>
         </div>
       </div>
 
-      <v-alert
-        v-if="store.error"
-        class="mb-4"
-        closable
-        density="compact"
-        rounded="lg"
-        type="error"
-        variant="tonal"
-        @click:close="store.error = ''"
-      >
-        {{ store.error }}
-      </v-alert>
+      <!-- Miembros -->
+      <v-card class="mb-4">
+        <v-card-title class="text-h6 font-weight-bold pa-4 pb-0">Miembros</v-card-title>
 
-      <div class="summary-grid">
-        <v-card v-for="member in store.couple.members" :key="member.id" class="summary-card">
-          <div class="summary-card-header">
-            <span class="summary-card-label">{{
-              member.role === 'owner' ? 'Propietario' : 'Miembro'
-            }}</span>
-
-            <div
-              class="summary-card-icon sc-icon-green"
-              style="
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                font-size: 16px;
-                font-weight: 600;
-                color: var(--green-deep);
-              "
+        <v-card-text class="pa-4">
+          <v-row>
+            <v-col
+              v-for="member in store.couple.members"
+              :key="member.id"
+              cols="12"
+              sm="6"
             >
-              {{ member.name.charAt(0).toUpperCase() }}
-            </div>
-          </div>
+              <v-card class="summary-card" variant="tonal">
+                <v-card-text class="pa-4">
+                  <div class="d-flex align-center ga-3">
+                    <v-avatar color="var(--green-deep)" size="40">
+                      <span class="text-white font-weight-bold">{{ member.name.charAt(0).toUpperCase() }}</span>
+                    </v-avatar>
 
-          <div class="summary-card-value" style="font-size: 18px">
-            {{ member.name }}
-          </div>
+                    <div>
+                      <div style="font-weight: 600">{{ member.name }}</div>
 
-          <div
-            class="summary-card-change"
-            style="font-size: 13px; color: rgba(var(--v-theme-on-surface), 0.87)"
-          >
-            {{ member.email }}
-          </div>
-        </v-card>
+                      <div class="text-caption text-medium-emphasis">
+                        {{ member.role === 'owner' ? 'Propietario' : 'Miembro' }}
+                      </div>
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
 
-        <v-card
-          v-if="store.couple.members.length < 2"
-          class="summary-card"
-          style="display: flex; flex-direction: column; justify-content: center"
-        >
-          <v-card-text class="pa-4">
-            <h2 class="content-card-title" style="font-size: 16px; margin-bottom: 8px">Invitar a mi pareja</h2>
-
-            <v-form @submit.prevent="handleInvite">
-              <div style="display: flex; gap: 8px">
-                <v-text-field
-                  v-model="inviteEmail"
-                  aria-label="Correo electrónico"
-                  class="fm-input"
-                  density="compact"
-                  hide-details="auto"
-                  placeholder="Correo electrónico"
-                  rounded="lg"
-                  type="email"
-                  variant="outlined"
-                />
-
-                <v-btn
-                  class="fm-btn-submit"
-                  :disabled="!inviteEmail.trim()"
-                  :loading="inviting"
-                  rounded="lg"
-                  size="small"
-                  type="submit"
-                >
-                  Invitar
-                  <template #loader>
-                    <v-progress-circular color="white" indeterminate size="16" width="2" />
-                  </template>
-                </v-btn>
-              </div>
-            </v-form>
-
-            <p v-if="inviteSuccess" class="mt-2 text-caption" style="color: var(--green-deep)">
-              Invitación enviada correctamente
-            </p>
-          </v-card-text>
-        </v-card>
-      </div>
-
-      <div style="display: flex; gap: 8px; margin-bottom: 24px">
-        <v-btn
-          v-if="isOwner"
-          color="error"
-          :loading="store.saving"
-          rounded="lg"
-          variant="tonal"
-          @click="confirmDissolve = true"
-        >
-          <v-icon>mdi-heart-broken</v-icon> Disolver grupo
-        </v-btn>
-
-        <v-btn
-          v-else
-          color="error"
-          :loading="store.saving"
-          rounded="lg"
-          variant="tonal"
-          @click="confirmLeave = true"
-        >
-          <v-icon>mdi-exit-to-app</v-icon> Abandonar grupo
-        </v-btn>
-      </div>
-
+      <!-- Metas -->
       <div
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 16px;
-        "
+        class="mt-6 mb-3"
+        style="display: flex; align-items: center; justify-content: space-between"
       >
-        <div>
-          <h2 class="content-card-title" style="font-size: 20px; margin-bottom: 4px">Metas compartidas</h2>
-          <p class="text-caption">Ahorren juntos para lo que más importa</p>
-        </div>
+        <h2 class="text-h5 font-weight-bold">Metas compartidas</h2>
 
         <v-btn
           class="fm-btn-submit"
@@ -245,107 +184,96 @@
         </v-btn>
       </div>
 
-      <div
-        v-if="store.goals.length === 0"
-        class="text-center pa-8 text-87"
-          >
-            <v-icon size="48" style="opacity: 0.6">mdi-flag-outline</v-icon>
-        <p class="mt-2">Aún no hay metas. ¡Crea la primera!</p>
+      <v-alert
+        v-if="store.error"
+        class="mb-4"
+        closable
+        density="compact"
+        rounded="lg"
+        type="error"
+        variant="tonal"
+        @click:close="store.error = ''"
+      >
+        {{ store.error }}
+      </v-alert>
+
+      <div v-if="store.goals.length === 0" class="text-center pa-8">
+        <v-icon size="48" style="opacity: 0.4">mdi-flag-outline</v-icon>
+        <p class="mt-2 text-medium-emphasis">No hay metas aún. ¡Crea tu primera meta!</p>
       </div>
 
-      <div class="summary-grid">
-        <v-card v-for="goal in store.goals" :key="goal.id" class="summary-card">
+      <div v-for="goal in store.goals" :key="goal.id" class="mb-3">
+        <v-card class="summary-card" variant="tonal">
           <v-card-text class="pa-4">
             <div style="display: flex; justify-content: space-between; align-items: start">
-              <div>
-                <h3 class="chart-title" style="font-size: 16px; margin-bottom: 0">{{ goal.title }}</h3>
+              <div style="flex: 1">
+                <div class="text-h6 font-weight-bold">{{ goal.title }}</div>
 
-                <v-chip
-                  v-if="goal.status !== 'active'"
-                  class="mt-1"
-                  :color="goal.status === 'completed' ? 'green' : 'grey'"
-                  size="x-small"
-                  variant="tonal"
-                >
-                  {{ goal.status === 'completed' ? 'Completada' : 'Cancelada' }}
-                </v-chip>
+                <div class="mt-2">
+                  <div class="d-flex align-center ga-2">
+                    <span class="text-caption text-medium-emphasis">
+                      {{ formatCurrency(goal.currentAmount) }} / {{ formatCurrency(goal.targetAmount) }}
+                    </span>
+
+                    <v-chip size="x-small" variant="tonal">
+                      {{ Math.round(goalProgress(goal)) }}%
+                    </v-chip>
+                  </div>
+
+                  <v-progress-linear
+                    class="mt-1"
+                    color="var(--green-deep)"
+                    height="8"
+                    :model-value="goalProgress(goal)"
+                    rounded
+                  />
+                </div>
+
+                <div class="mt-1 d-flex ga-3 text-caption text-medium-emphasis">
+                  <span v-if="goal.deadline">
+                    <v-icon size="14">mdi-calendar</v-icon>
+                    {{ formatDate(goal.deadline) }}
+                  </span>
+
+                  <span>
+                    <v-icon size="14">mdi-account-group</v-icon>
+                    {{ goal.contributions.length }} aporte(s)
+                  </span>
+                </div>
               </div>
 
-              <div style="display: flex; gap: 4px">
-                <v-tooltip v-if="goal.status === 'active'" location="top" text="Aportar a esta meta">
+              <div class="d-flex ga-1">
+                <v-tooltip location="top" text="Contribuir">
                   <template #activator="{ props }">
-                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="openContribute(goal)">
-                      <v-icon>mdi-hand-coin</v-icon>
+                    <v-btn v-bind="props" icon size="small" variant="text" @click="openContribute(goal)">
+                      <v-icon>mdi-plus-circle-outline</v-icon>
                     </v-btn>
                   </template>
                 </v-tooltip>
 
-                <v-tooltip location="top" text="Ver resumen de aportes">
+                <v-tooltip location="top" text="Ver aportes">
                   <template #activator="{ props }">
-                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="openSummary(goal)">
+                    <v-btn v-bind="props" icon size="small" variant="text" @click="openSummary(goal)">
                       <v-icon>mdi-chart-bar</v-icon>
                     </v-btn>
                   </template>
                 </v-tooltip>
 
-                <v-tooltip v-if="isOwner && goal.status === 'active'" location="top" text="Editar meta">
+                <v-tooltip location="top" text="Editar meta">
                   <template #activator="{ props }">
-                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="openEditGoal(goal)">
+                    <v-btn v-bind="props" icon size="small" variant="text" @click="openEditGoal(goal)">
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                   </template>
                 </v-tooltip>
 
-                <v-tooltip v-if="isOwner && goal.status === 'active'" location="top" text="Eliminar meta">
+                <v-tooltip location="top" text="Eliminar meta">
                   <template #activator="{ props }">
-                    <v-btn v-bind="props" icon size="x-small" variant="text" @click="confirmDeleteGoal = goal">
-                      <v-icon color="error">mdi-delete</v-icon>
+                    <v-btn v-bind="props" color="error" icon size="small" variant="text" @click="confirmDeleteGoal = goal">
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </template>
                 </v-tooltip>
-              </div>
-            </div>
-
-            <div class="mt-3">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  font-size: 13px;
-                  margin-bottom: 4px;
-                "
-              >
-                <span style="font-weight: 500">
-                  {{ formatCurrency(goal.currentAmount) }}
-                </span>
-
-                <span class="text-87">
-                  {{ formatCurrency(goal.targetAmount) }}
-                </span>
-              </div>
-
-              <v-progress-linear
-                :color="goal.status === 'completed' ? 'green' : 'var(--green-deep)'"
-                height="8"
-                :model-value="goalProgress(goal)"
-                rounded
-              />
-
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  font-size: 12px;
-                  margin-top: 4px;
-                "
-              >
-                <span class="text-87"
-                  >{{ Math.round(goalProgress(goal)) }}%</span
-                >
-
-                <span v-if="goal.deadline" class="text-87">
-                  Meta: {{ formatDate(goal.deadline) }}
-                </span>
               </div>
             </div>
           </v-card-text>
@@ -353,440 +281,99 @@
       </div>
     </template>
 
-    <v-dialog v-model="editNameDialog" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Editar nombre del grupo
-          <v-spacer />
+    <CoupleDialogsEditName
+      v-model="editNameDialog"
+      :error="editNameError"
+      :loading="store.saving"
+      :name="editNameForm.name"
+      @save="handleEditName"
+      @update:error="editNameError = $event"
+      @update:name="editNameForm.name = $event"
+    />
 
-          <v-btn icon variant="text" @click="editNameDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
+    <CoupleDialogsGoal
+      v-model="goalDialog"
+      :deadline="goalDeadline"
+      :error="goalFormError"
+      :is-editing="!!editingGoal"
+      :loading="store.saving"
+      :target-amount="goalForm.targetAmount"
+      :title="goalForm.title"
+      @save="handleSaveGoal"
+      @update:deadline="goalDeadline = $event"
+      @update:error="goalFormError = $event"
+      @update:target-amount="goalForm.targetAmount = $event"
+      @update:title="goalForm.title = $event"
+    />
 
-        <v-divider />
+    <CoupleDialogsContribute
+      v-model="contributeDialog"
+      :amount="contributeForm.amount"
+      :current-amount="contributingGoal?.currentAmount ?? '0'"
+      :date="contributeDate"
+      :error="contributeError"
+      :goal-title="contributingGoal?.title ?? ''"
+      :loading="store.saving"
+      :notes="contributeForm.notes"
+      :target-amount="contributingGoal?.targetAmount ?? '0'"
+      @save="handleContribute"
+      @update:amount="contributeForm.amount = $event"
+      @update:date="contributeDate = $event"
+      @update:error="contributeError = $event"
+      @update:notes="contributeForm.notes = $event"
+    />
 
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="editNameError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="editNameError = ''"
-          >
-            {{ editNameError }}
-          </v-alert>
+    <CoupleDialogsSummary
+      v-model="summaryDialog"
+      :goal-title="summaryGoal?.title ?? ''"
+      :rows="summaryRows"
+      :status="summaryGoal?.status"
+      :total-amount="summaryGoal?.currentAmount ?? '0'"
+    />
 
-          <v-form @submit.prevent="handleEditName">
-            <div class="fm-field-group">
-              <label class="fm-label" for="couple-name-edit">Nombre</label>
+    <ConfirmDeleteDialog
+      v-model="confirmDissolve"
+      action-text="disolver"
+      confirm-text="Disolver"
+      :item-name="store.couple?.name"
+      :loading="store.saving"
+      title="Disolver grupo"
+      @confirm="handleDissolve"
+    >
+      <template #message>
+        <p>Las metas activas se cancelarán y los registros financieros se desvincularán. Esta acción no se puede deshacer.</p>
+      </template>
+    </ConfirmDeleteDialog>
 
-              <v-text-field
-                id="couple-name-edit"
-                v-model="editNameForm.name"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                required
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
+    <ConfirmDeleteDialog
+      v-model="confirmLeave"
+      action-text="abandonar"
+      confirm-text="Abandonar"
+      :item-name="store.couple?.name"
+      :loading="store.saving"
+      title="Abandonar grupo"
+      @confirm="handleLeave"
+    />
 
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="store.saving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              Guardar
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="goalDialog" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          {{ editingGoal ? 'Editar meta' : 'Nueva meta' }}
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="goalDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="goalFormError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="goalFormError = ''"
-          >
-            {{ goalFormError }}
-          </v-alert>
-
-          <v-form @submit.prevent="handleSaveGoal">
-            <div class="fm-field-group">
-              <label class="fm-label" for="goal-title">Título</label>
-
-              <v-text-field
-                id="goal-title"
-                v-model="goalForm.title"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                placeholder="Ej: Viaje a la playa"
-                required
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="goal-amount">Monto objetivo</label>
-
-              <AmountInput id="goal-amount" v-model="goalForm.targetAmount" placeholder="0" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="goal-deadline">Fecha límite (opcional)</label>
-              <DatePicker id="goal-deadline" v-model="goalDeadline" />
-            </div>
-
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="store.saving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              {{ editingGoal ? 'Guardar cambios' : 'Crear meta' }}
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="contributeDialog" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Contribuir · {{ contributingGoal?.title }}
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="contributeDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="contributeError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="contributeError = ''"
-          >
-            {{ contributeError }}
-          </v-alert>
-
-          <div class="mb-4 pa-3 bg-green-deep-05">
-            <div style="display: flex; justify-content: space-between; font-size: 13px">
-              <span>Progreso actual</span>
-
-              <span style="font-weight: 500">
-                {{ formatCurrency(contributingGoal?.currentAmount ?? '0') }}
-                de {{ formatCurrency(contributingGoal?.targetAmount ?? '0') }}
-              </span>
-            </div>
-          </div>
-
-          <v-form @submit.prevent="handleContribute">
-            <div class="fm-field-group">
-              <label class="fm-label" for="contribute-amount">Monto a contribuir</label>
-
-              <AmountInput id="contribute-amount" v-model="contributeForm.amount" placeholder="0" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="contribute-date">Fecha</label>
-              <DatePicker id="contribute-date" v-model="contributeDate" required />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="contribute-notes">Notas (opcional)</label>
-
-              <v-textarea
-                id="contribute-notes"
-                v-model="contributeForm.notes"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                maxlength="255"
-                placeholder="Nota sobre el aporte"
-                rounded="lg"
-                rows="2"
-                variant="outlined"
-              />
-            </div>
-
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="store.saving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              Contribuir
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="summaryDialog" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Resumen de aportes · {{ summaryGoal?.title }}
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="summaryDialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="summaryGoal && summaryGoal.status !== 'active'"
-            class="mb-4"
-            density="compact"
-            rounded="lg"
-            type="info"
-            variant="tonal"
-          >
-            Meta {{ summaryGoal.status === 'completed' ? 'completada' : 'cancelada' }}
-          </v-alert>
-
-          <template v-if="summaryGoal && summaryGoal.contributions.length > 0">
-            <div
-              v-for="row in summaryRows"
-              :key="row.userId"
-              class="mb-3 pa-3 bg-green-deep-05"
-            >
-              <div style="display: flex; justify-content: space-between; align-items: center">
-                <div>
-                  <span style="font-weight: 600; font-size: 15px">{{ row.userName }}</span>
-
-                  <v-chip
-                    v-if="row.role === 'owner'"
-                    class="ml-2"
-                    color="var(--green-deep)"
-                    size="x-small"
-                    variant="tonal"
-                  >
-                    Propietario
-                  </v-chip>
-                </div>
-
-                <span style="font-weight: 700; font-size: 16px">
-                  {{ formatCurrency(String(row.total)) }}
-                </span>
-              </div>
-
-              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px">
-                <v-progress-linear
-                  :color="row.percentage >= 50 ? 'var(--green-deep)' : 'orange'"
-                  height="6"
-                  :model-value="row.percentage"
-                  rounded
-                  style="flex: 1"
-                />
-
-                <span style="font-size: 13px; font-weight: 500; min-width: 48px; text-align: right">
-                  {{ Math.round(row.percentage) }}%
-                </span>
-              </div>
-            </div>
-
-            <v-divider class="my-3" />
-
-            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 16px">
-              <span>Total aportado</span>
-
-                <span>
-                {{ formatCurrency(summaryGoal?.currentAmount ?? '0') }}
-              </span>
-            </div>
-          </template>
-
-          <div
-            v-else
-            class="text-center pa-4 text-87"
-          >
-            <v-icon size="40" style="opacity: 0.6">mdi-currency-usd-off</v-icon>
-            <p class="mt-2">No hay aportes registrados en esta meta</p>
-          </div>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn class="fm-btn-submit" rounded="lg" @click="summaryDialog = false">Cerrar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="confirmDissolve" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Disolver grupo
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="confirmDissolve = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <p>
-            ¿Estás seguro de disolver el grupo <strong>{{ store.couple?.name }}</strong
-            >?
-          </p>
-
-          <p class="mt-2 text-caption">
-            Las metas activas se cancelarán y los registros financieros se desvincularán. Esta
-            acción no se puede deshacer.
-          </p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="confirmDissolve = false">Cancelar</v-btn>
-
-          <v-btn
-            color="error"
-            :loading="store.saving"
-            rounded="lg"
-            variant="tonal"
-            @click="handleDissolve"
-          >
-            Disolver
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="confirmLeave" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Abandonar grupo
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="confirmLeave = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <p>
-            ¿Estás seguro de abandonar el grupo <strong>{{ store.couple?.name }}</strong
-            >?
-          </p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="confirmLeave = false">Cancelar</v-btn>
-
-          <v-btn
-            color="error"
-            :loading="store.saving"
-            rounded="lg"
-            variant="tonal"
-            @click="handleLeave"
-          >
-            Abandonar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="showDeleteGoal" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Eliminar meta
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="confirmDeleteGoal = null">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <p>
-            ¿Estás seguro de eliminar la meta <strong>{{ confirmDeleteGoal?.title }}</strong
-            >?
-          </p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="confirmDeleteGoal = null">Cancelar</v-btn>
-
-          <v-btn color="error" rounded="lg" variant="tonal" @click="handleDeleteGoal">
-            Eliminar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <ConfirmDeleteDialog
+      v-model="showDeleteGoal"
+      :item-name="confirmDeleteGoal?.title"
+      :loading="store.saving"
+      title="Eliminar meta"
+      @confirm="handleDeleteGoal"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-/** Couples — gestión de grupo de pareja (crear/invitar/abandonar/disolver) y metas compartidas con contribuciones. Usado en ruta '/couples' */
 import type { Goal } from '@/types';
 import { computed, onMounted, ref, watch } from 'vue';
-import AmountInput from '@/components/AmountInput.vue';
-import CircularLoader from '@/components/CircularLoader.vue';
-import DatePicker from '@/components/DatePicker.vue';
+
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue';
+import CoupleDialogsContribute from '@/components/CoupleDialogs/ContributeDialog.vue';
+import CoupleDialogsEditName from '@/components/CoupleDialogs/EditNameDialog.vue';
+import CoupleDialogsGoal from '@/components/CoupleDialogs/GoalDialog.vue';
+import CoupleDialogsSummary from '@/components/CoupleDialogs/SummaryDialog.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useCouplesStore } from '@/stores/couples';
 import { formatCurrency } from '@/utils/format';

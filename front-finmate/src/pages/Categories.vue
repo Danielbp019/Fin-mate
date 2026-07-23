@@ -96,139 +96,43 @@
       </v-data-table>
     </v-card>
 
-    <v-dialog v-model="dialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          {{ editingId ? 'Editar categoría' : 'Nueva categoría' }}
-          <v-spacer />
+    <CategoryDialog
+      v-model="dialogOpen"
+      :form-error="formError"
+      :icon="form.icon ?? ''"
+      :is-editing="!!editingId"
+      :name="form.name"
+      :saving="saving"
+      :type="form.type"
+      @save="handleSave"
+      @update:form-error="formError = $event"
+      @update:icon="form.icon = $event"
+      @update:name="form.name = $event"
+      @update:type="form.type = $event as 'income' | 'expense'"
+    />
 
-          <v-btn icon variant="text" @click="dialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <v-alert
-            v-if="formError"
-            class="mb-4"
-            closable
-            density="compact"
-            rounded="lg"
-            type="error"
-            variant="tonal"
-            @click:close="formError = ''"
-          >
-            {{ formError }}
-          </v-alert>
-
-          <v-form @submit.prevent="handleSave">
-            <div class="fm-field-group">
-              <label class="fm-label" for="cat-name">Nombre</label>
-
-              <v-text-field
-                id="cat-name"
-                v-model="form.name"
-                v-capitalize-first
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                placeholder="Ej: Salario"
-                required
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="cat-type">Tipo</label>
-
-              <v-select
-                id="cat-type"
-                v-model="form.type"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                :items="typeOptions"
-                required
-                rounded="lg"
-                variant="outlined"
-              />
-            </div>
-
-            <div class="fm-field-group">
-              <label class="fm-label" for="cat-icon">Icono (opcional)</label>
-              <IconPicker id="cat-icon" v-model="form.icon" />
-            </div>
-
-            <v-btn
-              block
-              class="fm-btn-submit mt-2"
-              :loading="saving"
-              rounded="lg"
-              size="large"
-              type="submit"
-            >
-              {{ editingId ? 'Guardar cambios' : 'Crear categoría' }}
-              <template #loader>
-                <v-progress-circular color="white" indeterminate size="20" width="2" />
-              </template>
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="deleteDialogOpen" max-width="540">
-      <v-card rounded="xl">
-        <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
-          Eliminar categoría
-          <v-spacer />
-
-          <v-btn icon variant="text" @click="deleteDialogOpen = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pa-4">
-          <p>
-            ¿Estás seguro de eliminar la categoría <strong>{{ deletingItem?.name }}</strong
-            >?
-          </p>
-
-          <p v-if="deletingItem?.isSystem" class="mt-2 text-caption text-red">
-            Las categorías del sistema no pueden eliminarse.
-          </p>
-        </v-card-text>
-
-        <v-card-actions class="pa-4 pt-0">
-          <v-spacer />
-          <v-btn rounded="lg" variant="text" @click="deleteDialogOpen = false">Cancelar</v-btn>
-
-          <v-btn
-            color="error"
-            :loading="deleting"
-            rounded="lg"
-            variant="tonal"
-            @click="handleDelete"
-          >
-            Eliminar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <ConfirmDeleteDialog
+      v-model="deleteDialogOpen"
+      :item-name="deletingItem?.name"
+      :loading="deleting"
+      title="Eliminar categoría"
+      @confirm="handleDelete"
+    >
+      <template #message>
+        <p v-if="deletingItem?.isSystem" class="mt-2 text-caption text-red">
+          Las categorías del sistema no pueden eliminarse.
+        </p>
+      </template>
+    </ConfirmDeleteDialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-/** Categories — CRUD de categorías con tabs por tipo (ingreso/gasto), tabla con iconos y diálogos de crear/editar/eliminar. Usado en ruta '/categories' */
 import type { Category, CreateCategoryBody, UpdateCategoryBody } from '@/types';
 import type { AxiosError } from 'axios';
 import { computed, onMounted, ref } from 'vue';
-import IconPicker from '@/components/IconPicker.vue';
+import CategoryDialog from '@/components/CategoryDialog.vue';
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useCategoriesStore } from '@/stores/categories';
 import { createCategorySchema, updateCategorySchema } from '@/validation';
@@ -249,11 +153,6 @@ const form = ref<CreateCategoryBody>({
   type: 'expense',
   icon: '',
 });
-
-const typeOptions = [
-  { title: 'Ingreso', value: 'income' },
-  { title: 'Gasto', value: 'expense' },
-];
 
 const headers = [
   { title: 'Nombre', key: 'name', align: 'start' as const },
