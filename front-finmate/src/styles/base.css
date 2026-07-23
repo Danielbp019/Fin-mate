@@ -120,6 +120,10 @@ body {
   color: var(--green-mid);
 }
 
+.fm-input .v-field__prepend-inner {
+  padding-inline: 12px;
+}
+
 .v-theme--dark .fm-input .v-field__outline__start,
 .v-theme--dark .fm-input .v-field__outline__end,
 .v-theme--dark .fm-input .v-field__outline__notch {
