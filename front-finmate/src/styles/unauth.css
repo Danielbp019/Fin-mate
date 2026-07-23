@@ -1031,6 +1031,22 @@
 
 /* ── Form utilities ── */
 
+.fm-auth-root .fm-field-group {
+  margin-bottom: 20px;
+}
+
+.fm-auth-root .fm-field-row {
+  margin-bottom: 4px;
+}
+
+.fm-auth-root .fm-terms {
+  margin-top: 20px;
+}
+
+.fm-auth-root .fm-switch-link {
+  margin-top: 32px;
+}
+
 .fm-label-row {
   display: flex;
   justify-content: space-between;

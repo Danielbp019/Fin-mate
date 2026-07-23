@@ -121,7 +121,7 @@
 
           <v-btn
             block
-            class="fm-btn-submit mt-6"
+            class="fm-btn-submit mt-8"
             :loading="loading"
             rounded="lg"
             size="large"
