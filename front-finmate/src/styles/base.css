@@ -184,3 +184,45 @@ body {
   box-shadow: 0 6px 20px var(--green-deep-40);
   transform: translateY(-1px);
 }
+
+.lp-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green-deep);
+  letter-spacing: -0.3px;
+}
+
+.lp-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--green-deep);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-logo-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-ghost {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--green-deep);
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-ghost:hover {
+  background: var(--green-light);
+}
