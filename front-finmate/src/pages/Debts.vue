@@ -108,6 +108,14 @@
             </template>
           </v-tooltip>
 
+          <v-tooltip location="top" text="Plan de pago">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" icon size="small" variant="text" @click="openPayoffPlan(item)">
+                <v-icon>mdi-lightbulb-on-outline</v-icon>
+              </v-btn>
+            </template>
+          </v-tooltip>
+
           <v-tooltip location="top" text="Eliminar deuda">
             <template #activator="{ props }">
               <v-btn
@@ -489,6 +497,11 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <DebtPayoffModal
+      v-model:dialog="payoffDialog"
+      :debt="payoffDebt"
+    />
   </div>
 </template>
 
@@ -499,6 +512,7 @@ import type { AxiosError } from 'axios';
 import { computed, onMounted, ref, watch } from 'vue';
 import AmountInput from '@/components/AmountInput.vue';
 import DatePicker from '@/components/DatePicker.vue';
+import DebtPayoffModal from '@/components/DebtPayoffModal.vue';
 import InterestRateInput from '@/components/InterestRateInput.vue';
 import LinearLoader from '@/components/LinearLoader.vue';
 import { useDebtsStore } from '@/stores/debts';
@@ -533,6 +547,9 @@ const filterPriority = ref<string | null>(null);
 
 const debtStartDate = ref<Date | null>(null);
 const payDate = ref(new Date());
+
+const payoffDialog = ref(false);
+const payoffDebt = ref<Debt | null>(null);
 
 watch(debtStartDate, (d) => {
   form.value.startDate = d ? d.toISOString().slice(0, 10) : '';
@@ -756,6 +773,11 @@ async function handleDelete() {
     deleting.value = false;
     deletingItem.value = null;
   }
+}
+
+function openPayoffPlan(debt: Debt) {
+  payoffDebt.value = debt;
+  payoffDialog.value = true;
 }
 
 async function openPayments(debt: Debt) {

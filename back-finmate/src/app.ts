@@ -10,6 +10,7 @@ import authRouter from './modules/auth/auth.routes.js';
 import categoriesRouter from './modules/categories/categories.routes.js';
 import movementsRouter from './modules/movements/movements.routes.js';
 import debtsRouter from './modules/debts/debts.routes.js';
+import debtAdvisorRouter from './modules/debt-advisor/advisor.routes.js';
 import couplesRouter from './modules/couples/couples.routes.js';
 import dashboardRouter from './modules/dashboard/dashboard.routes.js';
 import { env } from './config/env.js';
@@ -46,6 +47,7 @@ app.use(authRouter);
 app.use('/categories', categoriesRouter);
 app.use('/movements', movementsRouter);
 app.use('/debts', debtsRouter);
+app.use('/debt-advisor', debtAdvisorRouter);
 app.use('/couples', couplesRouter);
 app.use('/dashboard', dashboardRouter);
 

@@ -203,3 +203,61 @@ export interface CreateContributionBody {
   notes?: string;
   date?: string;
 }
+
+export interface AdvisorPlanResponse {
+  strategies: StrategyResult[];
+  recommendedStrategy: string;
+  tips: DebtTip[];
+  totalMonthlyMinimum: string;
+  totalMonthlyWithExtra: string;
+}
+
+export interface StrategyResult {
+  name: string;
+  key: 'avalanche' | 'snowball' | 'byPriority' | 'minimumOnly';
+  description: string;
+  order: PaymentOrderItem[];
+  totalMonths: number;
+  totalInterestPaid: string;
+  totalPaid: string;
+}
+
+export interface PaymentOrderItem {
+  debtId: string;
+  title: string;
+  currentAmount: string;
+  interestRate: string;
+  minimumPayment: string;
+  monthlyAllocation: string;
+  payoffOrder: number;
+  estimatedPayoffMonths: number;
+}
+
+export interface DebtTip {
+  type: string;
+  title: string;
+  description: string;
+  applicable: boolean;
+}
+
+export interface PayoffScenario {
+  label: string;
+  monthlyPayment: string;
+  totalMonths: number;
+  totalInterestPaid: string;
+  totalPaid: string;
+  estimatedPayoffDate: string;
+}
+
+export interface DebtPayoffPlan {
+  debtId: string;
+  title: string;
+  currentAmount: string;
+  interestRate: string;
+  minimumPayment: string;
+  initialAmount: string;
+  suggestedPayment: string;
+  progressPercent: number;
+  scenarios: PayoffScenario[];
+  tips: DebtTip[];
+}

@@ -166,6 +166,19 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 | DELETE | `/couples/:id/leave`  | —              | 200 `{ message }`        |
 | DELETE | `/couples/:id`        | —              | 200 `{ message }`        |
 
+### Debt Advisor
+
+Requiere `Authorization: Bearer <token>`.
+
+| Método | Ruta                 | Query                         | Respuesta                 |
+| ------ | -------------------- | ----------------------------- | ------------------------- |
+| GET    | `/debt-advisor/plan` | `?monthlyExtraPayment=500000`  | 200 `AdvisorPlanResponse`  |
+| GET    | `/debt-advisor/debt/:debtId` | `?monthlyPayment=500000` (opcional) | 200 `DebtPayoffPlan` |
+
+**`/debt-advisor/plan`**: genera un plan de pago personalizado comparando 4 estrategias (avalancha, bola de nieve, por prioridad, solo mínimos) e incluye consejos financieros contextuales. No requiere base de datos propia — lee las deudas activas del repositorio y ejecuta los cálculos en memoria.
+
+**`/debt-advisor/debt/:debtId`**: calcula escenarios de pago para una deuda específica (solo mínimos, recomendado y personalizado) con fecha estimada de finalización. Usado desde el modal de plan de pago en la interfaz.
+
 ### Dashboard
 
 Requiere `Authorization: Bearer <token>`.
@@ -269,8 +282,6 @@ src/modules/debts/
     payments.controller.ts / payments.service.ts / ...
 ```
 
-## Pendientes
-
 ## Modulos Existentes
 
 | Modulo       | Archivos                     |
@@ -281,5 +292,6 @@ src/modules/debts/
 | Debts        | `src/modules/debts/`         |
 | Couples      | `src/modules/couples/`       |
 | Couple Goals | `src/modules/couples/goals/` |
+| Debt Advisor | `src/modules/debt-advisor/`  |
 | Dashboard    | `src/modules/dashboard/`     |
 | Ping         | `src/modules/ping/`          |

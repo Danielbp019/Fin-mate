@@ -16,6 +16,7 @@ Olvídate de las hojas de cálculo y los apuntes manuales. FinMate automatiza el
 - **Dashboard financiero** — resumen del mes, ingresos vs gastos, balance, distribución por categoría y evolución mensual con gráficos (Chart.js)
 - **Ingresos y Gastos** — registro con categorías, filtros y paginación
 - **Deudas** — control de deudas con pagos, intereses y prioridades
+- **Plan de pago** — estrategias inteligentes para liquidar deudas (avalancha, bola de nieve, por prioridad)
 - **Modo Pareja** — comparte finanzas con tu pareja, crea metas y contribuye
 
 ## Stack

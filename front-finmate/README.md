@@ -46,7 +46,7 @@ src/
   App.vue               Componente raíz
   pages/                Vistas (Login, Register, Dashboard, Profile, Categories, Movements, Debts)
   layouts/              Layouts compartidos
-  stores/               Stores de Pinia
+  stores/               Stores de Pinia (auth, categories, movements, debts, couples, dashboard, debtAdvisor)
   services/             Servicios (Axios + interceptors)
   types/                Interfaces TypeScript
   plugins/              Configuración de plugins
@@ -80,6 +80,7 @@ public/                 Archivos estáticos
 | Categories (CRUD + tabs por tipo)                | ✅     |
 | Movements (CRUD + filtros + paginación)          | ✅     |
 | Debts + Payments                                 | ✅     |
+
 | Couples + Goals                                  | ✅     |
 | Dashboard (resumen + gráficos)                   | ✅     |
 
