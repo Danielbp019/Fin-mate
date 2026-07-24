@@ -88,6 +88,7 @@
               v-model="email"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrors.email ? [fieldErrors.email] : []"
               hide-details="auto"
               placeholder="tu@correo.com"
               prepend-inner-icon="mdi-email-outline"
@@ -95,6 +96,7 @@
               rounded="lg"
               type="email"
               variant="outlined"
+              @update:model-value="fieldErrors.email = ''"
             />
           </div>
 
@@ -109,6 +111,7 @@
               v-model="password"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrors.password ? [fieldErrors.password] : []"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -116,6 +119,7 @@
               rounded="lg"
               type="password"
               variant="outlined"
+              @update:model-value="fieldErrors.password = ''"
             />
           </div>
 
@@ -156,15 +160,21 @@ const email = ref('');
 const password = ref('');
 const loading = ref(false);
 const error = ref('');
+const fieldErrors = ref<Record<string, string>>({});
 
 async function handleLogin() {
   const result = loginSchema.safeParse({ email: email.value, password: password.value });
   if (!result.success) {
-    error.value = result.error.issues[0].message;
+    fieldErrors.value = {};
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as string;
+      if (field) fieldErrors.value[field] = issue.message;
+    }
     return;
   }
   loading.value = true;
   error.value = '';
+  fieldErrors.value = {};
   try {
     await auth.login(result.data.email, result.data.password);
   } catch (error_) {

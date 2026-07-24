@@ -45,7 +45,7 @@ describe('Register.vue', () => {
     wrapper.vm.confirmPassword = 'different';
     await wrapper.vm.handleRegister();
 
-    expect(wrapper.vm.error).toBe('Las contraseñas no coinciden');
+    expect(wrapper.vm.fieldErrors.confirmPassword).toBe('Las contraseñas no coinciden');
     expect(mockRegister).not.toHaveBeenCalled();
   });
 

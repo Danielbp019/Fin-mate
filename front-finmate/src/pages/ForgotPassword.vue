@@ -84,6 +84,7 @@
               v-model="email"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrors.email ? [fieldErrors.email] : []"
               hide-details="auto"
               placeholder="tu@correo.com"
               prepend-inner-icon="mdi-email-outline"
@@ -91,6 +92,7 @@
               rounded="lg"
               type="email"
               variant="outlined"
+              @update:model-value="fieldErrors.email = ''"
             />
           </div>
 
@@ -128,15 +130,21 @@ const email = ref('');
 const loading = ref(false);
 const error = ref('');
 const success = ref('');
+const fieldErrors = ref<Record<string, string>>({});
 
 async function handleForgotPassword() {
   const result = forgotPasswordSchema.safeParse({ email: email.value });
   if (!result.success) {
-    error.value = result.error.issues[0].message;
+    fieldErrors.value = {};
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as string;
+      if (field) fieldErrors.value[field] = issue.message;
+    }
     return;
   }
   loading.value = true;
   error.value = '';
+  fieldErrors.value = {};
   try {
     const res = await api.post('/auth/forgot-password', { email: result.data.email });
     success.value = res.data.message as string;

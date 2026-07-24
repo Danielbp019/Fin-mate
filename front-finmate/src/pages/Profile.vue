@@ -45,12 +45,14 @@
               v-capitalize-first
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrorsName.name ? [fieldErrorsName.name] : []"
               hide-details="auto"
               placeholder="Tu nombre"
               prepend-inner-icon="mdi-account-outline"
               required
               rounded="lg"
               variant="outlined"
+              @update:model-value="fieldErrorsName.name = ''"
             />
           </div>
 
@@ -107,6 +109,7 @@
               v-model="currentPassword"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrorsPassword.currentPassword ? [fieldErrorsPassword.currentPassword] : []"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -114,6 +117,7 @@
               rounded="lg"
               type="password"
               variant="outlined"
+              @update:model-value="fieldErrorsPassword.currentPassword = ''"
             />
           </div>
 
@@ -125,6 +129,7 @@
               v-model="newPassword"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrorsPassword.newPassword ? [fieldErrorsPassword.newPassword] : []"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -132,6 +137,7 @@
               rounded="lg"
               type="password"
               variant="outlined"
+              @update:model-value="fieldErrorsPassword.newPassword = ''"
             />
           </div>
 
@@ -143,6 +149,7 @@
               v-model="confirmPassword"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrorsPassword.confirmPassword ? [fieldErrorsPassword.confirmPassword] : []"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -150,6 +157,7 @@
               rounded="lg"
               type="password"
               variant="outlined"
+              @update:model-value="fieldErrorsPassword.confirmPassword = ''"
             />
           </div>
 
@@ -187,6 +195,7 @@ const name = ref('');
 const nameLoading = ref(false);
 const nameError = ref('');
 const nameSuccess = ref('');
+const fieldErrorsName = ref<Record<string, string>>({});
 
 const currentPassword = ref('');
 const newPassword = ref('');
@@ -195,6 +204,7 @@ const confirmPassword = ref('');
 const passwordLoading = ref(false);
 const passwordError = ref('');
 const passwordSuccess = ref('');
+const fieldErrorsPassword = ref<Record<string, string>>({});
 
 onMounted(() => {
   if (auth.user) {
@@ -205,12 +215,17 @@ onMounted(() => {
 async function handleUpdateName() {
   const result = updateProfileSchema.safeParse({ name: name.value });
   if (!result.success) {
-    nameError.value = result.error.issues[0].message;
+    fieldErrorsName.value = {};
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as string;
+      if (field) fieldErrorsName.value[field] = issue.message;
+    }
     return;
   }
   nameLoading.value = true;
   nameError.value = '';
   nameSuccess.value = '';
+  fieldErrorsName.value = {};
   try {
     await auth.updateProfile(result.data.name);
     nameSuccess.value = 'Nombre actualizado correctamente';
@@ -229,12 +244,17 @@ async function handleChangePassword() {
     confirmPassword: confirmPassword.value,
   });
   if (!result.success) {
-    passwordError.value = result.error.issues[0].message;
+    fieldErrorsPassword.value = {};
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as string;
+      if (field) fieldErrorsPassword.value[field] = issue.message;
+    }
     return;
   }
   passwordLoading.value = true;
   passwordError.value = '';
   passwordSuccess.value = '';
+  fieldErrorsPassword.value = {};
   try {
     const res = await api.post('/auth/change-password', {
       currentPassword: result.data.currentPassword,

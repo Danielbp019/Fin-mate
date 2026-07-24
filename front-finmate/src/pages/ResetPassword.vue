@@ -77,6 +77,7 @@
               v-model="password"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrors.newPassword ? [fieldErrors.newPassword] : []"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-outline"
@@ -84,6 +85,7 @@
               rounded="lg"
               type="password"
               variant="outlined"
+              @update:model-value="fieldErrors.newPassword = ''"
             />
           </div>
 
@@ -95,6 +97,7 @@
               v-model="confirmPassword"
               class="fm-input"
               density="comfortable"
+              :error-messages="fieldErrors.confirmPassword ? [fieldErrors.confirmPassword] : []"
               hide-details="auto"
               placeholder="••••••••"
               prepend-inner-icon="mdi-lock-check-outline"
@@ -102,6 +105,7 @@
               rounded="lg"
               type="password"
               variant="outlined"
+              @update:model-value="fieldErrors.confirmPassword = ''"
             />
           </div>
 
@@ -142,6 +146,7 @@ const confirmPassword = ref('');
 const loading = ref(false);
 const error = ref('');
 const success = ref('');
+const fieldErrors = ref<Record<string, string>>({});
 
 const token = ref('');
 
@@ -160,11 +165,16 @@ async function handleResetPassword() {
     confirmPassword: confirmPassword.value,
   });
   if (!result.success) {
-    error.value = result.error.issues[0].message;
+    fieldErrors.value = {};
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as string;
+      if (field) fieldErrors.value[field] = issue.message;
+    }
     return;
   }
   loading.value = true;
   error.value = '';
+  fieldErrors.value = {};
   try {
     const res = await api.post('/auth/reset-password', {
       token: result.data.token,
