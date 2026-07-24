@@ -20,6 +20,16 @@ const router = createRouter({
       component: () => import('@/pages/Register.vue'),
     },
     {
+      path: '/forgot-password',
+      name: 'ForgotPassword',
+      component: () => import('@/pages/ForgotPassword.vue'),
+    },
+    {
+      path: '/reset-password',
+      name: 'ResetPassword',
+      component: () => import('@/pages/ResetPassword.vue'),
+    },
+    {
       path: '/como-funciona',
       name: 'HowItWorks',
       component: () => import('@/pages/HowItWorks.vue'),
@@ -66,7 +76,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const auth = useAuthStore();
 
-  const guestRoutes = new Set(['Landing', 'Login', 'Register', 'HowItWorks']);
+  const guestRoutes = new Set(['Landing', 'Login', 'Register', 'HowItWorks', 'ForgotPassword', 'ResetPassword']);
 
   if (!auth.appReady && !guestRoutes.has(to.name as string)) {
     await auth.initialize();

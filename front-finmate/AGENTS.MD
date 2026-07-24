@@ -97,7 +97,7 @@ src/
 
 ## Validaciones
 
-Todas las entradas con **Zod**.
+Toda entrada del usuario debe validarse con **Zod** (schemas en `src/validation/`). Aplica a todos los formularios: login, register, forgot-password, reset-password, y cualquier otro componente que recolecte datos del usuario.
 
 - **Capitalización**: Todo texto ingresado por el usuario (`name`, `title`, `description`, `notes`) se transforma con `capitalizeFirst` vía Zod `.transform()` + directiva `v-capitalize-first` para feedback en tiempo real
 

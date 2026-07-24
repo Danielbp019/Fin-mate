@@ -1,5 +1,5 @@
-import { capitalizeFirst } from '@/utils/format';
 import { z } from 'zod';
+import { capitalizeFirst } from '@/utils/format';
 
 export const registerSchema = z
   .object({
@@ -16,6 +16,26 @@ export const registerSchema = z
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'La contraseña actual es requerida'),
+    newPassword: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    confirmPassword: z.string(),
+  })
+  .refine((d) => d.newPassword === d.confirmPassword, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirmPassword'],
+  });
+
+export const loginSchema = z.object({
+  email: z.string().email('Correo inválido').trim().toLowerCase(),
+  password: z.string().min(1, 'La contraseña es requerida'),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Correo inválido').trim().toLowerCase(),
+});
+
+export const resetPasswordSchema = z
+  .object({
+    token: z.string().min(1, 'Token inválido'),
     newPassword: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
     confirmPassword: z.string(),
   })

@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-greeting">
-      <h1>Bienvenido, {{ auth.user?.name }}</h1>
+      <h1>Bienvenido, {{ auth.user?.name }}<v-icon v-if="auth.user?.emailVerifiedAt" class="ml-1" color="var(--green-mid)" size="small">mdi-check-circle</v-icon></h1>
       <p>Resumen de {{ currentMonthLabel }}</p>
     </div>
 

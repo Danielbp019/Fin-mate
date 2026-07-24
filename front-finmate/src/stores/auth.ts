@@ -8,6 +8,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  emailVerifiedAt: string | null;
 }
 
 export const useAuthStore = defineStore('auth', () => {

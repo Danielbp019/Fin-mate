@@ -30,7 +30,7 @@
       <template #append>
         <div class="d-flex align-center ga-3" style="margin-right: 4px">
           <span style="color: var(--green-deep); font-size: 14px; font-weight: 500"
-            >Bienvenido, {{ auth.user?.name }}</span
+            >Bienvenido, {{ auth.user?.name }}<v-icon v-if="auth.user?.emailVerifiedAt" class="ml-1" color="var(--green-mid)" size="small">mdi-check-circle</v-icon></span
           >
 
           <button

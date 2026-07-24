@@ -101,7 +101,7 @@
           <div class="fm-field-group">
             <div class="fm-label-row">
               <label class="fm-label" for="login-password">Contraseña</label>
-              <a class="fm-forgot" href="#">¿La olvidaste?</a>
+              <router-link class="fm-forgot" :to="{ name: 'ForgotPassword' }">¿La olvidaste?</router-link>
             </div>
 
             <v-text-field
@@ -148,6 +148,7 @@
 import type { AxiosError } from 'axios';
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
+import { loginSchema } from '@/validation';
 import '@/styles/unauth.css';
 
 const auth = useAuthStore();
@@ -157,10 +158,15 @@ const loading = ref(false);
 const error = ref('');
 
 async function handleLogin() {
+  const result = loginSchema.safeParse({ email: email.value, password: password.value });
+  if (!result.success) {
+    error.value = result.error.issues[0].message;
+    return;
+  }
   loading.value = true;
   error.value = '';
   try {
-    await auth.login(email.value, password.value);
+    await auth.login(result.data.email, result.data.password);
   } catch (error_) {
     const msg = (error_ as AxiosError<{ message?: string }>).response?.data?.message;
     error.value = msg || 'Error al iniciar sesión';

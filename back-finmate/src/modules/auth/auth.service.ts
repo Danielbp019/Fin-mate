@@ -60,7 +60,7 @@ export async function login(data: { email: string; password: string }) {
 
   return {
     accessToken,
-    user: { id: user.id, name: user.name, email: user.email },
+    user: { id: user.id, name: user.name, email: user.email, emailVerifiedAt: user.emailVerifiedAt?.toISOString() ?? null },
     refreshToken,
     cookieOptions: getRefreshCookieOptions(),
   };
@@ -105,7 +105,7 @@ export async function register(data: { name: string; email: string; password: st
 
   return {
     accessToken,
-    user: { id: user.id, name: user.name, email: user.email },
+    user: { id: user.id, name: user.name, email: user.email, emailVerifiedAt: user.emailVerifiedAt?.toISOString() ?? null },
     refreshToken,
     cookieOptions: getRefreshCookieOptions(),
   };
@@ -182,7 +182,7 @@ export async function refresh(refreshTokenValue: string | undefined) {
     accessToken,
     refreshToken,
     cookieOptions: getRefreshCookieOptions(),
-    user: { id: user.id, name: user.name, email: user.email },
+    user: { id: user.id, name: user.name, email: user.email, emailVerifiedAt: user.emailVerifiedAt?.toISOString() ?? null },
   };
 }
 
@@ -213,12 +213,12 @@ export async function updateProfile(userId: string, data: { name: string }) {
   }
 
   if (user.name === data.name) {
-    return { id: user.id, name: user.name, email: user.email };
+    return { id: user.id, name: user.name, email: user.email, emailVerifiedAt: user.emailVerifiedAt?.toISOString() ?? null };
   }
 
   await authRepository.updateUserName(userId, data.name);
 
-  return { id: user.id, name: data.name, email: user.email };
+  return { id: user.id, name: data.name, email: user.email, emailVerifiedAt: user.emailVerifiedAt?.toISOString() ?? null };
 }
 
 export async function changePassword(
