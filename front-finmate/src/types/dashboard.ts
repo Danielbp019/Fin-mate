@@ -25,6 +25,7 @@ export interface RecentMovement {
 export interface ActiveDebts {
   count: number;
   totalRemaining: string;
+  nextDueDebt: { title: string; dueDate: string } | null;
 }
 
 export interface CoupleGoals {

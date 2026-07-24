@@ -48,6 +48,7 @@ export async function getSummary(userId: string): Promise<DashboardSummary> {
     recentMovements,
     activeDebts,
     activeCouple,
+    nextDueDebtRaw,
   ] = await Promise.all([
     movementsRepository.getPeriodTotals(userId, currentRange.from, currentRange.to),
     movementsRepository.getPeriodTotals(userId, prevRange.from, prevRange.to),
@@ -57,6 +58,7 @@ export async function getSummary(userId: string): Promise<DashboardSummary> {
     movementsRepository.getRecentWithCategory(userId, 5),
     debtsRepository.getActiveSummary(userId),
     couplesRepository.findActiveCoupleByUserId(userId),
+    debtsRepository.getNextDueDebt(userId),
   ]);
 
   let coupleGoals = null;
@@ -84,6 +86,12 @@ export async function getSummary(userId: string): Promise<DashboardSummary> {
   const prevExpenseMoney = dbToDinero(prevTotals.totalExpense);
   const balanceMoney = subtract(incomeMoney, expenseMoney);
 
+  const nextDueDebt = nextDueDebtRaw
+    ? { title: nextDueDebtRaw.title, dueDate: nextDueDebtRaw.dueDate.toISOString() }
+    : null;
+
+  const activeDebtsWithNextDue = activeDebts ? { ...activeDebts, nextDueDebt } : null;
+
   const monthlyBalanceWithCalc = monthlyBalance.map((m) => {
     const income = dbToDinero(m.income);
     const expense = dbToDinero(m.expense);
@@ -105,7 +113,7 @@ export async function getSummary(userId: string): Promise<DashboardSummary> {
     expenseByCategory,
     monthlyBalance: monthlyBalanceWithCalc,
     recentMovements,
-    activeDebts,
+    activeDebts: activeDebtsWithNextDue,
     coupleGoals,
   };
 }

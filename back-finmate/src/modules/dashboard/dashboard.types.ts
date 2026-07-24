@@ -39,6 +39,7 @@ export interface DashboardSummary {
   activeDebts: {
     count: number;
     totalRemaining: string;
+    nextDueDebt: { title: string; dueDate: Date } | null;
   } | null;
   coupleGoals: {
     active: number;

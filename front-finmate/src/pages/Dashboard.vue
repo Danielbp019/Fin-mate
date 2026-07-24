@@ -178,6 +178,17 @@
                 formatCurrency(summary!.activeDebts!.totalRemaining)
               }}</span>
             </div>
+
+            <div
+              v-if="summary!.activeDebts!.nextDueDebt"
+              class="stat-row"
+            >
+              <span class="stat-row-label">Próximo vencimiento</span>
+
+              <span class="stat-row-value">{{ summary!.activeDebts!.nextDueDebt.title }} — {{
+                daysUntilDue(summary!.activeDebts!.nextDueDebt.dueDate)
+              }}</span>
+            </div>
           </div>
         </div>
 
@@ -247,6 +258,17 @@ function formatDate(iso: string) {
     month: '2-digit',
     year: 'numeric',
   });
+}
+
+function daysUntilDue(dueDate: string): string {
+  const now = new Date();
+  const due = new Date(dueDate);
+  const diffTime = due.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays < 0) return 'Vencida';
+  if (diffDays === 0) return 'Hoy';
+  if (diffDays === 1) return '1 día';
+  return `${diffDays} días`;
 }
 
 const palette = [

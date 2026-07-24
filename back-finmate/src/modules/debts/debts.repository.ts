@@ -43,6 +43,33 @@ export async function softDelete(id: string, deletedAt: Date) {
   await db.update(debts).set({ deletedAt, updatedAt: deletedAt }).where(eq(debts.id, id));
 }
 
+export async function getNextDueDebt(userId: string) {
+  const result = await db
+    .select({
+      title: debts.title,
+      dueDate: debts.dueDate,
+    })
+    .from(debts)
+    .where(
+      and(
+        eq(debts.userId, userId),
+        eq(debts.status, 'pending'),
+        isNull(debts.deletedAt),
+        sql`${debts.dueDate} IS NOT NULL`,
+      ),
+    )
+    .orderBy(debts.dueDate)
+    .limit(1);
+
+  const row = result[0];
+  if (!row) return null;
+
+  return {
+    title: row.title,
+    dueDate: row.dueDate,
+  };
+}
+
 export async function getActiveSummary(userId: string) {
   const result = await db
     .select({
