@@ -233,7 +233,7 @@ const dashboard = useDashboardStore();
 const summary = computed(() => dashboard.summary);
 const loading = computed(() => dashboard.loading);
 
-const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 const currentMonthLabel = computed(() => {
   const now = new Date();
