@@ -19,14 +19,16 @@ describe('createDebtSchema', () => {
       description: 'Prestamo del banco',
       initialAmount: '10000.00',
       interestRate: '5.5',
+      interestRateType: 'monthly',
       minimumPayment: '500.00',
-      dueDay: 15,
+      dueDate: '2026-08-15T00:00:00.000Z',
       priority: 'high',
       startDate: '2026-01-01T00:00:00.000Z',
     });
     expect(result.title).toBe('Prestamo personal');
     expect(result.priority).toBe('high');
-    expect(result.dueDay).toBe(15);
+    expect(result.interestRateType).toBe('monthly');
+    expect(result.dueDate).toBe('2026-08-15T00:00:00.000Z');
   });
 
   it('rejects empty title', () => {
@@ -43,15 +45,15 @@ describe('createDebtSchema', () => {
     expect(() => createDebtSchema.parse({ title: 'Test', initialAmount: 'abc' })).toThrow();
   });
 
-  it('rejects dueDay below 1', () => {
+  it('rejects invalid dueDate', () => {
     expect(() =>
-      createDebtSchema.parse({ title: 'Test', initialAmount: '100', dueDay: 0 }),
+      createDebtSchema.parse({ title: 'Test', initialAmount: '100', dueDate: 'not-a-date' }),
     ).toThrow();
   });
 
-  it('rejects dueDay above 31', () => {
+  it('rejects invalid interestRateType', () => {
     expect(() =>
-      createDebtSchema.parse({ title: 'Test', initialAmount: '100', dueDay: 32 }),
+      createDebtSchema.parse({ title: 'Test', initialAmount: '100', interestRateType: 'semestral' }),
     ).toThrow();
   });
 

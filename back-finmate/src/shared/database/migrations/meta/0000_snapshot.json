@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "c1cc11d9-f00d-4d3c-aed3-a02c10fe4aac",
+  "id": "18b37b00-7cfc-4005-bac5-84d48463c4b9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "categories": {
@@ -41,21 +41,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "color": {
-          "name": "color",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": true
         },
         "is_system": {
           "name": "is_system",
@@ -402,7 +387,7 @@
           "name": "name",
           "type": "varchar(120)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "status": {
@@ -592,6 +577,14 @@
           "autoincrement": false,
           "default": "'0'"
         },
+        "interest_rate_type": {
+          "name": "interest_rate_type",
+          "type": "enum('annual','monthly')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'annual'"
+        },
         "minimum_payment": {
           "name": "minimum_payment",
           "type": "decimal(19,4)",
@@ -600,9 +593,9 @@
           "autoincrement": false,
           "default": "'0'"
         },
-        "due_day": {
-          "name": "due_day",
-          "type": "tinyint",
+        "due_date": {
+          "name": "due_date",
+          "type": "datetime(3)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -836,6 +829,20 @@
           "notNull": true,
           "autoincrement": false
         },
+        "reference_type": {
+          "name": "reference_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reference_id": {
+          "name": "reference_id",
+          "type": "char(36)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "datetime(3)",
@@ -886,6 +893,13 @@
           "columns": [
             "type",
             "movement_date"
+          ],
+          "isUnique": false
+        },
+        "idx_movements_reference_type": {
+          "name": "idx_movements_reference_type",
+          "columns": [
+            "reference_type"
           ],
           "isUnique": false
         }

@@ -1,13 +1,14 @@
-import { capitalizeFirst } from '@/utils/format';
 import { z } from 'zod';
+import { capitalizeFirst } from '@/utils/format';
 
 export const createDebtSchema = z.object({
   title: z.string().min(1, 'El título es requerido').trim().transform(capitalizeFirst),
   initialAmount: z.string().refine((v) => Number(v) > 0, 'Ingresa un monto inicial válido'),
   priority: z.enum(['low', 'medium', 'high']).default('medium'),
   interestRate: z.string().optional(),
+  interestRateType: z.enum(['annual', 'monthly']).default('annual'),
   minimumPayment: z.string().optional(),
-  dueDay: z.coerce.number().int().min(1).max(31).optional(),
+  dueDate: z.string().optional(),
   startDate: z.string().optional(),
   description: z.string().max(255).trim().transform((v) => (v ? capitalizeFirst(v) : v)).optional(),
 });

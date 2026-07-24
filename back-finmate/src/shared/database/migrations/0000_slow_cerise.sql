@@ -76,16 +76,17 @@ CREATE TABLE `debts` (
 	`description` varchar(255) COMMENT 'Descripción detallada',
 	`initial_amount` decimal(19,4) NOT NULL COMMENT 'Monto original de la deuda',
 	`current_amount` decimal(19,4) NOT NULL COMMENT 'Saldo actual pendiente',
-	`interest_rate` decimal(10,4) NOT NULL DEFAULT '0' COMMENT 'Tasa de interés anual en porcentaje',
+	`interest_rate` decimal(10,4) NOT NULL DEFAULT '0' COMMENT 'Tasa de interés en porcentaje',
+	`interest_rate_type` enum('annual','monthly') NOT NULL DEFAULT 'annual' COMMENT 'Tipo de tasa: anual (annual) o mensual (monthly)',
 	`minimum_payment` decimal(19,4) NOT NULL DEFAULT '0' COMMENT 'Pago mínimo mensual requerido',
-	`due_day` tinyint COMMENT 'Día de vencimiento del pago (1-31)',
+	`due_date` datetime(3) COMMENT 'Fecha de vencimiento del pago',
 	`priority` enum('low','medium','high') NOT NULL DEFAULT 'medium' COMMENT 'Prioridad: baja, media o alta',
 	`status` enum('pending','paid','overdue') NOT NULL DEFAULT 'pending' COMMENT 'Estado: pendiente, pagada o vencida',
 	`start_date` datetime(3) COMMENT 'Fecha de inicio o contratación',
 	`end_date` datetime(3) COMMENT 'Fecha de liquidación o fin',
 	`created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT 'Fecha de creación del registro',
 	`updated_at` datetime(3) NOT NULL COMMENT 'Fecha de última actualización',
-	`deleted_at` datetime(3) COMMENT 'Fecha de borrado lógico',
+	`deleted_at` datetime(3) COMMENT 'Fecha de borrado lógico (soft delete)',
 	CONSTRAINT `debts_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint

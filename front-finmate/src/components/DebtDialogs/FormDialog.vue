@@ -79,7 +79,22 @@
             <div class="fm-field-group">
               <label class="fm-label" for="debt-interest">Tasa de interés % (opcional)</label>
 
-              <InterestRateInput id="debt-interest" :model-value="interestRate" @update:model-value="$emit('update:interestRate', $event)" />
+              <div style="display: flex; gap: 8px; align-items: start">
+                <InterestRateInput id="debt-interest" :model-value="interestRate" @update:model-value="$emit('update:interestRate', $event)" />
+
+                <v-select
+                  id="debt-interest-type"
+                  class="fm-input"
+                  density="comfortable"
+                  hide-details="auto"
+                  :items="interestRateTypeOptions"
+                  :model-value="interestRateType"
+                  rounded="lg"
+                  style="max-width: 120px"
+                  variant="outlined"
+                  @update:model-value="$emit('update:interestRateType', $event)"
+                />
+              </div>
             </div>
 
             <div class="fm-field-group">
@@ -91,22 +106,9 @@
 
           <div class="fm-field-row">
             <div class="fm-field-group">
-              <label class="fm-label" for="debt-due-day">Día de vencimiento (opcional)</label>
+              <label class="fm-label" for="debt-due-date">Fecha de vencimiento (opcional)</label>
 
-              <v-text-field
-                id="debt-due-day"
-                class="fm-input"
-                density="comfortable"
-                hide-details="auto"
-                max="31"
-                min="1"
-                :model-value="dueDay"
-                placeholder="15"
-                rounded="lg"
-                type="number"
-                variant="outlined"
-                @update:model-value="$emit('update:dueDay', $event ? Number($event) : undefined)"
-              />
+              <DatePicker id="debt-due-date" :model-value="dueDate ?? null" @update:model-value="$emit('update:dueDate', $event)" />
             </div>
 
             <div class="fm-field-group">
@@ -186,8 +188,9 @@ withDefaults(defineProps<{
   initialAmount: string;
   priority: string;
   interestRate?: string;
+  interestRateType?: string;
   minimumPayment?: string;
-  dueDay?: number;
+  dueDate?: Date | null;
   startDate?: Date | null;
   status?: string;
   description?: string;
@@ -196,12 +199,18 @@ withDefaults(defineProps<{
 }>(), {
   formError: '',
   saving: false,
+  interestRateType: 'annual',
 });
 
 const priorityOptions = [
   { title: 'Baja', value: 'low' },
   { title: 'Media', value: 'medium' },
   { title: 'Alta', value: 'high' },
+];
+
+const interestRateTypeOptions = [
+  { title: 'Anual', value: 'annual' },
+  { title: 'Mensual', value: 'monthly' },
 ];
 
 const statusOptions = [
@@ -216,8 +225,9 @@ defineEmits<{
   'update:initialAmount': [value: string];
   'update:priority': [value: string];
   'update:interestRate': [value: string];
+  'update:interestRateType': [value: string];
   'update:minimumPayment': [value: string];
-  'update:dueDay': [value: number | undefined];
+  'update:dueDate': [value: Date | null];
   'update:startDate': [value: Date | null];
   'update:status': [value: string];
   'update:description': [value: string];

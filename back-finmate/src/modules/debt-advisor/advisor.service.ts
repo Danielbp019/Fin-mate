@@ -25,6 +25,7 @@ interface DebtState {
   title: string;
   currentAmount: number;
   interestRate: number;
+  interestRateType: 'annual' | 'monthly';
   minimumPayment: number;
   remaining: number;
   totalInterestPaid: number;
@@ -46,6 +47,7 @@ function runSimulation(
     title: d.title,
     currentAmount: d.currentAmount,
     interestRate: d.interestRate,
+    interestRateType: d.interestRateType,
     minimumPayment: d.minimumPayment,
     remaining: d.currentAmount,
     totalInterestPaid: 0,
@@ -65,7 +67,7 @@ function runSimulation(
     for (const s of state) {
       if (s.remaining <= PAYOFF_EPSILON) continue;
 
-      const monthlyRate = s.interestRate / 100 / 12;
+      const monthlyRate = s.interestRateType === 'monthly' ? s.interestRate / 100 : s.interestRate / 100 / 12;
       const interest = s.remaining * monthlyRate;
       s.remaining += interest;
       s.totalInterestPaid += interest;
@@ -295,6 +297,7 @@ export async function generatePlan(
     title: d.title,
     currentAmount: toNumber(d.currentAmount),
     interestRate: toNumber(d.interestRate),
+    interestRateType: d.interestRateType,
     minimumPayment: toNumber(d.minimumPayment),
     priority: d.priority,
   }));
@@ -335,6 +338,7 @@ export async function generatePlan(
 function simulateSingleDebt(
   currentAmount: number,
   interestRate: number,
+  interestRateType: 'annual' | 'monthly',
   monthlyPayment: number,
 ): { totalMonths: number; totalInterest: number; totalPaid: number } {
   let remaining = currentAmount;
@@ -343,7 +347,7 @@ function simulateSingleDebt(
 
   while (remaining > PAYOFF_EPSILON && month < MAX_MONTHS) {
     month++;
-    const monthlyRate = interestRate / 100 / 12;
+    const monthlyRate = interestRateType === 'monthly' ? interestRate / 100 : interestRate / 100 / 12;
     const interest = remaining * monthlyRate;
     remaining += interest;
     totalInterest += interest;
@@ -371,11 +375,13 @@ function buildPayoffScenario(
   label: string,
   currentAmount: number,
   interestRate: number,
+  interestRateType: 'annual' | 'monthly',
   monthlyPayment: number,
 ): PayoffScenario {
   const { totalMonths, totalInterest, totalPaid } = simulateSingleDebt(
     currentAmount,
     interestRate,
+    interestRateType,
     monthlyPayment,
   );
 
@@ -453,21 +459,23 @@ export async function getDebtPayoffPlan(
 
   const suggestedPayment = calculateSuggestedPayment(currentAmount, minimumPayment);
 
+  const interestRateType = debt.interestRateType;
+
   const scenarios: PayoffScenario[] = [];
 
   scenarios.push(
-    buildPayoffScenario('Solo m\u00EDnimos', currentAmount, interestRate, minimumPayment),
+    buildPayoffScenario('Solo m\u00EDnimos', currentAmount, interestRate, interestRateType, minimumPayment),
   );
 
   scenarios.push(
-    buildPayoffScenario('Recomendado', currentAmount, interestRate, suggestedPayment),
+    buildPayoffScenario('Recomendado', currentAmount, interestRate, interestRateType, suggestedPayment),
   );
 
   if (monthlyPayment) {
     const userPayment = toNumber(monthlyPayment);
     if (userPayment > 0) {
       scenarios.push(
-        buildPayoffScenario('Tu plan', currentAmount, interestRate, userPayment),
+        buildPayoffScenario('Tu plan', currentAmount, interestRate, interestRateType, userPayment),
       );
     }
   }
@@ -482,6 +490,7 @@ export async function getDebtPayoffPlan(
     title: debt.title,
     currentAmount: debt.currentAmount,
     interestRate: debt.interestRate,
+    interestRateType: debt.interestRateType,
     minimumPayment: debt.minimumPayment,
     initialAmount: debt.initialAmount,
     suggestedPayment: toFixed(suggestedPayment),

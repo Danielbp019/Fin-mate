@@ -89,13 +89,13 @@
           </v-chip>
         </template>
 
-        <template #item.dueDay="{ item }">
-          <span v-if="item.dueDay">{{ item.dueDay }}</span>
-          <span v-else class="text-caption text-disabled">&mdash;</span>
+        <template #item.remainingDays="{ item }">
+          <span v-if="item.startDate && item.endDate">{{ calcRemainingDays(item.endDate) }}</span>
+          <span v-else class="text-caption text-disabled">N/A</span>
         </template>
 
         <template #item.interestRate="{ item }">
-          <span v-if="item.interestRate">{{ formatInterestRate(item.interestRate) }}</span>
+          <span v-if="item.interestRate">{{ formatInterestRate(item.interestRate) }}<span class="text-caption text-disabled">/{{ item.interestRateType === 'monthly' ? 'mes' : 'anual' }}</span></span>
           <span v-else class="text-caption text-disabled">&mdash;</span>
         </template>
 
@@ -138,10 +138,11 @@
     <DebtDialogsForm
       v-model="dialogOpen"
       :description="form.description"
-      :due-day="form.dueDay"
+      :due-date="debtDueDate"
       :form-error="formError"
       :initial-amount="form.initialAmount"
       :interest-rate="form.interestRate"
+      :interest-rate-type="form.interestRateType ?? 'annual'"
       :is-editing="!!editingId"
       :minimum-payment="form.minimumPayment"
       :priority="form.priority ?? 'medium'"
@@ -151,10 +152,11 @@
       :title="form.title"
       @save="handleSave"
       @update:description="form.description = $event"
-      @update:due-day="form.dueDay = $event"
+      @update:due-date="debtDueDate = $event ?? null"
       @update:form-error="formError = $event"
       @update:initial-amount="form.initialAmount = $event"
       @update:interest-rate="form.interestRate = $event"
+      @update:interest-rate-type="form.interestRateType = $event as 'annual' | 'monthly'"
       @update:minimum-payment="form.minimumPayment = $event"
       @update:priority="form.priority = $event as 'low' | 'medium' | 'high'"
       @update:start-date="debtStartDate = $event ?? null"
@@ -207,13 +209,22 @@ import { formatCurrency, formatInterestRate } from '@/utils/format';
 import { createDebtSchema, updateDebtSchema } from '@/validation';
 import '@/styles/auth.css';
 
+function calcRemainingDays(endDate: string): string {
+  const now = new Date();
+  const end = new Date(endDate);
+  const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return '0 días';
+  return `${diff} días`;
+}
+
 interface DebtForm {
   title: string;
   description?: string;
   initialAmount: string;
   interestRate?: string;
+  interestRateType?: 'annual' | 'monthly';
   minimumPayment?: string;
-  dueDay?: number;
+  dueDate?: string;
   priority?: 'low' | 'medium' | 'high';
   status?: 'pending' | 'paid' | 'overdue';
   startDate?: string;
@@ -233,12 +244,17 @@ const filterStatus = ref('');
 const filterPriority = ref<string | null>(null);
 
 const debtStartDate = ref<Date | null>(null);
+const debtDueDate = ref<Date | null>(null);
 
 const payoffDialog = ref(false);
 const payoffDebt = ref<Debt | null>(null);
 
 watch(debtStartDate, (d) => {
-  form.value.startDate = d ? d.toISOString().slice(0, 10) : '';
+  form.value.startDate = d ? d.toISOString() : '';
+});
+
+watch(debtDueDate, (d) => {
+  form.value.dueDate = d ? d.toISOString() : '';
 });
 
 let filterTimeout: ReturnType<typeof setTimeout>;
@@ -253,8 +269,9 @@ const form = ref<DebtForm>({
   initialAmount: '',
   priority: 'medium',
   interestRate: '',
+  interestRateType: 'annual',
   minimumPayment: '',
-  dueDay: undefined,
+  dueDate: '',
   startDate: '',
   description: '',
 });
@@ -273,7 +290,7 @@ const headers = [
   { title: 'Monto actual', key: 'currentAmount', sortable: false },
   { title: 'Prioridad', key: 'priority', sortable: false },
   { title: 'Estado', key: 'status', sortable: false },
-  { title: 'Día venc.', key: 'dueDay', sortable: false },
+  { title: 'Días restantes', key: 'remainingDays', sortable: false },
   { title: 'Interés %', key: 'interestRate', sortable: false },
   { title: 'Acciones', key: 'actions', sortable: false, align: 'end' as const },
 ];
@@ -318,13 +335,15 @@ function applyFilters() {
 function openCreate() {
   editingId.value = null;
   debtStartDate.value = null;
+  debtDueDate.value = null;
   form.value = {
     title: '',
     initialAmount: '',
     priority: 'medium',
     interestRate: '',
+    interestRateType: 'annual',
     minimumPayment: '',
-    dueDay: undefined,
+    dueDate: '',
     startDate: '',
     description: '',
   };
@@ -335,13 +354,15 @@ function openCreate() {
 function openEdit(debt: Debt) {
   editingId.value = debt.id;
   debtStartDate.value = debt.startDate ? new Date(debt.startDate) : null;
+  debtDueDate.value = debt.dueDate ? new Date(debt.dueDate) : null;
   form.value = {
     title: debt.title,
     initialAmount: String(Number(debt.initialAmount)),
     priority: debt.priority,
     interestRate: debt.interestRate ? String(Number(debt.interestRate)) : '',
+    interestRateType: debt.interestRateType,
     minimumPayment: debt.minimumPayment ? String(Number(debt.minimumPayment)) : '',
-    dueDay: debt.dueDay ?? undefined,
+    dueDate: debt.dueDate?.slice(0, 10) ?? '',
     startDate: debt.startDate?.slice(0, 10) ?? '',
     description: debt.description ?? '',
     status: debt.status,
@@ -364,8 +385,9 @@ async function handleSave() {
           initialAmount: form.value.initialAmount,
           priority: form.value.priority,
           interestRate: form.value.interestRate,
+          interestRateType: form.value.interestRateType,
           minimumPayment: form.value.minimumPayment,
-          dueDay: form.value.dueDay ? Number(form.value.dueDay) : undefined,
+          dueDate: debtDueDate.value ? debtDueDate.value.toISOString() : undefined,
           startDate: debtStartDate.value ? debtStartDate.value.toISOString() : undefined,
           description: form.value.description,
           status: form.value.status,
@@ -375,8 +397,9 @@ async function handleSave() {
           initialAmount: form.value.initialAmount,
           priority: form.value.priority,
           interestRate: form.value.interestRate,
+          interestRateType: form.value.interestRateType,
           minimumPayment: form.value.minimumPayment,
-          dueDay: form.value.dueDay ? Number(form.value.dueDay) : undefined,
+          dueDate: debtDueDate.value ? debtDueDate.value.toISOString() : undefined,
           startDate: debtStartDate.value ? debtStartDate.value.toISOString() : undefined,
           description: form.value.description,
         },

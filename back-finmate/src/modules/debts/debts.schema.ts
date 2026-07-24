@@ -13,15 +13,18 @@ export const createDebtSchema = z.object({
     .string()
     .regex(/^\d+(\.\d{1,4})?$/, 'La tasa de interes debe ser un numero valido')
     .optional(),
+  interestRateType: z
+    .enum(['annual', 'monthly'], {
+      errorMap: () => ({ message: 'El tipo de interes debe ser annual o monthly' }),
+    })
+    .optional(),
   minimumPayment: z
     .string()
     .regex(/^\d+(\.\d{1,2})?$/, 'El pago minimo debe ser un numero valido con hasta 2 decimales')
     .optional(),
-  dueDay: z
-    .number()
-    .int('El dia de vencimiento debe ser un numero entero')
-    .min(1, 'El dia de vencimiento debe estar entre 1 y 31')
-    .max(31, 'El dia de vencimiento debe estar entre 1 y 31')
+  dueDate: z
+    .string()
+    .datetime({ message: 'Fecha de vencimiento invalida' })
     .optional(),
   priority: z
     .enum(['low', 'medium', 'high'], {
@@ -50,15 +53,18 @@ export const updateDebtSchema = z.object({
     .string()
     .regex(/^\d+(\.\d{1,4})?$/, 'La tasa de interes debe ser un numero valido')
     .optional(),
+  interestRateType: z
+    .enum(['annual', 'monthly'], {
+      errorMap: () => ({ message: 'El tipo de interes debe ser annual o monthly' }),
+    })
+    .optional(),
   minimumPayment: z
     .string()
     .regex(/^\d+(\.\d{1,2})?$/, 'El pago minimo debe ser un numero valido con hasta 2 decimales')
     .optional(),
-  dueDay: z
-    .number()
-    .int('El dia de vencimiento debe ser un numero entero')
-    .min(1, 'El dia de vencimiento debe estar entre 1 y 31')
-    .max(31, 'El dia de vencimiento debe estar entre 1 y 31')
+  dueDate: z
+    .string()
+    .datetime({ message: 'Fecha de vencimiento invalida' })
     .optional(),
   priority: z
     .enum(['low', 'medium', 'high'], {

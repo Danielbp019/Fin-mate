@@ -3,6 +3,7 @@ export interface AdvisorDebtItem {
   title: string;
   currentAmount: number;
   interestRate: number;
+  interestRateType: 'annual' | 'monthly';
   minimumPayment: number;
   priority: string;
 }

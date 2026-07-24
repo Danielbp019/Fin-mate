@@ -135,13 +135,13 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 
 Todas las rutas requieren `Authorization: Bearer <token>`.
 
-| Método | Ruta         | Body / Query                                                                                                                                  | Respuesta            |
-| ------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| GET    | `/debts`     | `?status, ?priority`                                                                                                                          | 200 `DebtResponse[]` |
-| GET    | `/debts/:id` | —                                                                                                                                             | 200 `DebtResponse`   |
-| POST   | `/debts`     | `{ title, description?, initialAmount, interestRate?, minimumPayment?, dueDay?, priority?, startDate? }`                                      | 201 `DebtResponse`   |
-| PATCH  | `/debts/:id` | `{ title?, description?, initialAmount?, currentAmount?, interestRate?, minimumPayment?, dueDay?, priority?, status?, startDate?, endDate? }` | 200 `DebtResponse`   |
-| DELETE | `/debts/:id` | —                                                                                                                                             | 204 Sin contenido    |
+| Método | Ruta         | Body / Query                                                                                                                                                      | Respuesta            |
+| ------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| GET    | `/debts`     | `?status, ?priority`                                                                                                                                              | 200 `DebtResponse[]` |
+| GET    | `/debts/:id` | —                                                                                                                                                                 | 200 `DebtResponse`   |
+| POST   | `/debts`     | `{ title, description?, initialAmount, interestRate?, interestRateType?, minimumPayment?, dueDate?, priority?, startDate? }`                                      | 201 `DebtResponse`   |
+| PATCH  | `/debts/:id` | `{ title?, description?, initialAmount?, currentAmount?, interestRate?, interestRateType?, minimumPayment?, dueDate?, priority?, status?, startDate?, endDate? }` | 200 `DebtResponse`   |
+| DELETE | `/debts/:id` | —                                                                                                                                                                 | 204 Sin contenido    |
 
 ### Debt Payments (dentro de Debts)
 
@@ -170,10 +170,10 @@ Todas las rutas requieren `Authorization: Bearer <token>`.
 
 Requiere `Authorization: Bearer <token>`.
 
-| Método | Ruta                 | Query                         | Respuesta                 |
-| ------ | -------------------- | ----------------------------- | ------------------------- |
-| GET    | `/debt-advisor/plan` | `?monthlyExtraPayment=500000`  | 200 `AdvisorPlanResponse`  |
-| GET    | `/debt-advisor/debt/:debtId` | `?monthlyPayment=500000` (opcional) | 200 `DebtPayoffPlan` |
+| Método | Ruta                         | Query                               | Respuesta                 |
+| ------ | ---------------------------- | ----------------------------------- | ------------------------- |
+| GET    | `/debt-advisor/plan`         | `?monthlyExtraPayment=500000`       | 200 `AdvisorPlanResponse` |
+| GET    | `/debt-advisor/debt/:debtId` | `?monthlyPayment=500000` (opcional) | 200 `DebtPayoffPlan`      |
 
 **`/debt-advisor/plan`**: genera un plan de pago personalizado comparando 4 estrategias (avalancha, bola de nieve, por prioridad, solo mínimos) e incluye consejos financieros contextuales. No requiere base de datos propia — lee las deudas activas del repositorio y ejecuta los cálculos en memoria.
 

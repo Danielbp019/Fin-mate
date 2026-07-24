@@ -79,8 +79,9 @@ export interface Debt {
   initialAmount: string;
   currentAmount: string;
   interestRate: string;
+  interestRateType: 'annual' | 'monthly';
   minimumPayment: string;
-  dueDay: number | null;
+  dueDate: string | null;
   priority: 'low' | 'medium' | 'high';
   status: 'pending' | 'paid' | 'overdue';
   startDate: string | null;
@@ -94,8 +95,9 @@ export interface CreateDebtBody {
   description?: string;
   initialAmount: string;
   interestRate?: string;
+  interestRateType?: 'annual' | 'monthly';
   minimumPayment?: string;
-  dueDay?: number;
+  dueDate?: string;
   priority?: 'low' | 'medium' | 'high';
   startDate?: string;
 }
@@ -106,8 +108,9 @@ export interface UpdateDebtBody {
   initialAmount?: string;
   currentAmount?: string;
   interestRate?: string;
+  interestRateType?: 'annual' | 'monthly';
   minimumPayment?: string;
-  dueDay?: number;
+  dueDate?: string;
   priority?: 'low' | 'medium' | 'high';
   status?: 'pending' | 'paid' | 'overdue';
   startDate?: string;

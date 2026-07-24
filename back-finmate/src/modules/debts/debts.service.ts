@@ -18,8 +18,9 @@ function toResponse(row: typeof debts.$inferSelect): DebtResponse {
     initialAmount: row.initialAmount,
     currentAmount: row.currentAmount,
     interestRate: row.interestRate,
+    interestRateType: row.interestRateType,
     minimumPayment: row.minimumPayment,
-    dueDay: row.dueDay,
+    dueDate: row.dueDate?.toISOString() ?? null,
     priority: row.priority,
     status: row.status,
     startDate: row.startDate?.toISOString() ?? null,
@@ -57,8 +58,9 @@ export async function create(data: CreateDebtBody, userId: string): Promise<Debt
     initialAmount: data.initialAmount,
     currentAmount: data.initialAmount,
     interestRate: data.interestRate ?? '0',
+    interestRateType: data.interestRateType ?? 'annual',
     minimumPayment: data.minimumPayment ?? '0',
-    dueDay: data.dueDay ?? null,
+    dueDate: data.dueDate ? new Date(data.dueDate) : null,
     priority: data.priority ?? 'medium',
     status: 'pending' as const,
     startDate: data.startDate ? new Date(data.startDate) : null,
@@ -93,8 +95,10 @@ export async function update(
   if (data.initialAmount !== undefined) updateData.initialAmount = data.initialAmount;
   if (data.currentAmount !== undefined) updateData.currentAmount = data.currentAmount;
   if (data.interestRate !== undefined) updateData.interestRate = data.interestRate;
+  if (data.interestRateType !== undefined) updateData.interestRateType = data.interestRateType;
   if (data.minimumPayment !== undefined) updateData.minimumPayment = data.minimumPayment;
-  if (data.dueDay !== undefined) updateData.dueDay = data.dueDay;
+  if (data.dueDate !== undefined)
+    updateData.dueDate = data.dueDate ? new Date(data.dueDate) : null;
   if (data.priority !== undefined) updateData.priority = data.priority;
   if (data.status !== undefined) updateData.status = data.status;
   if (data.startDate !== undefined)
