@@ -59,9 +59,8 @@
             <AmountInput v-model="customPayment" placeholder="0" style="max-width: 280px" />
 
             <v-btn
-              class="mt-1"
               color="var(--green-deep)"
-              density="compact"
+              size="large"
               variant="tonal"
               @click="applyCustomPayment"
             >
