@@ -130,12 +130,6 @@ body {
   border-color: var(--green-mid-50);
 }
 
-/* ── Diálogos ── */
-
-.v-dialog.v-dialog--scrollable > .v-overlay__content > .v-card {
-  max-height: 80vh;
-}
-
 /* ── Form utilities ── */
 
 .fm-alert {

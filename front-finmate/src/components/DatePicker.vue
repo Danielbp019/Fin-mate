@@ -1,10 +1,14 @@
 <template>
-  <v-menu v-model="menu" :close-on-content-click="false">
-    <template #activator="{ props: fieldProps }">
+  <v-dialog
+    max-width="340"
+    :model-value="menu"
+    @update:model-value="menu = $event"
+  >
+    <template #activator="{ props: activatorProps }">
       <v-text-field
         :id="props.id"
         :aria-label="props.label"
-        v-bind="fieldProps"
+        v-bind="activatorProps"
         class="fm-input"
         clearable
         :density="density"
@@ -19,10 +23,23 @@
       />
     </template>
 
-    <v-locale-provider locale="es-CO">
-      <v-date-picker v-model="innerValue" @update:model-value="menu = false" />
-    </v-locale-provider>
-  </v-menu>
+    <v-card rounded="xl">
+      <v-card-title class="text-h5 font-weight-bold pa-4 d-flex align-center">
+        Seleccionar fecha
+        <v-spacer />
+
+        <v-btn icon variant="text" @click="menu = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <v-divider />
+
+      <v-card-text class="pa-4">
+        <v-date-picker v-model="innerValue" @update:model-value="menu = false" />
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">

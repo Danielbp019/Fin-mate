@@ -7,7 +7,7 @@ function createWrapper(props: Record<string, unknown> = {}) {
     props,
     global: {
       stubs: {
-        VMenu: {
+        VDialog: {
           template: '<div><slot name="activator" :props="{}" /><slot /></div>',
           props: ['modelValue'],
         },
@@ -22,7 +22,6 @@ function createWrapper(props: Record<string, unknown> = {}) {
           template: '<div class="v-date-picker-stub" />',
           emits: ['update:model-value'],
         },
-        VLocaleProvider: { template: '<slot />' },
       },
     },
   });

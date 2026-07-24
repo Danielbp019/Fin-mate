@@ -54,7 +54,8 @@ describe('IconPicker.vue', () => {
   it('emits empty string when clear icon is clicked', async () => {
     const wrapper = createWrapper({ modelValue: 'mdi-cash' });
     await wrapper.find('.fm-select-trigger').trigger('click');
-    await wrapper.find('.v-btn-stub').trigger('click');
+    const buttons = wrapper.findAll('.v-btn-stub');
+    await buttons[1].trigger('click');
     expect(wrapper.emitted('update:modelValue')).toBeTruthy();
     expect(wrapper.emitted('update:modelValue')![0]).toEqual(['']);
   });
