@@ -209,11 +209,11 @@ import { formatCurrency, formatInterestRate } from '@/utils/format';
 import { createDebtSchema, updateDebtSchema } from '@/validation';
 import '@/styles/auth.css';
 
-function calcRemainingDays(endDate: string): string {
+function calcRemainingDays(date: string): string {
   const now = new Date();
-  const end = new Date(endDate);
-  const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  if (diff < 0) return '0 días';
+  const target = new Date(date);
+  const diff = Math.ceil((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return 'Vencida';
   return `${diff} días`;
 }
 
