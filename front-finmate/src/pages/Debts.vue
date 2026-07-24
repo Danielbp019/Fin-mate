@@ -90,7 +90,7 @@
         </template>
 
         <template #item.remainingDays="{ item }">
-          <span v-if="item.startDate && item.endDate">{{ calcRemainingDays(item.endDate) }}</span>
+          <span v-if="item.dueDate">{{ calcRemainingDays(item.dueDate) }}</span>
           <span v-else class="text-caption text-disabled">N/A</span>
         </template>
 
