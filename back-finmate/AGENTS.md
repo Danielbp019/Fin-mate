@@ -53,16 +53,16 @@ Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod, JWT (Access + Refresh
 
 ## Comandos
 
-| Comando               | Descripción                 |
-| --------------------- | --------------------------- |
-| `npm run dev`         | Servidor con hot-reload     |
-| `npm run build`       | Compilar TypeScript         |
-| `npm run start`       | Ejecutar compilado          |
-| `npm run db:generate` | Generar migraciones         |
-| `npm run db:migrate`  | Aplicar migraciones         |
-| `npm run db:seed`     | Insertar datos de prueba    |
-| `npm test`            | Ejecutar tests (vitest run) |
-| `npm run test:watch`  | Tests en modo watch         |
+| Comando                | Descripción                 |
+| ---------------------- | --------------------------- |
+| `pnpm run dev`         | Servidor con hot-reload     |
+| `pnpm run build`       | Compilar TypeScript         |
+| `pnpm run start`       | Ejecutar compilado          |
+| `pnpm run db:generate` | Generar migraciones         |
+| `pnpm run db:migrate`  | Aplicar migraciones         |
+| `pnpm run db:seed`     | Insertar datos de prueba    |
+| `pnpm test`            | Ejecutar tests (vitest run) |
+| `pnpm run test:watch`  | Tests en modo watch         |
 
 ## Estructura de Módulo
 

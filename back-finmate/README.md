@@ -10,21 +10,21 @@ Node.js, Express 5, TypeScript, MariaDB, Drizzle ORM, Zod, JWT (Access + Refresh
 
 - Node.js v18+
 - MariaDB 10+
-- npm
+- pnpm
 
 ## Instalación
 
 1. Clonar el repositorio
-2. `npm install`
+2. `pnpm install`
 3. Copiar `.env.example` a `.env` y configurar variables
 4. Generar `JWT_SECRET` y pegarlo en `.env`:
    ```bash
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
    ```
-5. Generar migraciones: `npm run db:generate`
-6. Aplicar migraciones: `npm run db:migrate`
-7. Insertar datos de prueba: `npm run db:seed`
-8. Iniciar servidor: `npm run dev`
+5. Generar migraciones: `pnpm run db:generate`
+6. Aplicar migraciones: `pnpm run db:migrate`
+7. Insertar datos de prueba: `pnpm run db:seed`
+8. Iniciar servidor: `pnpm run dev`
 
 ## Variables de Entorno
 
@@ -38,16 +38,16 @@ Ver `.env.example` para la lista completa con descripciones. Las secciones inclu
 
 ## Comandos Útiles
 
-| Comando               | Descripción                                                                                                                 |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`         | Inicia servidor con hot-reload + limpieza automática de tokens expirados                                                    |
-| `npm run build`       | Compila TypeScript a JS                                                                                                     |
-| `npm run start`       | Ejecuta compilado en producción                                                                                             |
-| `npm run db:generate` | Genera migraciones desde el schema                                                                                          |
-| `npm run db:migrate`  | Aplica migraciones pendientes a MariaDB                                                                                     |
-| `npm run db:seed`     | Inserta datos de prueba (2 usuarios, 10 categorias, 16 movimientos, 4 deudas, 6 pagos, 1 pareja, 2 metas, 4 contribuciones) |
-| `npm test`            | Ejecuta todos los tests (vitest run)                                                                                        |
-| `npm run test:watch`  | Ejecuta tests en modo watch (vitest)                                                                                        |
+| Comando                | Descripción                                                                                                                 |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm run dev`         | Inicia servidor con hot-reload + limpieza automática de tokens expirados                                                    |
+| `pnpm run build`       | Compila TypeScript a JS                                                                                                     |
+| `pnpm run start`       | Ejecuta compilado en producción                                                                                             |
+| `pnpm run db:generate` | Genera migraciones desde el schema                                                                                          |
+| `pnpm run db:migrate`  | Aplica migraciones pendientes a MariaDB                                                                                     |
+| `pnpm run db:seed`     | Inserta datos de prueba (2 usuarios, 10 categorias, 16 movimientos, 4 deudas, 6 pagos, 1 pareja, 2 metas, 4 contribuciones) |
+| `pnpm test`            | Ejecuta todos los tests (vitest run)                                                                                        |
+| `pnpm run test:watch`  | Ejecuta tests en modo watch (vitest)                                                                                        |
 
 ## Limpieza de Tokens
 
@@ -55,7 +55,7 @@ Los refresh tokens se acumulan en la tabla `refresh_tokens` con cada login y rot
 Para evitar crecimiento innecesario, el servidor ejecuta una limpieza automática:
 
 - **Archivo**: `src/shared/database/cleanup.ts`
-- **Cuándo**: Al iniciar el servidor (`npm run dev` o `npm start`) y cada 6 horas automáticamente
+- **Cuándo**: Al iniciar el servidor (`pnpm run dev` o `pnpm start`) y cada 6 horas automáticamente
 - **Qué elimina**:
   - Tokens cuya fecha de expiración ya pasó (`expires_at < NOW()`)
   - Tokens revocados con más de 7 días de antigüedad

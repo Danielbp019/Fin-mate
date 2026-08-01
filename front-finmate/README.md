@@ -9,13 +9,13 @@ Vue 3, Vite, TypeScript, Vuetify, Pinia, Vue Router, Axios, Vitest, ESLint, Zod
 ## Requisitos
 
 - Node.js v18+
-- npm
+- pnpm
 
 ## Instalación
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Variables de Entorno
@@ -26,17 +26,17 @@ npm run dev
 
 ## Comandos
 
-| Comando                 | Descripción                           |
-| ----------------------- | ------------------------------------- |
-| `npm run dev`           | Servidor de desarrollo con hot-reload |
-| `npm run build`         | Compilación producción                |
-| `npm run preview`       | Previsualizar build                   |
-| `npm run lint`          | Ejecutar ESLint                       |
-| `npm run lint:fix`      | Corregir errores ESLint               |
-| `npm run type-check`    | Verificar tipos TypeScript            |
-| `npm run test`          | Tests en modo watch                   |
-| `npm run test:run`      | Tests una sola vez                    |
-| `npm run test:coverage` | Tests con cobertura                   |
+| Comando                  | Descripción                           |
+| ------------------------ | ------------------------------------- |
+| `pnpm run dev`           | Servidor de desarrollo con hot-reload |
+| `pnpm run build`         | Compilación producción                |
+| `pnpm run preview`       | Previsualizar build                   |
+| `pnpm run lint`          | Ejecutar ESLint                       |
+| `pnpm run lint:fix`      | Corregir errores ESLint               |
+| `pnpm run type-check`    | Verificar tipos TypeScript            |
+| `pnpm run test`          | Tests en modo watch                   |
+| `pnpm run test:run`      | Tests una sola vez                    |
+| `pnpm run test:coverage` | Tests con cobertura                   |
 
 ## Estructura del Proyecto
 
@@ -80,7 +80,6 @@ public/                 Archivos estáticos
 | Categories (CRUD + tabs por tipo)                | ✅     |
 | Movements (CRUD + filtros + paginación)          | ✅     |
 | Debts + Payments                                 | ✅     |
-
 | Couples + Goals                                  | ✅     |
 | Dashboard (resumen + gráficos)                   | ✅     |
 

@@ -30,7 +30,7 @@ async function seed() {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`Error de conexion: ${message}`);
-    console.error('Verifica que las migraciones esten aplicadas con "npm run db:migrate"');
+    console.error('Verifica que las migraciones esten aplicadas con "pnpm run db:migrate"');
     console.error('');
     process.exit(1);
   }
